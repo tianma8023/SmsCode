@@ -1,0 +1,139 @@
+apply plugin: 'com.android.application'
+
+
+def key = file('F:\\Keystore\\tianma.jks')
+
+def keyProps = new Properties()
+keyProps.load(new FileInputStream("app\\signature.properties"))
+
+def static releaseTime() {
+    return new Date().format("yyMMdd", TimeZone.default)
+}
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.github.tianma8023.smscode"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "LOG_TAG", "\"T-SmsCode\"")
+        buildConfigField("int", "MODULE_VERSION", "10")
+    }
+
+    signingConfigs {
+        release {
+            storeFile key
+            storePassword keyProps['STORE_PASSWORD']
+            keyAlias keyProps['KEY_ALIAS']
+            keyPassword keyProps['KEY_PASSWORD']
+        }
+    }
+
+    buildTypes {
+
+        debug {
+            buildConfigField("int", "LOG_LEVEL", "2")
+
+            if (key.exists()) {
+                println "using tianma's keystore"
+                signingConfig signingConfigs.release
+            } else {
+                println "using no keystore"
+            }
+        }
+
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+
+            buildConfigField("int", "LOG_LEVEL", "4")
+
+            if (key.exists()) {
+                println "using tianma's keystore"
+                signingConfig signingConfigs.release
+            } else {
+                println "using no keystore"
+            }
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            lintOptions {
+                disable 'MissingTranslation'
+            }
+        }
+
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith(".apk")) {
+                def fileName = ""
+                if (variant.buildType.name == 'release') {
+                    fileName = "SmsCode_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_release.apk"
+                } else if(variant.buildType.name == 'debug'){
+                    fileName = "SmsCode_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_debug.apk"
+                }
+                outputFileName = fileName
+            }
+        }
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        coolapk {
+            dimension "default"
+        }
+        xposedRepo {
+            dimension "default"
+        }
+        github {
+            dimension "default"
+        }
+    }
+
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME:name]
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:design:27.1.1' // material design support
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // ButterKnife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Remote Preferences
+    implementation "com.crossbowffs.remotepreferences:remotepreferences:0.5"
+
+    // Material Dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    // Android Shell
+    implementation 'com.jaredrummler:android-shell:1.0.0'
+
+    // umeng analyze
+    implementation 'com.umeng.sdk:common:latest.integration'
+    implementation 'com.umeng.sdk:analytics:latest.integration'
+
+    // Permissions Dispatcher
+    implementation ("com.github.hotchemi:permissionsdispatcher:3.3.1") {
+        exclude group: 'com.android.support'
+        exclude module: 'support-v13'
+    }
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.3.1"
+}

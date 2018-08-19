@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_general">
+
+        <SwitchPreference
+            android:key="pref_enable"
+            android:title="@string/pref_enable"
+            android:summary="@string/pref_enable_summary"
+            android:defaultValue="false"/>
+
+        <SwitchPreference
+            android:key="pref_show_toast"
+            android:title="@string/pref_show_toast"
+            android:summary="@string/pref_show_toast_summary"
+            android:dependency="pref_enable"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="pref_experimental"
+        android:title="@string/pref_experimental">
+
+        <SwitchPreference
+            android:key="pref_mark_as_read"
+            android:title="@string/pref_mark_as_read"
+            android:summary="@string/pref_mark_as_read_summary"
+            android:dependency="pref_enable"
+            android:defaultValue="false" />
+
+        <Preference
+            android:key="pref_entry_auto_input_code"
+            android:dependency="pref_enable"
+            android:title="@string/pref_entry_auto_input_code"
+            android:summary="@string/pref_entry_auto_input_code_summary" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_debug">
+        <SwitchPreference
+            android:key="pref_verbose_log_mode"
+            android:title="@string/pref_verbose_log_mode"
+            android:summary="@string/pref_verbose_log_mode_summary"
+            android:dependency="pref_enable"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_smscode">
+
+        <com.github.tianma8023.smscode.preference.ResettableEditPreference
+            android:key="pref_smscode_keywords"
+            android:title="@string/pref_smscode_keywords"
+            android:summary="@string/pref_smscode_keywords_summary"
+            android:hint="@string/code_keywords_hint"
+            android:negativeButtonText="@string/reset"
+            android:defaultValue="@string/default_smscode_keywords"/>
+
+        <Preference
+            android:key="pref_smscode_test"
+            android:title="@string/pref_smscode_test"
+            android:summary="@string/pref_smscode_test_summary"
+            android:hint="@string/sms_content_hint"
+            android:positiveButtonText="@string/test"
+            android:persistent="false"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about">
+
+        <Preference
+            android:key="pref_source_code"
+            android:title="@string/pref_source_code"
+            android:summary="@string/pref_source_code_summary" />
+
+        <Preference
+            android:key="pref_donate_by_alipay"
+            android:title="@string/pref_donate_by_alipay"/>
+
+        <Preference
+            android:key="pref_donate_by_wechat"
+            android:title="@string/pref_donate_by_wechat"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

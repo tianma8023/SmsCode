@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">簡訊驗證碼擷取器</string>
+
+    <!-- General -->
+    <string name="i_know">知道了</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">一般設定</string>
+    <string name="pref_enable">啟用</string>
+    <string name="pref_enable_summary">啟用/關閉功能不需重新開機</string>
+    <string name="pref_show_toast">顯示快顯訊息</string>
+    <string name="pref_show_toast_summary">接收到驗證碼時顯示快顯訊息</string>
+    <string name="pref_donate_by_alipay">支付寶捐贈</string>
+    <string name="pref_donate_by_wechat">微信捐贈</string>
+    <string name="about">關於</string>
+    <string name="pref_source_code">項目源碼</string>
+    <string name="pref_source_code_summary">歡迎Star ♪(＾∀＾)ﾉ</string>
+    <string name="alipay_install_prompt">請先安裝支付寶</string>
+    <string name="wechat_install_prompt">請先安裝微信</string>
+    <string name="cur_verification_code">當前驗證碼：%s</string>
+    <string name="pref_mark_as_read">標記為已讀</string>
+    <string name="pref_mark_as_read_summary">將驗證碼簡訊標記為已讀</string>
+    <string name="pref_smscode_keywords">驗證碼簡訊關鍵字</string>
+    <string name="pref_smscode_keywords_summary">簡訊關鍵字(正則表達式)</string>
+    <string name="pref_smscode">驗證碼簡訊</string>
+    <string name="reset">重置</string>
+    <string name="code_keywords_hint">關鍵字(正則表達式)</string>
+    <string name="pref_smscode_test">驗證碼簡訊測試</string>
+    <string name="pref_smscode_test_summary">測試是否能正確辨識簡訊中的驗證碼</string>
+    <string name="sms_content_hint">簡訊內容</string>
+    <string name="test">測試</string>
+    <string name="cancel">取消</string>
+    <string name="cannot_parse_smscode">無法正確辨識驗證碼</string>
+    <string name="auto_input_accessibility_service_description">利用無障礙服務啟用自動輸入。\n\n如果不需要此項功能，則建議關閉。</string>
+    <string name="pref_experimental">實驗性功能</string>
+    <string name="pref_entry_auto_input_code">自動輸入驗證碼</string>
+    <string name="pref_entry_auto_input_code_summary">嘗試自動輸入驗證碼</string>
+    <string name="open_auto_input_accessibility">打開無障礙服務</string>
+    <string name="close_auto_input_accessibility">關閉無障礙服務</string>
+    <string name="open_auto_input_accessibility_prompt">需要打開無障礙服務啟用自動輸入</string>
+    <string name="close_auto_input_accessibility_prompt">需要關閉無障礙服務停用自動輸入</string>
+    <string name="go_to_open">去打開</string>
+    <string name="go_to_close">去關閉</string>
+    <string name="smscode_auto_input_service_label">簡訊驗證碼自動輸入服務</string>
+    <string name="pref_enable_auto_input_code">啟用自動輸入</string>
+    <string name="pref_auto_input_mode_accessibility">無障礙服務模式</string>
+    <string name="pref_auto_input_mode_accessibility_summary">需要打開無障礙服務啟用自動輸入</string>
+    <string name="pref_auto_input_mode_root">Root模式</string>
+    <string name="pref_auto_input_mode_root_summary">需要Root權限</string>
+    <string name="pref_enable_auto_input_code_summary">請選擇自動輸入模式</string>
+    <string name="acquire_root_permission">獲取Root權限</string>
+    <string name="acquire_root_permission_prompt">需要獲取Root權限啟用自動輸入</string>
+    <string name="okay">好的</string>
+    <string name="channel_name_foreground_service">分析簡訊時的通知</string>
+    <string name="sms_code_notification_title">簡訊分析中……</string>
+    <string name="action_home_faq_title">常見問題</string>
+    <string name="pref_debug">調試</string>
+    <string name="pref_verbose_log_mode">輸出詳細日誌</string>
+    <string name="pref_verbose_log_mode_summary">輸出詳細的日誌(僅用於調試)</string>
+
+    <string-array name="question_list">
+        <item>這個模組適用於什麼樣的Rom呢？</item>
+        <item>我的手機本身就有這個功能了，還需要這個模組嗎？</item>
+        <item>自動輸入的原理是什麼？無障礙模式和Root模式的差別在哪裡呢？</item>
+        <item>這個模組需要在背景執行嗎？會占用多少資源呢？</item>
+        <item>驗證碼無法被分析並複製該怎麼辦？</item>
+        <item>可以將驗證碼簡訊複製後標記為已讀嗎？</item>
+    </string-array>
+
+    <string-array name="answer_list">
+        <item>適用於基於AOSP的類原生Rom，在其他第三方中度或高度訂製化的Rom可能無法正常運作。</item>
+        <item>這是給沒有這項功能的手機使用的唷:)</item>
+        <item>收到驗證碼後，尋找當前介面的驗證碼輸入框，然後自動輸入。\n\n無障礙模式打開後，系統會在背景持續運行這項服務\n\nRoot模式是透過Root或其他Hack的方式動態開啟/關閉無障礙服務，在分析驗證碼時打開，自動輸入完畢後關閉。\n\n個人推薦使用Root模式。</item>
+        <item>此模組使用了兩項服務，一項用來解析簡訊中的驗證碼，一項用來自動輸入(無障礙服務)。\n\n分析驗證碼的服務會在接收到簡訊時開啟，並在分析完畢後關閉，基本上不占用資源。</item>
+        <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此模組加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 請聯繫開發者，並回報相關問題。</item>
+        <item>從Android 4.4起，只有系統預設的簡訊程式才能對簡訊進行修改與操作。(也可能是開發者能力不夠，沒有找到合適的方法。)</item>
+    </string-array>
+</resources>
