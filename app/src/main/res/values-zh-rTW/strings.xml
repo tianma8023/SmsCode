@@ -59,6 +59,12 @@
     <string name="pref_verbose_log_mode">輸出詳細日誌</string>
     <string name="pref_verbose_log_mode_summary">輸出詳細的日誌(僅用於調試)</string>
 
+    <!-- Focus Mode -->
+    <string name="pref_focus_mode_title">對焦模式</string>
+    <string name="focus_mode_entry_auto">自動尋找驗證碼輸入框</string>
+    <string name="focus_mode_entry_manual">手動指定驗證碼輸入框</string>
+    <!-- Focus Mode end -->
+
     <string-array name="question_list">
         <item>這個模組適用於什麼樣的Rom呢？</item>
         <item>我的手機本身就有這個功能了，還需要這個模組嗎？</item>

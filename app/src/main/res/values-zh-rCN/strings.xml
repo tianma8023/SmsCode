@@ -57,4 +57,11 @@
     <string name="pref_debug">调试</string>
     <string name="pref_verbose_log_mode">输出详细日志</string>
     <string name="pref_verbose_log_mode_summary">输出详细的日志(仅用于调试)</string>
+
+    <!-- Focus Mode -->
+    <string name="pref_focus_mode_title">对焦模式</string>
+    <string name="focus_mode_entry_auto">自动寻找验证码输入框</string>
+    <string name="focus_mode_entry_manual">手动指定验证码输入框</string>
+    <!-- Focus Mode end -->
+
 </resources>

@@ -55,6 +55,13 @@
     <string name="pref_verbose_log_mode">Detailed log</string>
     <string name="pref_verbose_log_mode_summary">Print detailed log(only for debug)</string>
 
+    <!-- Focus Mode -->
+    <string name="pref_focus_mode_title">Focus Mode</string>
+    <string name="focus_mode_entry_auto">Auto Focus SMS code EditText</string>
+    <string name="focus_mode_entry_manual">Manual Focus SMS code EditText</string>
+    <!-- Focus Mode end -->
+
+    <!-- Q&A -->
     <string-array name="question_list">
         <item>这个模块适用的Rom是什么？</item>
         <item>我的手机自带有验证码复制，你这个App是鸡肋？</item>
@@ -72,4 +79,5 @@
         <item>1. 在验证码短信测试中先测试一下短信内容能否被正确解析。\n\n2. 因为用到了服务和广播，所以检查一下是否在应用控制类软件（黒阈、应用管理、绿色守护等）的黑名单中。\n\n3. 联系开发者，反馈问题。</item>
         <item>自Android 4.4起，只有系统默认的短信应用才可以对短信进行写操作。(也可能是因为目前开发者能力不够，没找到合适的方法。)</item>
     </string-array>
+    <!-- Q&A end -->
 </resources>
