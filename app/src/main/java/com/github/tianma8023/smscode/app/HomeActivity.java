@@ -19,8 +19,7 @@ import butterknife.ButterKnife;
  * 主界面
  */
 public class HomeActivity extends BaseActivity implements
-        SettingsFragment.OnNestedPreferenceClickListener,
-        SettingsFragment.OnPreferenceSwitchedListener {
+        SettingsFragment.OnNestedPreferenceClickListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
@@ -39,7 +38,6 @@ public class HomeActivity extends BaseActivity implements
         // init main fragment
         SettingsFragment settingsFragment = new SettingsFragment();
         settingsFragment.setOnNestedPreferenceClickListener(this);
-        settingsFragment.setOnPreferenceSwitchedListener(this);
         mFragmentManager = getFragmentManager();
         mFragmentManager.beginTransaction()
                 .replace(R.id.home_content, settingsFragment)
@@ -134,9 +132,5 @@ public class HomeActivity extends BaseActivity implements
         mCurrentFragment = faqFragment;
         refreshActionBar(getString(R.string.action_home_faq_title));
         invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onPreferenceSwitched(String key, boolean on) {
     }
 }

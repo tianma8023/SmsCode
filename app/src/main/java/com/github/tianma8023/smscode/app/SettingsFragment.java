@@ -55,12 +55,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         void onNestedPreferenceClicked(String key, String title);
     }
 
-    public interface OnPreferenceSwitchedListener {
-        void onPreferenceSwitched(String key, boolean on);
-    }
-
     private OnNestedPreferenceClickListener mNestedPreferenceClickListener;
-    private OnPreferenceSwitchedListener mPreferenceSwitchedListener;
 
     private boolean mIsFirstRunSinceV1;
     private WebView mPermStateWebView;
@@ -80,7 +75,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
         findPreference(IPrefConstants.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
         findPreference(IPrefConstants.KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
-        findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
+        // findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
         findPreference(IPrefConstants.KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
         findPreference(IPrefConstants.KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
 
@@ -88,6 +83,11 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         Preference markAsReadPref = findPreference(IPrefConstants.KEY_MARK_AS_READ);
         PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_EXPERIMENTAL);
         experimentalGroup.removePreference(markAsReadPref);
+
+        // Hide donate by wechat preference item
+        Preference donateByWechat = findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT);
+        PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_ABOUT);
+        aboutGroup.removePreference(donateByWechat);
     }
 
     @Override
@@ -109,10 +109,6 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     public void setOnNestedPreferenceClickListener(OnNestedPreferenceClickListener nestedPreferenceClickListener) {
         mNestedPreferenceClickListener = nestedPreferenceClickListener;
-    }
-
-    public void setOnPreferenceSwitchedListener(OnPreferenceSwitchedListener listener) {
-        mPreferenceSwitchedListener = listener;
     }
 
     @Override
@@ -137,31 +133,42 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     }
 
     private void aboutProject() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(IConstants.PROJECT_SOURCE_CODE_URL));
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(IConstants.PROJECT_SOURCE_CODE_URL));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(mHomeActivity, R.string.browser_install_or_enable_prompt, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void donateByAlipay() {
-        if (PackageUtils.isAlipayInstalled(mHomeActivity)) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(IConstants.ALIPAY_QRCODE_URI_PREFIX
-                    + IConstants.ALIPAY_QRCODE_URL));
-            startActivity(intent);
-        } else {
-            Toast.makeText(mHomeActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
+        if (!PackageUtils.isWeChatInstalled(mHomeActivity)) { // uninstalled
+            Toast.makeText(mHomeActivity, R.string.wechat_install_prompt, Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (!PackageUtils.isWeChatEnabled(mHomeActivity)) { // installed but disabled
+            Toast.makeText(mHomeActivity, R.string.wechat_enable_prompt, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setClassName(IConstants.WECHAT_PACKAGE_NAME, IConstants.WECHAT_LAUNCHER_UI);
+        intent.putExtra(IConstants.WECHAT_KEY_EXTRA_DONATE, true);
+        startActivity(intent);
     }
 
     private void donateByWechat() {
-        if (PackageUtils.isWeChatInstalled(mHomeActivity)) {
-            Intent intent = new Intent();
-            intent.setClassName(IConstants.WECHAT_PACKAGE_NAME, IConstants.WECHAT_LAUNCHER_UI);
-            intent.putExtra(IConstants.WECHAT_KEY_EXTRA_DONATE, true);
-            startActivity(intent);
-        } else {
-            Toast.makeText(mHomeActivity, R.string.wechat_install_prompt, Toast.LENGTH_SHORT).show();
+        if (!PackageUtils.isAlipayInstalled(mHomeActivity)) { // uninstalled
+            Toast.makeText(mHomeActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
+            return;
         }
+        if (!PackageUtils.isAlipayEnabled(mHomeActivity)) { // installed but disabled
+            Toast.makeText(mHomeActivity, R.string.alipay_enable_prompt, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(IConstants.ALIPAY_QRCODE_URI_PREFIX + IConstants.ALIPAY_QRCODE_URL));
+        startActivity(intent);
     }
 
 

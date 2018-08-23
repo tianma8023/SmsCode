@@ -63,7 +63,9 @@
             android:persistent="false"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/about">
+    <PreferenceCategory
+        android:key="pref_about"
+        android:title="@string/about">
 
         <Preference
             android:key="pref_source_code"
