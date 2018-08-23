@@ -31,17 +31,6 @@ public class VerificationUtils {
     }
 
     /**
-     * 是否是验证码短信
-     *
-     * @param context context
-     * @param content content
-     * @return
-     */
-    private static boolean isVerificationMsg(Context context, String content) {
-        return containsVerificationKeywords(context, content);
-    }
-
-    /**
      * 是否包含验证码短信关键字
      *
      * @param context context
@@ -50,6 +39,17 @@ public class VerificationUtils {
      */
     public static boolean containsVerificationKeywords(Context context, String content) {
         String keywordsRegex = loadVerificationKeywords(context);
+        return containsVerificationKeywords(keywordsRegex, content);
+    }
+
+    /**
+     * 是否包含短信验证码关键字
+     *
+     * @param keywordsRegex verification message keywords (regex expressions)
+     * @param content sms message content
+     * @return
+     */
+    private static boolean containsVerificationKeywords(String keywordsRegex, String content) {
         Pattern pattern = Pattern.compile(keywordsRegex);
         Matcher matcher = pattern.matcher(content);
         return matcher.find();
@@ -65,9 +65,10 @@ public class VerificationUtils {
      */
     public static String parseVerificationCodeIfExists(Context context, String content) {
         String result = "";
-        if (isVerificationMsg(context, content)) {
+        String keywordsRegex = loadVerificationKeywords(context);
+        if (containsVerificationKeywords(keywordsRegex, content)) {
             if (containsChinese(content)) {
-                result = getVerificationCodeCN(content);
+                result = getVerificationCodeCN(keywordsRegex, content);
             } else {
                 result = getVerificationCodeEN(content);
             }
@@ -110,11 +111,8 @@ public class VerificationUtils {
 
     /**
      * 获取中文短信中包含的验证码
-     *
-     * @param content
-     * @return
      */
-    public static String getVerificationCodeCN(String content) {
+    public static String getVerificationCodeCN(String keywordsRegex, String content) {
         String regex = "[a-zA-Z0-9]{4,8}";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
@@ -122,10 +120,12 @@ public class VerificationUtils {
         int maxMatchLevel = LEVEL_NONE;
         while (m.find()) {
             final String matchedStr = m.group();
-            final int curLevel = getMatchLevel(matchedStr);
-            if (curLevel > maxMatchLevel) {
-                maxMatchLevel = curLevel;
-                verificationCode = matchedStr;
+            if (isNearToKeywords(keywordsRegex, matchedStr, content)) {
+                final int curLevel = getMatchLevel(matchedStr);
+                if (curLevel > maxMatchLevel) {
+                    maxMatchLevel = curLevel;
+                    verificationCode = matchedStr;
+                }
             }
         }
         return verificationCode;
@@ -155,7 +155,24 @@ public class VerificationUtils {
         return LEVEL_TEXT;
     }
 
-    public static String getVerificationCodeEN(String content) {
+    /**
+     * 匹配上的字符串是否靠近关键字
+     */
+    private static boolean isNearToKeywords(String keywordsRegex, String matchedStr, String content) {
+        int beginIndex = 0, endIndex = content.length() - 1;
+        int curIndex = content.indexOf(matchedStr);
+        int strLength = matchedStr.length();
+        int magicNumber = 14;
+        if (curIndex - magicNumber > 0) {
+            beginIndex = curIndex - magicNumber;
+        }
+        if (curIndex + strLength + magicNumber < endIndex) {
+            endIndex = curIndex + strLength + magicNumber;
+        }
+        return containsVerificationKeywords(keywordsRegex, content.substring(beginIndex, endIndex));
+    }
+
+    private static String getVerificationCodeEN(String content) {
         String regex = "[0-9]{4,8}";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(content);
