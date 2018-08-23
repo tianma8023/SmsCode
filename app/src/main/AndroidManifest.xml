@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
 
     <application
         android:name=".app.SmsCodeApplication"
@@ -65,11 +66,11 @@
         <service
             android:name=".service.SmsCodeService"
             android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE">
+            android:exported="false">
         </service>
 
         <receiver
+            android:permission="android.permission.BROADCAST_SMS"
             android:name=".receiver.SmsReceiver"
             android:enabled="true"
             android:exported="true">

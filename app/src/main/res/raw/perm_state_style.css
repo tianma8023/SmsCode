@@ -1,0 +1,18 @@
+body {
+	padding: 0 10px;
+	background-color: #0;
+}
+
+h1 {
+	margin: 14px 0 14px 0;
+	font-size: 16px;
+}
+
+a.title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+a.content {
+	font-size: 14px;
+}

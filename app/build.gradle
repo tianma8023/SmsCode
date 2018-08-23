@@ -20,8 +20,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "LOG_TAG", "\"T-SmsCode\"")
-        buildConfigField("int", "MODULE_VERSION", "10")
+        buildConfigField("String", "LOG_TAG", "\"SmsCodeExtractor\"")
     }
 
     signingConfigs {
@@ -75,9 +74,9 @@ android {
             if (outputFile != null && outputFile.name.endsWith(".apk")) {
                 def fileName = ""
                 if (variant.buildType.name == 'release') {
-                    fileName = "SmsCode_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_release.apk"
+                    fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_r.apk"
                 } else if(variant.buildType.name == 'debug'){
-                    fileName = "SmsCode_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_debug.apk"
+                    fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_d.apk"
                 }
                 outputFileName = fileName
             }
@@ -132,10 +131,6 @@ dependencies {
     implementation 'com.umeng.sdk:common:latest.integration'
     implementation 'com.umeng.sdk:analytics:latest.integration'
 
-    // Permissions Dispatcher
-    implementation ("com.github.hotchemi:permissionsdispatcher:3.3.1") {
-        exclude group: 'com.android.support'
-        exclude module: 'support-v13'
-    }
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.3.1"
+    // AndPermission
+    implementation 'com.yanzhenjie:permission:2.0.0-rc12'
 }

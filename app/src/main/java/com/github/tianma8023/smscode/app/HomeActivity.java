@@ -1,38 +1,28 @@
 package com.github.tianma8023.smscode.app;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.faq.FaqFragment;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnShowRationale;
-import permissions.dispatcher.PermissionRequest;
-import permissions.dispatcher.RuntimePermissions;
 
 /**
  * 主界面
  */
-@RuntimePermissions
 public class HomeActivity extends BaseActivity implements
         SettingsFragment.OnNestedPreferenceClickListener,
         SettingsFragment.OnPreferenceSwitchedListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private static final String TAG_NESTED = "tag_nested";
     private static final String TAG_FAQ = "tag_faq";
@@ -147,40 +137,6 @@ public class HomeActivity extends BaseActivity implements
     }
 
     @Override
-    public void onPreferenceSwitched(String key, boolean newValue) {
-        if (newValue && IPrefConstants.KEY_ENABLE.equals(key)) {
-            HomeActivityPermissionsDispatcher.onEnabledWithPermissionCheck(this);
-        }
-    }
-
-
-    @NeedsPermission(Manifest.permission.RECEIVE_SMS)
-    void onEnabled() {
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        HomeActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
-    }
-
-    @OnShowRationale(Manifest.permission.RECEIVE_SMS)
-    void callShow(final PermissionRequest request) {
-        new MaterialDialog.Builder(this)
-                .title(R.string.action_home_faq_title)
-                .content(R.string.sms_content_hint)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        request.proceed();
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        request.cancel();
-                    }
-                })
-                .show();
+    public void onPreferenceSwitched(String key, boolean on) {
     }
 }

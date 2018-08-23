@@ -14,8 +14,8 @@ public class SharedPreferencesProvider extends RemotePreferenceProvider {
 
     @Override
     protected boolean checkAccess(String prefName, String prefKey, boolean write) {
-        if (write)
-            return false;
+//        if (write)
+//            return false;
         return super.checkAccess(prefName, prefKey, write);
     }
 }

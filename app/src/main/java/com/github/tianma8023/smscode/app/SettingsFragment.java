@@ -10,25 +10,35 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
+import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.IConstants;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.utils.PackageUtils;
+import com.github.tianma8023.smscode.utils.RemotePreferencesUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
 import com.github.tianma8023.smscode.utils.XLog;
+import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
+import com.github.tianma8023.smscode.utils.rom.RomUtils;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RequestExecutor;
 
-import permissions.dispatcher.PermissionUtils;
+import java.util.List;
 
 /**
  * 首选项Fragment
@@ -37,16 +47,23 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     private HomeActivity mHomeActivity;
 
+    private SwitchPreference mEnablePreference;
+
+    private RemotePreferences mRemotePreferences;
+
     public interface OnNestedPreferenceClickListener {
         void onNestedPreferenceClicked(String key, String title);
     }
 
     public interface OnPreferenceSwitchedListener {
-        void onPreferenceSwitched(String key, boolean newValue);
+        void onPreferenceSwitched(String key, boolean on);
     }
 
     private OnNestedPreferenceClickListener mNestedPreferenceClickListener;
     private OnPreferenceSwitchedListener mPreferenceSwitchedListener;
+
+    private boolean mIsFirstRunSinceV1;
+    private WebView mPermStateWebView;
 
     public SettingsFragment() {
     }
@@ -58,7 +75,8 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         addPreferencesFromResource(R.xml.settings);
 
         findPreference(IPrefConstants.KEY_VERBOSE_LOG_MODE).setOnPreferenceChangeListener(this);
-        findPreference(IPrefConstants.KEY_ENABLE).setOnPreferenceChangeListener(this);
+        mEnablePreference = (SwitchPreference) findPreference(IPrefConstants.KEY_ENABLE);
+        mEnablePreference.setOnPreferenceChangeListener(this);
 
         findPreference(IPrefConstants.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
         findPreference(IPrefConstants.KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
@@ -76,6 +94,17 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mHomeActivity = (HomeActivity) getActivity();
+        mRemotePreferences = RemotePreferencesUtils.getDefaultRemotePreferences(mHomeActivity);
+        mIsFirstRunSinceV1 = RemotePreferencesUtils.isFirstRunSinceV1(mRemotePreferences);
+        initIfIsFirstRunV1();
+    }
+
+    private void initIfIsFirstRunV1() {
+        if (mIsFirstRunSinceV1) {
+            View dialogView = mHomeActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
+            mPermStateWebView = dialogView.findViewById(R.id.perm_state_webview);
+            mPermStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
+        }
     }
 
     public void setOnNestedPreferenceClickListener(OnNestedPreferenceClickListener nestedPreferenceClickListener) {
@@ -140,9 +169,6 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
         if (IPrefConstants.KEY_ENABLE.equals(key)) {
-//            if (mPreferenceSwitchedListener != null) {
-//                mPreferenceSwitchedListener.onPreferenceSwitched(key, (Boolean) newValue);
-//            }
             onEnabledSwitched((Boolean) newValue);
         } else if (IPrefConstants.KEY_VERBOSE_LOG_MODE.equals(key)) {
             onVerboseLogModeSwitched((Boolean) newValue);
@@ -222,41 +248,109 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     }
 
     private void onEnabledSwitched(boolean enable) {
-        if (enable) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                tryToAcquireNecessaryPermissions();
+        if (!enable) {
+            return;
+        }
+        if (mIsFirstRunSinceV1) {
+            showPermissionStatement();
+            mIsFirstRunSinceV1 = false;
+            RemotePreferencesUtils.setFirstRunSinceV1(mRemotePreferences, mIsFirstRunSinceV1);
+        } else {
+            tryToAcquireNecessaryPermissions();
+        }
+    }
+
+    // 申请必要权限
+    private void tryToAcquireNecessaryPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
+        Rationale<List<String>> rationale = new Rationale<List<String>>() {
+            @Override
+            public void showRationale(Context context, List<String> data, final RequestExecutor executor) {
+                new MaterialDialog.Builder(mHomeActivity)
+                        .title(R.string.permission_requirement)
+                        .content(R.string.receive_sms_permission_requirement)
+                        .positiveText(R.string.okay)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                executor.execute();
+                            }
+                        })
+                        .negativeText(R.string.cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                executor.cancel();
+                            }
+                        })
+                        .show();
+            }
+        };
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Manifest.permission.READ_SMS,
+                        Manifest.permission.RECEIVE_SMS)
+                .rationale(rationale)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        requestOtherPermissionsIfNecessary();
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        Toast.makeText(mHomeActivity, R.string.prompt_sms_permission_denied, Toast.LENGTH_LONG).show();
+                        mEnablePreference.setChecked(false);
+                    }
+                })
+                .start();
+    }
+
+    // 展示权限声明
+    private void showPermissionStatement() {
+        new MaterialDialog.Builder(mHomeActivity)
+                .title(R.string.permission_statement)
+                .customView(mPermStateWebView, false)
+                .positiveText(R.string.okay)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        tryToAcquireNecessaryPermissions();
+                    }
+                })
+                .show();
+    }
+
+    // 必要情况下，申请其他更多权限（MIUI的"通知类短信"权限）
+    private void requestOtherPermissionsIfNecessary() {
+        if (RomUtils.isMiui()) {
+            if (!RemotePreferencesUtils.isServiceSmsPromptShown(mRemotePreferences)) {
+                new MaterialDialog.Builder(mHomeActivity)
+                        .title(R.string.permission_requirement)
+                        .content(R.string.service_sms_permission_requirement)
+                        .positiveText(R.string.okay)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                MiuiUtils.goToPermissionEditorActivity(mHomeActivity);
+                                RemotePreferencesUtils.setServiceSmsPromptShown(mRemotePreferences, true);
+                            }
+                        })
+                        .negativeText(R.string.cancel)
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Toast.makeText(mHomeActivity, R.string.prompt_service_sms_permission_denied, Toast.LENGTH_LONG).show();
+                                mEnablePreference.setChecked(false);
+                            }
+                        })
+                        .show();
             }
         }
-    }
-
-    private static final int REQUEST_CODE_RECEIVE_SMS = 0xff;
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void tryToAcquireNecessaryPermissions() {
-        boolean granted = PermissionUtils.hasSelfPermissions(mHomeActivity, Manifest.permission.RECEIVE_SMS);
-        if (!granted) {
-            new MaterialDialog.Builder(mHomeActivity)
-                    .title("权限获取")
-                    .content("需要获取读取短信权限")
-                    .positiveText("好的")
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, REQUEST_CODE_RECEIVE_SMS);
-                        }
-                    })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        }
-                    })
-                    .show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

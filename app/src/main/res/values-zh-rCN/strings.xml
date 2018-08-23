@@ -64,4 +64,12 @@
     <string name="focus_mode_entry_manual">手动指定验证码输入框</string>
     <!-- Focus Mode end -->
 
+    <!-- permission requirement -->
+    <string name="permission_statement">权限声明</string>
+    <string name="permission_requirement">权限获取</string>
+    <string name="receive_sms_permission_requirement">需要获得读取短信权限</string>
+    <string name="prompt_sms_permission_denied">读取短信权限获取失败，本应用将无法正常工作。</string>
+    <string name="service_sms_permission_requirement">MIUI中需要获得通知类短信权限</string>
+    <string name="prompt_service_sms_permission_denied">通知类短信权限获取失败，本应用将无法正常工作。</string>
+    <!-- permission requirement end -->
 </resources>

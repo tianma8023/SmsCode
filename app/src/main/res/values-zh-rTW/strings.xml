@@ -65,6 +65,15 @@
     <string name="focus_mode_entry_manual">手動指定驗證碼輸入框</string>
     <!-- Focus Mode end -->
 
+    <!-- permission requirement -->
+    <string name="permission_statement">權限聲明</string>
+    <string name="permission_requirement">權限獲取</string>
+    <string name="receive_sms_permission_requirement">需要獲得讀取簡訊權限</string>
+    <string name="prompt_sms_permission_denied">讀取簡訊權限獲取失敗，本應用將無法正常運作。</string>
+    <string name="service_sms_permission_requirement">MIUI中需要獲得通知類簡訊權限</string>
+    <string name="prompt_service_sms_permission_denied">通知類簡訊權限獲取失敗，本應用將無法正常運作。</string>
+    <!-- permission requirement end -->
+
     <string-array name="question_list">
         <item>這個模組適用於什麼樣的Rom呢？</item>
         <item>我的手機本身就有這個功能了，還需要這個模組嗎？</item>
