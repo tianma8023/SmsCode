@@ -57,6 +57,7 @@
     <string name="pref_debug">Debug</string>
     <string name="pref_verbose_log_mode">Detailed log</string>
     <string name="pref_verbose_log_mode_summary">Print detailed log(only for debug)</string>
+    <string name="pref_choose_theme_title">Theme</string>
 
     <!-- Focus Mode -->
     <string name="pref_focus_mode_title">Focus Mode</string>
@@ -84,12 +85,23 @@
     </string-array>
 
     <string-array name="answer_list">
-        <item>适用于AOSP之类的偏原生的Rom，其他第三方中度或者重度定制的ROM可能不适用。</item>
+        <item>适用于AOSP之类的偏原生的Rom，其他第三方中度或者重度定制的Rom可能不适用。</item>
         <item>我可去你个可爱大西瓜，你开心就好。 ^_^</item>
         <item>收到验证码后，通过无障碍服务查找当前界面的验证码输入框，然后将验证码自动输入。\n\n无障碍模式下需要手动开启自动输入的无障碍服务(系统后台就会一直跑着这个服务)\n\nROOT模式则是通过ROOT或其他Hack的方式动态地启用/关闭无障碍服务，即在解析到验证码时打开，在自动输入完毕时关闭。\n\n个人推荐采用ROOT方式。</item>
         <item>开了两个服务，一个服务用来解析短信中的验证码，一个服务用来自动输入(即前面的无障碍服务)。\n\n解析验证码的服务在接收到验证码短信时开启，在解析完毕之后关闭，不占用什么资源。</item>
-        <item>1. 在验证码短信测试中先测试一下短信内容能否被正确解析。\n\n2. 因为用到了服务和广播，所以检查一下是否在应用控制类软件（黒阈、应用管理、绿色守护等）的黑名单中。\n\n3. 联系开发者，反馈问题。</item>
+        <item>1. 在验证码短信测试中先测试一下短信内容能否被正确解析。\n\n2. 因为用到了服务和广播，所以检查一下是否在应用控制类软件（黑阈、应用管理、绿色守护等）的黑名单中。\n\n3. 联系开发者，反馈问题。</item>
         <item>自Android 4.4起，只有系统默认的短信应用才可以对短信进行写操作。(也可能是因为目前开发者能力不够，没找到合适的方法。)</item>
     </string-array>
     <!-- Q&A end -->
+
+    <!-- theme color -->
+    <string name="color_default">Default</string>
+    <string name="red">Red</string>
+    <string name="pink">Pink</string>
+    <string name="yellow">Yellow</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="violet">Violet</string>
+    <string name="black">Dark</string>
+    <!-- theme color end -->
 </resources>

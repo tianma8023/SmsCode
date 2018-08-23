@@ -60,6 +60,7 @@
     <string name="pref_debug">调试</string>
     <string name="pref_verbose_log_mode">输出详细日志</string>
     <string name="pref_verbose_log_mode_summary">输出详细的日志(仅用于调试)</string>
+    <string name="pref_choose_theme_title">主题</string>
 
     <!-- Focus Mode -->
     <string name="pref_focus_mode_title">对焦模式</string>
@@ -75,4 +76,15 @@
     <string name="service_sms_permission_requirement">MIUI中需要获得通知类短信权限</string>
     <string name="prompt_service_sms_permission_denied">通知类短信权限获取失败，本应用将无法正常工作。</string>
     <!-- permission requirement end -->
+
+    <!-- theme color -->
+    <string name="color_default">默认蓝</string>
+    <string name="red">姨妈红</string>
+    <string name="pink">哔哩粉</string>
+    <string name="yellow">咸蛋黄</string>
+    <string name="green">原谅绿</string>
+    <string name="blue">胖次蓝</string>
+    <string name="violet">基佬紫</string>
+    <string name="black">Dark♂黑</string>
+    <!-- theme color end -->
 </resources>
