@@ -111,6 +111,21 @@ public class SmsCodeHandleService extends IntentService {
 
         String sender = smsMessageData.getSender();
         String msgBody = smsMessageData.getBody();
+        long date = smsMessageData.getDate();
+
+        String lastSender = RemotePreferencesUtils.getLastSmsSender(mPreferences);
+        long lastDate = RemotePreferencesUtils.getLastSmsDate(mPreferences);
+
+        // save last sender & date
+        RemotePreferencesUtils.setLastSmsDate(mPreferences, date);
+        RemotePreferencesUtils.setLastSmsSender(mPreferences, sender);
+
+        if (Math.abs(date - lastDate) <= 5000 && lastSender.equals(sender)) {
+            // duplicate SMS message
+            XLog.d("Duplicate SMS, exiting");
+            return;
+        }
+
         XLog.i("Received a new SMS message");
         if (BuildConfig.DEBUG) {
             XLog.i("Sender: %s", sender);
@@ -138,10 +153,10 @@ public class SmsCodeHandleService extends IntentService {
         mFocusMode = getStringPref(mPreferences, IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
         mIsRootAutoInput = getBooleanPref(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT);
         XLog.d("FocusMode: %s", mFocusMode);
-        XLog.d("isRootAutoInputMode: " + mIsRootAutoInput);
+        XLog.d("RootAutoInputMode: " + mIsRootAutoInput);
 
         if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsRootAutoInput) {
-            // Root auto-input mode
+            // Root mode + Auto Focus Mode
             String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
             // 用root的方式启动
             boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
@@ -194,16 +209,17 @@ public class SmsCodeHandleService extends IntentService {
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
-        if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode)) {
+        if (mIsRootAutoInput && IPrefConstants.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
+            // focus mode: manual focus
+            // input mode: root mode
+            ShellUtils.inputText(verificationCode);
+            XLog.i("Auto input succeed");
+        } else {
             // focus mode: auto focus
             // start auto input
             Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);
             intent.putExtra(SmsCodeAutoInputService.EXTRA_KEY_SMS_CODE, verificationCode);
             sendBroadcast(intent);
-        } else {
-            // focus mode: manual focus
-            ShellUtils.inputText(verificationCode);
-            XLog.i("Auto input succeed");
         }
     }
 

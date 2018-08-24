@@ -2,7 +2,8 @@
     <string name="app_name">短信验证码提取器</string>
 
     <!-- General -->
-    <string name="i_know">知道了</string>
+    <string name="okay">好的</string>
+    <string name="confirm">确定</string>
 
     <!-- Preferences -->
     <string name="pref_general">通用</string>
@@ -53,7 +54,6 @@
     <string name="pref_enable_auto_input_code_summary">请选择自动输入模式</string>
     <string name="acquire_root_permission">获取Root权限</string>
     <string name="acquire_root_permission_prompt">需要获取Root权限来自动输入验证码</string>
-    <string name="okay">好的</string>
     <string name="channel_name_foreground_service">解析短信时的通知</string>
     <string name="sms_code_notification_title">短信解析中……</string>
     <string name="action_home_faq_title">常见问题</string>
@@ -67,6 +67,14 @@
     <string name="focus_mode_entry_auto">自动寻找验证码输入框</string>
     <string name="focus_mode_entry_manual">手动指定验证码输入框</string>
     <!-- Focus Mode end -->
+
+    <!-- Listen Mode -->
+    <string name="pref_listen_mode_title">短信监听模式</string>
+    <string name="listen_mode_entry_standard">标准模式(广播监听)</string>
+    <string name="listen_mode_entry_compatible">兼容模式(广播监听+数据库监听)</string>
+    <string name="compatible_mode_prompt_title">兼容模式</string>
+    <string name="compatible_mode_prompt_content">兼容模式需要常驻后台，如果需要开机自启动则请授予权限。\n\n如果标准模式能正常运行，则不推荐兼容模式。</string>
+    <!-- Listen Mode end -->
 
     <!-- permission requirement -->
     <string name="permission_statement">权限声明</string>

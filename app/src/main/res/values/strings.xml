@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">SMS Code Extractor</string>
 
+    <string name="okay">OK</string>
+    <string name="confirm">Confirm</string>
+
     <string name="pref_general">General</string>
     <string name="pref_enable">Enable SMS code</string>
     <string name="pref_enable_summary">Reboot is not required</string>
-    <string name="i_know">I see</string>
     <string name="pref_show_toast">Show Toast</string>
     <string name="pref_show_toast_summary">Show Toast when a SMS Code is copied.</string>
     <string name="about">About</string>
@@ -50,7 +52,6 @@
     <string name="pref_enable_auto_input_code_summary">Please choose an auto-input mode.</string>
     <string name="acquire_root_permission">ROOT permission required</string>
     <string name="acquire_root_permission_prompt">Root permission for auto-input code is required</string>
-    <string name="okay">OK</string>
     <string name="channel_name_foreground_service">Notifications for parsing SMS message</string>
     <string name="sms_code_notification_title">Parsing SMS message……</string>
     <string name="action_home_faq_title">FAQs</string>
@@ -65,6 +66,14 @@
     <string name="focus_mode_entry_manual">Manual Focus SMS code EditText</string>
     <!-- Focus Mode end -->
 
+    <!-- Listen Mode -->
+    <string name="pref_listen_mode_title">SMS listen mode</string>
+    <string name="listen_mode_entry_standard">Standard Mode(Broadcast Listen)</string>
+    <string name="listen_mode_entry_compatible">Compatible Mode(Broadcast Listen + Database Listen)</string>
+    <string name="compatible_mode_prompt_content">Compatible Mode will run service in background.AutoStart permission should be granted to work well after Boot completed.\n\nCompatible Mode isn\'t recommended if Standard Mode works well.</string>
+    <string name="compatible_mode_prompt_title">Compatible Mode</string>
+    <!-- Listen Mode end -->
+
     <!-- permission requirement -->
     <string name="permission_statement">Permission Statement</string>
     <string name="permission_requirement">Permission Requirement</string>
@@ -73,6 +82,17 @@
     <string name="service_sms_permission_requirement">Service SMS permission needs to be granted for MIUI users.</string>
     <string name="prompt_service_sms_permission_denied">Service SMS permission is denied, this app will not work properly.</string>
     <!-- permission requirement end -->
+
+    <!-- theme color -->
+    <string name="color_default">Default</string>
+    <string name="red">Red</string>
+    <string name="pink">Pink</string>
+    <string name="yellow">Yellow</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="violet">Violet</string>
+    <string name="black">Dark</string>
+    <!-- theme color end -->
 
     <!-- Q&A -->
     <string-array name="question_list">
@@ -93,15 +113,4 @@
         <item>自Android 4.4起，只有系统默认的短信应用才可以对短信进行写操作。(也可能是因为目前开发者能力不够，没找到合适的方法。)</item>
     </string-array>
     <!-- Q&A end -->
-
-    <!-- theme color -->
-    <string name="color_default">Default</string>
-    <string name="red">Red</string>
-    <string name="pink">Pink</string>
-    <string name="yellow">Yellow</string>
-    <string name="green">Green</string>
-    <string name="blue">Blue</string>
-    <string name="violet">Violet</string>
-    <string name="black">Dark</string>
-    <!-- theme color end -->
 </resources>

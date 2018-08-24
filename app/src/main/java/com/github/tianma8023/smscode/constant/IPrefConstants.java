@@ -12,7 +12,11 @@ public interface IPrefConstants {
     String REMOTE_PREF_AUTHORITY = BuildConfig.APPLICATION_ID + ".preferences";
 
     String KEY_ENABLE = "pref_enable";
-    boolean KEY_ENABLE_DEFAULT = true;
+    boolean KEY_ENABLE_DEFAULT = false;
+
+    String KEY_LISTEN_MODE = "pref_listen_mode";
+    String KEY_LISTEN_MODE_STANDARD = "listen_mode_standard";
+    String KEY_LISTEN_MODE_COMPATIBLE = "listen_mode_compatible";
 
     String KEY_SHOW_TOAST = "pref_show_toast";
     boolean KEY_SHOW_TOAST_DEFAULT = true;
@@ -46,6 +50,7 @@ public interface IPrefConstants {
     boolean KEY_AUTO_INPUT_MODE_ROOT_DEFAULT = false;
     String KEY_FOCUS_MODE = "pref_focus_mode";
     String KEY_FOCUS_MODE_AUTO = "focus_mode_auto";
+    String KEY_FOCUS_MODE_MANUAL = "focus_mode_manual";
 
     String KEY_VERBOSE_LOG_MODE = "pref_verbose_log_mode";
     boolean KEY_VERBOSE_LOG_MODE_DEFAULT = false;

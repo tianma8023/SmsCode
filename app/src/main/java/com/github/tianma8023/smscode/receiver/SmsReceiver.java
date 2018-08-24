@@ -33,10 +33,12 @@ public class SmsReceiver extends BroadcastReceiver {
                 if (messages.length != 0) {
                     String body = SmsMessageUtils.getMessageBody(messages);
                     String sender = messages[0].getOriginatingAddress();
+                    long date = System.currentTimeMillis();
 
                     SmsMessageData smsMessageData = new SmsMessageData();
                     smsMessageData.setBody(body);
                     smsMessageData.setSender(sender);
+                    smsMessageData.setDate(date);
 
                     Intent smsCodeHandleSvc = new Intent(context, SmsCodeHandleService.class);
                     smsCodeHandleSvc.putExtra(SmsCodeHandleService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMessageData);

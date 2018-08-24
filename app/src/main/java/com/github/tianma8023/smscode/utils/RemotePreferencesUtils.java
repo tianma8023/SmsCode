@@ -11,6 +11,8 @@ public class RemotePreferencesUtils {
     private static final String FIRST_RUN_SINCE_V1 = "first_run_v1";
     // 是否已经对MIUI的"通知类短信"权限进行提示了
     private static final String SERVICE_SMS_PROMPT_SHOWN = "service_sms_prompt_shown";
+    private static final String LAST_SMS_DATE = "last_sms_date";
+    private static final String LAST_SMS_SENDER = "last_sms_sender";
 
     private RemotePreferencesUtils() {
     }
@@ -44,6 +46,23 @@ public class RemotePreferencesUtils {
         }
     }
 
+    public static void setStringPref(RemotePreferences preferences, String key, String value) {
+        preferences.edit().putString(key, value).apply();
+    }
+
+    public static long getLongPref(RemotePreferences preferences, String key, long defaultValue) {
+        try {
+            return preferences.getLong(key, defaultValue);
+        } catch (RemotePreferenceAccessException e) {
+            XLog.d("Failed to read preference: %s", key, e);
+            return defaultValue;
+        }
+    }
+
+    public static void setLongPref(RemotePreferences preferences, String key, long value) {
+        preferences.edit().putLong(key, value).apply();
+    }
+
     public static boolean isFirstRunSinceV1(RemotePreferences preferences) {
         return getBooleanPref(preferences, FIRST_RUN_SINCE_V1, true);
     }
@@ -63,5 +82,21 @@ public class RemotePreferencesUtils {
 
     public static void setServiceSmsPromptShown(RemotePreferences preferences, boolean shown) {
         setBooleanPref(preferences, SERVICE_SMS_PROMPT_SHOWN, shown);
+    }
+
+    public static void setLastSmsSender(RemotePreferences preferences, String lastSender) {
+        setStringPref(preferences, LAST_SMS_SENDER, lastSender);
+    }
+
+    public static String getLastSmsSender(RemotePreferences preferences) {
+        return getStringPref(preferences, LAST_SMS_SENDER, "");
+    }
+
+    public static void setLastSmsDate(RemotePreferences preferences, long lastSendDate) {
+        setLongPref(preferences, LAST_SMS_DATE, lastSendDate);
+    }
+
+    public static long getLastSmsDate(RemotePreferences preferences) {
+        return getLongPref(preferences, LAST_SMS_DATE, -1L);
     }
 }

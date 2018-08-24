@@ -23,6 +23,7 @@ import com.github.tianma8023.smscode.app.theme.ItemCallback;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.service.SmsObserveService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,21 @@ public class HomeActivity extends BaseActivity implements
 
         // setup toolbar
         setupToolbar();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        boolean enable = mPreferences.getBoolean(IPrefConstants.KEY_ENABLE,
+                IPrefConstants.KEY_ENABLE_DEFAULT);
+        String listenMode = mPreferences.getString(IPrefConstants.KEY_LISTEN_MODE,
+                IPrefConstants.KEY_LISTEN_MODE_STANDARD);
+        if (enable && IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
+            SmsObserveService.startMe(this);
+        } else {
+            SmsObserveService.stopMe(this);
+        }
     }
 
     private void initTheme() {

@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
 
@@ -41,6 +40,7 @@
             android:targetActivity=".app.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity-alias>
@@ -62,20 +62,46 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config"/>
         </service>
-
         <service
             android:name=".service.SmsCodeHandleService"
             android:enabled="true"
             android:exported="false">
         </service>
+        <service
+            android:name=".service.SmsObserveService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":background"/>
 
         <receiver
-            android:permission="android.permission.BROADCAST_SMS"
             android:name=".receiver.SmsReceiver"
             android:enabled="true"
-            android:exported="true">
-            <intent-filter>
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_EJECT" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_SHARED" />
+                <action android:name="android.intent.action.MEDIA_SCANNER_STARTED" />
+                <action android:name="android.intent.action.MEDIA_SCANNER_FINISHED" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <action android:name="android.intent.action.MEDIA_BAD_REMOVAL" />
+
+                <data android:scheme="file" />
             </intent-filter>
         </receiver>
     </application>

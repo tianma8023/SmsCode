@@ -3,7 +3,8 @@
     <string name="app_name">簡訊驗證碼擷取器</string>
 
     <!-- General -->
-    <string name="i_know">知道了</string>
+    <string name="okay">好的</string>
+    <string name="confirm">確定</string>
 
     <!-- Preferences -->
     <string name="pref_general">一般設定</string>
@@ -54,7 +55,6 @@
     <string name="pref_enable_auto_input_code_summary">請選擇自動輸入模式</string>
     <string name="acquire_root_permission">獲取Root權限</string>
     <string name="acquire_root_permission_prompt">需要獲取Root權限啟用自動輸入</string>
-    <string name="okay">好的</string>
     <string name="channel_name_foreground_service">分析簡訊時的通知</string>
     <string name="sms_code_notification_title">簡訊分析中……</string>
     <string name="action_home_faq_title">常見問題</string>
@@ -69,6 +69,14 @@
     <string name="focus_mode_entry_manual">手動指定驗證碼輸入框</string>
     <!-- Focus Mode end -->
 
+    <!-- Listen Mode -->
+    <string name="pref_listen_mode_title">簡訊監聽模式</string>
+    <string name="listen_mode_entry_standard">標準模式(廣播監聽)</string>
+    <string name="listen_mode_entry_compatible">兼容模式(廣播監聽+數據庫監聽)</string>
+    <string name="compatible_mode_prompt_title">兼容模式</string>
+    <string name="compatible_mode_prompt_content">兼容模式需要常駐後台，如果需要開機自啟動則請授予權限。\n\n如果標準模式能正常運作，則不推薦兼容模式。</string>
+    <!-- Listen Mode end -->
+
     <!-- permission requirement -->
     <string name="permission_statement">權限聲明</string>
     <string name="permission_requirement">權限獲取</string>
@@ -77,6 +85,17 @@
     <string name="service_sms_permission_requirement">MIUI中需要獲得通知類簡訊權限</string>
     <string name="prompt_service_sms_permission_denied">通知類簡訊權限獲取失敗，本應用將無法正常運作。</string>
     <!-- permission requirement end -->
+
+    <!-- theme color -->
+    <string name="color_default">默認藍</string>
+    <string name="red">姨媽紅</string>
+    <string name="pink">櫻花粉</string>
+    <string name="yellow">鹹蛋黃</string>
+    <string name="green">原諒綠</string>
+    <string name="blue">胖次藍</string>
+    <string name="violet">基佬紫</string>
+    <string name="black">Dark♂黑</string>
+    <!-- theme color end -->
 
     <string-array name="question_list">
         <item>這個模組適用於什麼樣的Rom呢？</item>
@@ -95,15 +114,4 @@
         <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此模組加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 請聯繫開發者，並回報相關問題。</item>
         <item>從Android 4.4起，只有系統預設的簡訊程式才能對簡訊進行修改與操作。(也可能是開發者能力不夠，沒有找到合適的方法。)</item>
     </string-array>
-
-    <!-- theme color -->
-    <string name="color_default">默認藍</string>
-    <string name="red">姨媽紅</string>
-    <string name="pink">櫻花粉</string>
-    <string name="yellow">鹹蛋黃</string>
-    <string name="green">原諒綠</string>
-    <string name="blue">胖次藍</string>
-    <string name="violet">基佬紫</string>
-    <string name="black">Dark♂黑</string>
-    <!-- theme color end -->
 </resources>

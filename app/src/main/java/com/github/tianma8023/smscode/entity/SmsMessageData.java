@@ -15,6 +15,8 @@ public class SmsMessageData implements Parcelable {
     private String mSender;
     // Message content
     private String mBody;
+    // Receive date
+    private long mDate;
 
     public static SmsMessageData fromIntent(Intent intent) {
         SmsMessage[] smsMessageParts = SmsMessageUtils.fromIntent(intent);
@@ -39,12 +41,21 @@ public class SmsMessageData implements Parcelable {
         return this;
     }
 
+    public SmsMessageData setDate(long date) {
+        mDate = date;
+        return this;
+    }
+
     public String getSender() {
         return mSender;
     }
 
     public String getBody() {
         return mBody;
+    }
+
+    public long getDate() {
+        return mDate;
     }
 
     @Override
@@ -55,6 +66,7 @@ public class SmsMessageData implements Parcelable {
     private SmsMessageData(Parcel source) {
         mSender = source.readString();
         mBody = source.readString();
+        mDate = source.readLong();
     }
 
     public SmsMessageData() {
@@ -64,6 +76,7 @@ public class SmsMessageData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mSender);
         dest.writeString(mBody);
+        dest.writeLong(mDate);
     }
 
     public static final Creator<SmsMessageData> CREATOR = new Creator<SmsMessageData>() {

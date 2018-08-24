@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
 import android.preference.SwitchPreference;
@@ -51,6 +52,8 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     private HomeActivity mHomeActivity;
 
     private SwitchPreference mEnablePreference;
+    private ListPreference mListenModePreference;
+    private String mCurListenMode;
 
     private RemotePreferences mRemotePreferences;
 
@@ -102,6 +105,11 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         Preference donateByWechat = findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT);
         PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_ABOUT);
         aboutGroup.removePreference(donateByWechat);
+
+        mListenModePreference = (ListPreference) findPreference(IPrefConstants.KEY_LISTEN_MODE);
+        mListenModePreference.setOnPreferenceChangeListener(this);
+        mCurListenMode = mListenModePreference.getValue();
+        refreshListenModePreference(mCurListenMode);
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -109,6 +117,18 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         ThemeItem themeItem = args.getParcelable(EXTRA_KEY_CURRENT_THEME);
         if (themeItem != null) {
             chooseThemePref.setSummary(themeItem.getColorNameRes());
+        }
+    }
+
+    private void refreshListenModePreference(String newValue) {
+        if (TextUtils.isEmpty(newValue))
+            return;
+        CharSequence[] entries = mListenModePreference.getEntries();
+        int index = mListenModePreference.findIndexOfValue(newValue);
+        try {
+            mListenModePreference.setSummary(entries[index]);
+        } catch (Exception e) {
+            //ignore
         }
     }
 
@@ -203,6 +223,14 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         String key = preference.getKey();
         if (IPrefConstants.KEY_ENABLE.equals(key)) {
             onEnabledSwitched((Boolean) newValue);
+        } else if (IPrefConstants.KEY_LISTEN_MODE.equals(key)) {
+            if (!newValue.equals(mCurListenMode)) {
+                mCurListenMode = (String) newValue;
+                refreshListenModePreference(mCurListenMode);
+                if (IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
+                    showCompatibleModePrompt();
+                }
+            }
         } else if (IPrefConstants.KEY_VERBOSE_LOG_MODE.equals(key)) {
             onVerboseLogModeSwitched((Boolean) newValue);
         } else {
@@ -385,5 +413,14 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
                         .show();
             }
         }
+    }
+
+    // 对兼容模式进行提示
+    private void showCompatibleModePrompt() {
+        new MaterialDialog.Builder(mHomeActivity)
+                .title(R.string.compatible_mode_prompt_title)
+                .content(R.string.compatible_mode_prompt_content)
+                .positiveText(R.string.confirm)
+                .show();
     }
 }
