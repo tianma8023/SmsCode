@@ -9,7 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.telephony.SmsMessage;
 
 import com.github.tianma8023.smscode.entity.SmsMessageData;
-import com.github.tianma8023.smscode.service.SmsCodeService;
+import com.github.tianma8023.smscode.service.SmsCodeHandleService;
 import com.github.tianma8023.smscode.utils.SmsMessageUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
@@ -38,9 +38,9 @@ public class SmsReceiver extends BroadcastReceiver {
                     smsMessageData.setBody(body);
                     smsMessageData.setSender(sender);
 
-                    Intent smsCodeService = new Intent(context, SmsCodeService.class);
-                    smsCodeService.putExtra(SmsCodeService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMessageData);
-                    ContextCompat.startForegroundService(context, smsCodeService);
+                    Intent smsCodeHandleSvc = new Intent(context, SmsCodeHandleService.class);
+                    smsCodeHandleSvc.putExtra(SmsCodeHandleService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMessageData);
+                    ContextCompat.startForegroundService(context, smsCodeHandleSvc);
                 }
             }
         }

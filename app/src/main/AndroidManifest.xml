@@ -64,7 +64,7 @@
         </service>
 
         <service
-            android:name=".service.SmsCodeService"
+            android:name=".service.SmsCodeHandleService"
             android:enabled="true"
             android:exported="false">
         </service>

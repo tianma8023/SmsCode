@@ -45,9 +45,9 @@ import static com.github.tianma8023.smscode.utils.RemotePreferencesUtils.getStri
 /**
  * 处理验证码的Service
  */
-public class SmsCodeService extends IntentService {
+public class SmsCodeHandleService extends IntentService {
 
-    private static final String SERVICE_NAME = "SmsCodeService";
+    private static final String SERVICE_NAME = "SmsCodeHandleService";
 
     private static final int NOTIFY_ID_FOREGROUND_SVC = 0xff;
 
@@ -62,7 +62,7 @@ public class SmsCodeService extends IntentService {
     private boolean mIsRootAutoInput;
     private String mFocusMode;
 
-    public SmsCodeService() {
+    public SmsCodeHandleService() {
         this(SERVICE_NAME);
     }
 
@@ -71,7 +71,7 @@ public class SmsCodeService extends IntentService {
      *
      * @param name Used to name the worker thread, important only for debugging.
      */
-    public SmsCodeService(String name) {
+    public SmsCodeHandleService(String name) {
         super(name);
     }
 
@@ -151,17 +151,6 @@ public class SmsCodeService extends IntentService {
             }
         }
 
-//        if (getBooleanPref(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT)) {
-//            // Root auto-input mode
-//            String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
-//            // 用root的方式启动
-//            boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
-//            XLog.d("Accessibility enabled by Root: " + enabled);
-//            if (enabled) { // waiting for AutoInputService working on.
-//                sleep(1);
-//            }
-//        }
-
         XLog.i("Verification code: %s", verificationCode);
         Message copyMsg = new Message();
         copyMsg.obj = verificationCode;
@@ -214,6 +203,7 @@ public class SmsCodeService extends IntentService {
         } else {
             // focus mode: manual focus
             ShellUtils.inputText(verificationCode);
+            XLog.i("Auto input succeed");
         }
     }
 

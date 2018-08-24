@@ -101,6 +101,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
             XLog.d("try times %d", i+1);
             hit = tryToAutoInputSMSCode(smsCode);
             if (hit) {
+                XLog.i("Auto input succeed");
                 break;
             }
             sleep(100);
