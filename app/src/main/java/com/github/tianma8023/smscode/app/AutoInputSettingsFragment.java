@@ -1,5 +1,6 @@
 package com.github.tianma8023.smscode.app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -18,7 +19,7 @@ import com.github.tianma8023.smscode.utils.ShellUtils;
 
 public class AutoInputSettingsFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
 
-    private HomeActivity mHomeActivity;
+    private Context mContext;
 
     private SwitchPreference mAutoInputPreference;
     private SwitchPreference mAccessibilityModePreference;
@@ -51,7 +52,7 @@ public class AutoInputSettingsFragment extends BasePreferenceFragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHomeActivity = (HomeActivity) getActivity();
+        mContext = getActivity();
     }
 
     @Override
@@ -76,14 +77,14 @@ public class AutoInputSettingsFragment extends BasePreferenceFragment implements
                 AccessibilityUtils.getServiceId(SmsCodeAutoInputService.class));
 
         if (accessibilityEnabled != enable) {
-            new MaterialDialog.Builder(mHomeActivity)
+            new MaterialDialog.Builder(mContext)
                     .title(enable ? R.string.open_auto_input_accessibility : R.string.close_auto_input_accessibility)
                     .content(enable ? R.string.open_auto_input_accessibility_prompt : R.string.close_auto_input_accessibility_prompt)
                     .positiveText(enable ? R.string.go_to_open : R.string.go_to_close)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            AccessibilityUtils.gotoAccessibility(mHomeActivity);
+                            AccessibilityUtils.gotoAccessibility(mContext);
                         }
                     })
                     .show();
@@ -98,7 +99,7 @@ public class AutoInputSettingsFragment extends BasePreferenceFragment implements
 
     private void onRootModeSwitched(boolean enable) {
         if (enable) {
-            new MaterialDialog.Builder(mHomeActivity)
+            new MaterialDialog.Builder(mContext)
                     .title(R.string.acquire_root_permission)
                     .content(R.string.acquire_root_permission_prompt)
                     .positiveText(R.string.okay)

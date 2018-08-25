@@ -45,11 +45,6 @@
             </intent-filter>
         </activity-alias>
 
-        <provider
-            android:name=".provider.SharedPreferencesProvider"
-            android:authorities="${applicationId}.preferences"
-            android:exported="true"/>
-
         <service
             android:name=".service.accessibility.SmsCodeAutoInputService"
             android:label="@string/smscode_auto_input_service_label"

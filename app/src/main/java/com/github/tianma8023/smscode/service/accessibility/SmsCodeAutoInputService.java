@@ -11,10 +11,9 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 
-import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
-import com.github.tianma8023.smscode.utils.RemotePreferencesUtils;
+import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
 import com.github.tianma8023.smscode.utils.XLog;
@@ -27,8 +26,6 @@ import java.util.concurrent.TimeUnit;
  * An accessibility service that can input SMS code automatically.
  */
 public class SmsCodeAutoInputService extends BaseAccessibilityService {
-
-    private RemotePreferences mPreferences;
 
     public static final String ACTION_START_AUTO_INPUT = "action_start_auto_input";
     public static final String ACTION_STOP_AUTO_INPUT = "action_stop_auto_input";
@@ -47,7 +44,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                 String smsCode = intent.getStringExtra(EXTRA_KEY_SMS_CODE);
                 autoInputSmsCode(smsCode);
             } else if (ACTION_STOP_AUTO_INPUT.equals(action)) {
-                if (RemotePreferencesUtils.getBoolean(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT)) {
+                if (SPUtils.isAutoInputRootMode(context)) {
                     String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
                     // 用root的方式关闭无障碍服务
                     boolean disabled = ShellUtils.disableAccessibilityService(accessSvcName);
@@ -66,20 +63,12 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
     }
 
     private void init() {
-        initPreferences();
-
         if (mControllerReceiver == null) {
             mControllerReceiver = new AutoInputControllerReceiver();
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ACTION_START_AUTO_INPUT);
             intentFilter.addAction(ACTION_STOP_AUTO_INPUT);
             registerReceiver(mControllerReceiver, intentFilter);
-        }
-    }
-
-    private void initPreferences() {
-        if (mPreferences == null) {
-            mPreferences = RemotePreferencesUtils.getDefaultRemotePreferences(this.getApplicationContext());
         }
     }
 
@@ -118,8 +107,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      * @return 成功输入则返回true，否则返回false
      */
     private boolean tryToAutoInputSMSCode(String smsCode) {
-        String focusMode = RemotePreferencesUtils.getString(
-                mPreferences, IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
+        String focusMode = SPUtils.getFocusMode(this);
         if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(focusMode)) {
             // focus mode: auto focus
             return tryToAutoInputByAutoFocus(smsCode);

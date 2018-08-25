@@ -2,8 +2,6 @@ package com.github.tianma8023.smscode.utils;
 
 import android.content.Context;
 
-import com.crossbowffs.remotepreferences.RemotePreferences;
-import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.constant.ISmsCodeConstants;
 
 import java.util.regex.Matcher;
@@ -56,8 +54,7 @@ public class VerificationUtils {
     }
 
     private static String loadVerificationKeywords(Context context) {
-        RemotePreferences preferences = RemotePreferencesUtils.getDefaultRemotePreferences(context);
-        return RemotePreferencesUtils.getString(preferences, IPrefConstants.KEY_SMSCODE_KEYWORDS, IPrefConstants.KEY_SMSCODE_KEYWORDS_DEFAULT);
+        return SPUtils.getSMSCodeKeywords(context);
     }
 
     /**

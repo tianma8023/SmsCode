@@ -1,6 +1,7 @@
 package com.github.tianma8023.smscode.app;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,14 +24,13 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.IConstants;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.utils.PackageUtils;
-import com.github.tianma8023.smscode.utils.RemotePreferencesUtils;
+import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
@@ -49,13 +49,12 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     public static final String EXTRA_KEY_CURRENT_THEME = "extra_key_current_theme";
 
-    private HomeActivity mHomeActivity;
+    private Activity mActivity;
 
     private SwitchPreference mEnablePreference;
     private ListPreference mListenModePreference;
     private String mCurListenMode;
 
-    private RemotePreferences mRemotePreferences;
 
     public interface OnPreferenceClickCallback {
         void onPreferenceClicked(String key, String title, boolean nestedPreference);
@@ -135,15 +134,14 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHomeActivity = (HomeActivity) getActivity();
-        mRemotePreferences = RemotePreferencesUtils.getDefaultRemotePreferences(mHomeActivity);
-        mIsFirstRunSinceV1 = RemotePreferencesUtils.isFirstRunSinceV1(mRemotePreferences);
+        mActivity = getActivity();
+        mIsFirstRunSinceV1 = SPUtils.isFirstRunSinceV1(mActivity);
         initIfIsFirstRunV1();
     }
 
     private void initIfIsFirstRunV1() {
         if (mIsFirstRunSinceV1) {
-            View dialogView = mHomeActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
+            View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
             mPermStateWebView = dialogView.findViewById(R.id.perm_state_webview);
             mPermStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
         }
@@ -184,17 +182,17 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
             intent.setData(Uri.parse(IConstants.PROJECT_SOURCE_CODE_URL));
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(mHomeActivity, R.string.browser_install_or_enable_prompt, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, R.string.browser_install_or_enable_prompt, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void donateByAlipay() {
-        if (!PackageUtils.isWeChatInstalled(mHomeActivity)) { // uninstalled
-            Toast.makeText(mHomeActivity, R.string.wechat_install_prompt, Toast.LENGTH_SHORT).show();
+        if (!PackageUtils.isWeChatInstalled(mActivity)) { // uninstalled
+            Toast.makeText(mActivity, R.string.wechat_install_prompt, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!PackageUtils.isWeChatEnabled(mHomeActivity)) { // installed but disabled
-            Toast.makeText(mHomeActivity, R.string.wechat_enable_prompt, Toast.LENGTH_SHORT).show();
+        if (!PackageUtils.isWeChatEnabled(mActivity)) { // installed but disabled
+            Toast.makeText(mActivity, R.string.wechat_enable_prompt, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent();
@@ -204,12 +202,12 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     }
 
     private void donateByWechat() {
-        if (!PackageUtils.isAlipayInstalled(mHomeActivity)) { // uninstalled
-            Toast.makeText(mHomeActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
+        if (!PackageUtils.isAlipayInstalled(mActivity)) { // uninstalled
+            Toast.makeText(mActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!PackageUtils.isAlipayEnabled(mHomeActivity)) { // installed but disabled
-            Toast.makeText(mHomeActivity, R.string.alipay_enable_prompt, Toast.LENGTH_SHORT).show();
+        if (!PackageUtils.isAlipayEnabled(mActivity)) { // installed but disabled
+            Toast.makeText(mActivity, R.string.alipay_enable_prompt, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -248,12 +246,12 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     }
 
     private void showSmsCodeTestDialog() {
-        new MaterialDialog.Builder(mHomeActivity)
+        new MaterialDialog.Builder(mActivity)
                 .title(R.string.pref_smscode_test)
                 .input(R.string.sms_content_hint, 0, true, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        new Thread(new SmsCodeTestTask(mHomeActivity, input.toString())).start();
+                        new Thread(new SmsCodeTestTask(mActivity, input.toString())).start();
                     }
                 })
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
@@ -305,7 +303,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         } else {
             text = getString(R.string.cur_verification_code, verificationCode);
         }
-        Toast.makeText(mHomeActivity, text, Toast.LENGTH_LONG).show();
+        Toast.makeText(mActivity, text, Toast.LENGTH_LONG).show();
     }
 
     private void onEnabledSwitched(boolean enable) {
@@ -315,7 +313,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         if (mIsFirstRunSinceV1) {
             showPermissionStatement();
             mIsFirstRunSinceV1 = false;
-            RemotePreferencesUtils.setFirstRunSinceV1(mRemotePreferences, mIsFirstRunSinceV1);
+            SPUtils.setFirstRunSinceV1(mActivity, mIsFirstRunSinceV1);
         } else {
             tryToAcquireNecessaryPermissions();
         }
@@ -330,7 +328,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         Rationale<List<String>> rationale = new Rationale<List<String>>() {
             @Override
             public void showRationale(Context context, List<String> data, final RequestExecutor executor) {
-                new MaterialDialog.Builder(mHomeActivity)
+                new MaterialDialog.Builder(mActivity)
                         .title(R.string.permission_requirement)
                         .content(R.string.receive_sms_permission_requirement)
                         .positiveText(R.string.okay)
@@ -365,7 +363,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
-                        Toast.makeText(mHomeActivity, R.string.prompt_sms_permission_denied, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mActivity, R.string.prompt_sms_permission_denied, Toast.LENGTH_LONG).show();
                         mEnablePreference.setChecked(false);
                     }
                 })
@@ -374,7 +372,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     // 展示权限声明
     private void showPermissionStatement() {
-        new MaterialDialog.Builder(mHomeActivity)
+        new MaterialDialog.Builder(mActivity)
                 .title(R.string.permission_statement)
                 .customView(mPermStateWebView, false)
                 .positiveText(R.string.okay)
@@ -390,23 +388,23 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     // 必要情况下，申请其他更多权限（MIUI的"通知类短信"权限）
     private void requestOtherPermissionsIfNecessary() {
         if (RomUtils.isMiui()) {
-            if (!RemotePreferencesUtils.isServiceSmsPromptShown(mRemotePreferences)) {
-                new MaterialDialog.Builder(mHomeActivity)
+            if (!SPUtils.isServiceSmsPromptShown(mActivity)) {
+                new MaterialDialog.Builder(mActivity)
                         .title(R.string.permission_requirement)
                         .content(R.string.service_sms_permission_requirement)
                         .positiveText(R.string.okay)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                MiuiUtils.goToPermissionEditorActivity(mHomeActivity);
-                                RemotePreferencesUtils.setServiceSmsPromptShown(mRemotePreferences, true);
+                                MiuiUtils.goToPermissionEditorActivity(mActivity);
+                                SPUtils.setServiceSmsPromptShown(mActivity, true);
                             }
                         })
                         .negativeText(R.string.cancel)
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Toast.makeText(mHomeActivity, R.string.prompt_service_sms_permission_denied, Toast.LENGTH_LONG).show();
+                                Toast.makeText(mActivity, R.string.prompt_service_sms_permission_denied, Toast.LENGTH_LONG).show();
                                 mEnablePreference.setChecked(false);
                             }
                         })
@@ -417,7 +415,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     // 对兼容模式进行提示
     private void showCompatibleModePrompt() {
-        new MaterialDialog.Builder(mHomeActivity)
+        new MaterialDialog.Builder(mActivity)
                 .title(R.string.compatible_mode_prompt_title)
                 .content(R.string.compatible_mode_prompt_content)
                 .positiveText(R.string.confirm)

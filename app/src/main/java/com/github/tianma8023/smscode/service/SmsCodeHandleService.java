@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.crossbowffs.remotepreferences.RemotePreferences;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.INotificationConstants;
@@ -30,15 +29,13 @@ import com.github.tianma8023.smscode.entity.SmsMessageData;
 import com.github.tianma8023.smscode.service.accessibility.SmsCodeAutoInputService;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ClipboardUtils;
-import com.github.tianma8023.smscode.utils.RemotePreferencesUtils;
+import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 import com.github.tianma8023.smscode.utils.StringUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
 import java.util.concurrent.TimeUnit;
-
-import static com.github.tianma8023.smscode.utils.RemotePreferencesUtils.getBoolean;
 
 
 /**
@@ -56,9 +53,7 @@ public class SmsCodeHandleService extends IntentService {
     private static final int MSG_COPY_TO_CLIPBOARD = 0xff;
     private static final int MSG_MARK_AS_READ = 0xfe;
 
-    private RemotePreferences mPreferences;
-
-    private boolean mIsRootAutoInput;
+    private boolean mIsAutoInputRootMode;
     private String mFocusMode;
 
     public SmsCodeHandleService() {
@@ -77,7 +72,6 @@ public class SmsCodeHandleService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        mPreferences = RemotePreferencesUtils.getDefaultRemotePreferences(this.getApplicationContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Show a notification for the foreground service.
             Notification notification = new NotificationCompat.Builder(this, INotificationConstants.CHANNEL_ID_FOREGROUND_SERVICE)
@@ -103,7 +97,7 @@ public class SmsCodeHandleService extends IntentService {
     }
 
     private void doWork(SmsMessageData smsMessageData) {
-        if (!getBoolean(mPreferences, IPrefConstants.KEY_ENABLE, IPrefConstants.KEY_ENABLE_DEFAULT)) {
+        if (!SPUtils.isEnable(this)) {
             XLog.i("SmsCode disabled, exiting");
             return;
         }
@@ -112,12 +106,12 @@ public class SmsCodeHandleService extends IntentService {
         String msgBody = smsMessageData.getBody();
         long date = smsMessageData.getDate();
 
-        String lastSender = RemotePreferencesUtils.getLastSmsSender(mPreferences);
-        long lastDate = RemotePreferencesUtils.getLastSmsDate(mPreferences);
+        String lastSender = SPUtils.getLastSmsSender(this);
+        long lastDate = SPUtils.getLastSmsDate(this);
 
         // save last sender & date
-        RemotePreferencesUtils.setLastSmsDate(mPreferences, date);
-        RemotePreferencesUtils.setLastSmsSender(mPreferences, sender);
+        SPUtils.setLastSmsDate(this, date);
+        SPUtils.setLastSmsSender(this, sender);
 
         if (Math.abs(date - lastDate) <= 5000 && lastSender.equals(sender)) {
             // duplicate SMS message
@@ -142,19 +136,19 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
-        boolean verboseLog = getBoolean(mPreferences, IPrefConstants.KEY_VERBOSE_LOG_MODE, IPrefConstants.KEY_VERBOSE_LOG_MODE_DEFAULT);
-        if (verboseLog) {
+        boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
+        if (isVerboseLog) {
             XLog.setLogLevel(Log.VERBOSE);
         } else {
             XLog.setLogLevel(BuildConfig.LOG_LEVEL);
         }
 
-        mFocusMode = RemotePreferencesUtils.getString(mPreferences, IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
-        mIsRootAutoInput = getBoolean(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT);
+        mFocusMode = SPUtils.getFocusMode(this);
+        mIsAutoInputRootMode = SPUtils.isAutoInputRootMode(this);
         XLog.d("FocusMode: %s", mFocusMode);
-        XLog.d("RootAutoInputMode: " + mIsRootAutoInput);
+        XLog.d("AutoInputRootMode: " + mIsAutoInputRootMode);
 
-        if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsRootAutoInput) {
+        if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputRootMode) {
             // Root mode + Auto Focus Mode
             String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
             // 用root的方式启动
@@ -203,12 +197,12 @@ public class SmsCodeHandleService extends IntentService {
      */
     private void copyToClipboardOnMainThread(String verificationCode) {
         ClipboardUtils.copyToClipboard(this, verificationCode);
-        if (getBoolean(mPreferences, IPrefConstants.KEY_SHOW_TOAST, IPrefConstants.KEY_SHOW_TOAST_DEFAULT)) {
+        if (SPUtils.showToast(this)) {
             String text = this.getString(R.string.cur_verification_code, verificationCode);
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
-        if (mIsRootAutoInput && IPrefConstants.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
+        if (mIsAutoInputRootMode && IPrefConstants.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
             // focus mode: manual focus
             // input mode: root mode
             ShellUtils.inputText(verificationCode);
