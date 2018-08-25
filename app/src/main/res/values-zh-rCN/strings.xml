@@ -8,7 +8,8 @@
     <!-- Preferences -->
     <string name="pref_general">通用</string>
     <string name="pref_enable">启用</string>
-    <string name="pref_enable_summary">使用此开关不需要重启设备</string>
+    <string name="pref_enable_summary_off">需要接收和读取短信权限</string>
+    <string name="pref_enable_summary_on">不再需要时可关闭此开关</string>
     <string name="pref_show_toast">显示Toast</string>
     <string name="pref_show_toast_summary">接收到验证码时显示Toast</string>
     <string name="pref_donate_by_alipay">支付宝捐赠</string>

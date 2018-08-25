@@ -9,7 +9,8 @@
     <!-- Preferences -->
     <string name="pref_general">一般設定</string>
     <string name="pref_enable">啟用</string>
-    <string name="pref_enable_summary">啟用/關閉功能不需重新開機</string>
+    <string name="pref_enable_summary_off">需要接收和讀取簡訊權限</string>
+    <string name="pref_enable_summary_on">不再需要時可關閉此開關</string>
     <string name="pref_show_toast">顯示快顯訊息</string>
     <string name="pref_show_toast_summary">接收到驗證碼時顯示快顯訊息</string>
     <string name="pref_donate_by_alipay">支付寶捐贈</string>

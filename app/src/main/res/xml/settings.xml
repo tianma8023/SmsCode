@@ -6,10 +6,11 @@
         <SwitchPreference
             android:key="pref_enable"
             android:title="@string/pref_enable"
-            android:summary="@string/pref_enable_summary"
+            android:summaryOn="@string/pref_enable_summary_on"
+            android:summaryOff="@string/pref_enable_summary_off"
             android:defaultValue="false"/>
 
-        <com.afollestad.materialdialogs.prefs.MaterialListPreference
+        <ListPreference
             android:key="pref_listen_mode"
             android:title="@string/pref_listen_mode_title"
             android:entries="@array/pref_listen_mode_entries"
