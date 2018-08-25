@@ -14,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -249,6 +251,9 @@ public class HomeActivity extends BaseActivity implements
             case R.id.action_home_faq:
                 onFAQSelected();
                 return true;
+            case R.id.action_perm_state:
+                onPermStateSelected();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -275,5 +280,16 @@ public class HomeActivity extends BaseActivity implements
         mCurrentFragment = faqFragment;
         refreshActionBar(getString(R.string.action_home_faq_title));
         invalidateOptionsMenu();
+    }
+
+    private void onPermStateSelected() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
+        WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
+        permStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
+        new MaterialDialog.Builder(this)
+                .title(R.string.permission_statement)
+                .customView(permStateWebView, false)
+                .positiveText(R.string.confirm)
+                .show();
     }
 }

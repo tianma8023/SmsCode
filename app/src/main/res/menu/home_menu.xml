@@ -6,6 +6,10 @@
         android:id="@+id/action_home_faq"
         android:icon="@drawable/ic_question"
         android:title="@string/action_home_faq_title"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_perm_state"
+        android:title="@string/permission_statement"
+        app:showAsAction="never"/>
 </menu>

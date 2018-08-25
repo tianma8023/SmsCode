@@ -62,9 +62,6 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     private OnPreferenceClickCallback mPreferenceClickCallback;
 
-    private boolean mIsFirstRunSinceV1;
-    private WebView mPermStateWebView;
-
     public SettingsFragment() {
     }
 
@@ -135,16 +132,6 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
-        mIsFirstRunSinceV1 = SPUtils.isFirstRunSinceV1(mActivity);
-        initIfIsFirstRunV1();
-    }
-
-    private void initIfIsFirstRunV1() {
-        if (mIsFirstRunSinceV1) {
-            View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
-            mPermStateWebView = dialogView.findViewById(R.id.perm_state_webview);
-            mPermStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
-        }
     }
 
     public void setOnPreferenceClickCallback(OnPreferenceClickCallback preferenceClickCallback) {
@@ -310,10 +297,9 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         if (!enable) {
             return;
         }
-        if (mIsFirstRunSinceV1) {
+        if (SPUtils.isFirstRunSinceV1(mActivity)) {
             showPermissionStatement();
-            mIsFirstRunSinceV1 = false;
-            SPUtils.setFirstRunSinceV1(mActivity, mIsFirstRunSinceV1);
+            SPUtils.setFirstRunSinceV1(mActivity, false);
         } else {
             tryToAcquireNecessaryPermissions();
         }
@@ -372,9 +358,12 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     // 展示权限声明
     private void showPermissionStatement() {
+        View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
+        WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
+        permStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.permission_statement)
-                .customView(mPermStateWebView, false)
+                .customView(permStateWebView, false)
                 .positiveText(R.string.okay)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
