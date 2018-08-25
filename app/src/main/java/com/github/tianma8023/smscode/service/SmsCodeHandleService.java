@@ -38,8 +38,7 @@ import com.github.tianma8023.smscode.utils.XLog;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.tianma8023.smscode.utils.RemotePreferencesUtils.getBooleanPref;
-import static com.github.tianma8023.smscode.utils.RemotePreferencesUtils.getStringPref;
+import static com.github.tianma8023.smscode.utils.RemotePreferencesUtils.getBoolean;
 
 
 /**
@@ -104,7 +103,7 @@ public class SmsCodeHandleService extends IntentService {
     }
 
     private void doWork(SmsMessageData smsMessageData) {
-        if (!getBooleanPref(mPreferences, IPrefConstants.KEY_ENABLE, IPrefConstants.KEY_ENABLE_DEFAULT)) {
+        if (!getBoolean(mPreferences, IPrefConstants.KEY_ENABLE, IPrefConstants.KEY_ENABLE_DEFAULT)) {
             XLog.i("SmsCode disabled, exiting");
             return;
         }
@@ -143,15 +142,15 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
-        boolean verboseLog = getBooleanPref(mPreferences, IPrefConstants.KEY_VERBOSE_LOG_MODE, IPrefConstants.KEY_VERBOSE_LOG_MODE_DEFAULT);
+        boolean verboseLog = getBoolean(mPreferences, IPrefConstants.KEY_VERBOSE_LOG_MODE, IPrefConstants.KEY_VERBOSE_LOG_MODE_DEFAULT);
         if (verboseLog) {
             XLog.setLogLevel(Log.VERBOSE);
         } else {
             XLog.setLogLevel(BuildConfig.LOG_LEVEL);
         }
 
-        mFocusMode = getStringPref(mPreferences, IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
-        mIsRootAutoInput = getBooleanPref(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT);
+        mFocusMode = RemotePreferencesUtils.getString(mPreferences, IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
+        mIsRootAutoInput = getBoolean(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT);
         XLog.d("FocusMode: %s", mFocusMode);
         XLog.d("RootAutoInputMode: " + mIsRootAutoInput);
 
@@ -173,7 +172,7 @@ public class SmsCodeHandleService extends IntentService {
         innerHandler.sendMessage(copyMsg);
 
         // mark sms as read or not.
-//        if (getBooleanPref(mPreferences, IPrefConstants.KEY_MARK_AS_READ, IPrefConstants.KEY_MARK_AS_READ_DEFAULT)) {
+//        if (getBoolean(mPreferences, IPrefConstants.KEY_MARK_AS_READ, IPrefConstants.KEY_MARK_AS_READ_DEFAULT)) {
 ////            sleep(8);
 //            Message markMsg = new Message();
 //            markMsg.obj = smsMessageData;
@@ -204,7 +203,7 @@ public class SmsCodeHandleService extends IntentService {
      */
     private void copyToClipboardOnMainThread(String verificationCode) {
         ClipboardUtils.copyToClipboard(this, verificationCode);
-        if (getBooleanPref(mPreferences, IPrefConstants.KEY_SHOW_TOAST, IPrefConstants.KEY_SHOW_TOAST_DEFAULT)) {
+        if (getBoolean(mPreferences, IPrefConstants.KEY_SHOW_TOAST, IPrefConstants.KEY_SHOW_TOAST_DEFAULT)) {
             String text = this.getString(R.string.cur_verification_code, verificationCode);
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }

@@ -12,7 +12,7 @@ import com.github.tianma8023.smscode.constant.INotificationConstants;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 
-public class SmsCodeApplication extends Application{
+public class SmsCodeApp extends Application{
 
     @Override
     public void onCreate() {

@@ -57,7 +57,7 @@ public class VerificationUtils {
 
     private static String loadVerificationKeywords(Context context) {
         RemotePreferences preferences = RemotePreferencesUtils.getDefaultRemotePreferences(context);
-        return RemotePreferencesUtils.getStringPref(preferences, IPrefConstants.KEY_SMSCODE_KEYWORDS, IPrefConstants.KEY_SMSCODE_KEYWORDS_DEFAULT);
+        return RemotePreferencesUtils.getString(preferences, IPrefConstants.KEY_SMSCODE_KEYWORDS, IPrefConstants.KEY_SMSCODE_KEYWORDS_DEFAULT);
     }
 
     /**

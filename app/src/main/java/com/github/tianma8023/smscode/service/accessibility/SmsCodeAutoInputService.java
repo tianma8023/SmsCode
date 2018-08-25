@@ -47,7 +47,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                 String smsCode = intent.getStringExtra(EXTRA_KEY_SMS_CODE);
                 autoInputSmsCode(smsCode);
             } else if (ACTION_STOP_AUTO_INPUT.equals(action)) {
-                if (RemotePreferencesUtils.getBooleanPref(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT)) {
+                if (RemotePreferencesUtils.getBoolean(mPreferences, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT)) {
                     String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
                     // 用root的方式关闭无障碍服务
                     boolean disabled = ShellUtils.disableAccessibilityService(accessSvcName);
@@ -118,7 +118,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      * @return 成功输入则返回true，否则返回false
      */
     private boolean tryToAutoInputSMSCode(String smsCode) {
-        String focusMode = RemotePreferencesUtils.getStringPref(
+        String focusMode = RemotePreferencesUtils.getString(
                 mPreferences, IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
         if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(focusMode)) {
             // focus mode: auto focus

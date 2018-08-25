@@ -24,7 +24,7 @@ public class RemotePreferencesUtils {
                 true);
     }
 
-    public static boolean getBooleanPref(RemotePreferences mPreferences, String key, boolean defaultValue) {
+    public static boolean getBoolean(RemotePreferences mPreferences, String key, boolean defaultValue) {
         try {
             return mPreferences.getBoolean(key, defaultValue);
         } catch (RemotePreferenceAccessException e) {
@@ -33,11 +33,11 @@ public class RemotePreferencesUtils {
         }
     }
 
-    public static void setBooleanPref(RemotePreferences preferences, String key, boolean value) {
+    public static void putBoolean(RemotePreferences preferences, String key, boolean value) {
         preferences.edit().putBoolean(key, value).apply();
     }
 
-    public static String getStringPref(RemotePreferences preferences, String key, String defaultValue) {
+    public static String getString(RemotePreferences preferences, String key, String defaultValue) {
         try {
             return preferences.getString(key, defaultValue);
         } catch (RemotePreferenceAccessException e) {
@@ -46,11 +46,11 @@ public class RemotePreferencesUtils {
         }
     }
 
-    public static void setStringPref(RemotePreferences preferences, String key, String value) {
+    public static void putString(RemotePreferences preferences, String key, String value) {
         preferences.edit().putString(key, value).apply();
     }
 
-    public static long getLongPref(RemotePreferences preferences, String key, long defaultValue) {
+    public static long getLong(RemotePreferences preferences, String key, long defaultValue) {
         try {
             return preferences.getLong(key, defaultValue);
         } catch (RemotePreferenceAccessException e) {
@@ -59,16 +59,16 @@ public class RemotePreferencesUtils {
         }
     }
 
-    public static void setLongPref(RemotePreferences preferences, String key, long value) {
+    public static void putLong(RemotePreferences preferences, String key, long value) {
         preferences.edit().putLong(key, value).apply();
     }
 
     public static boolean isFirstRunSinceV1(RemotePreferences preferences) {
-        return getBooleanPref(preferences, FIRST_RUN_SINCE_V1, true);
+        return getBoolean(preferences, FIRST_RUN_SINCE_V1, true);
     }
 
     public static void setFirstRunSinceV1(RemotePreferences preferences, boolean value) {
-        setBooleanPref(preferences, FIRST_RUN_SINCE_V1, value);
+        putBoolean(preferences, FIRST_RUN_SINCE_V1, value);
     }
 
     /**
@@ -77,26 +77,26 @@ public class RemotePreferencesUtils {
      * @return
      */
     public static boolean isServiceSmsPromptShown(RemotePreferences preferences) {
-        return getBooleanPref(preferences, SERVICE_SMS_PROMPT_SHOWN, false);
+        return getBoolean(preferences, SERVICE_SMS_PROMPT_SHOWN, false);
     }
 
     public static void setServiceSmsPromptShown(RemotePreferences preferences, boolean shown) {
-        setBooleanPref(preferences, SERVICE_SMS_PROMPT_SHOWN, shown);
+        putBoolean(preferences, SERVICE_SMS_PROMPT_SHOWN, shown);
     }
 
     public static void setLastSmsSender(RemotePreferences preferences, String lastSender) {
-        setStringPref(preferences, LAST_SMS_SENDER, lastSender);
+        putString(preferences, LAST_SMS_SENDER, lastSender);
     }
 
     public static String getLastSmsSender(RemotePreferences preferences) {
-        return getStringPref(preferences, LAST_SMS_SENDER, "");
+        return getString(preferences, LAST_SMS_SENDER, "");
     }
 
     public static void setLastSmsDate(RemotePreferences preferences, long lastSendDate) {
-        setLongPref(preferences, LAST_SMS_DATE, lastSendDate);
+        putLong(preferences, LAST_SMS_DATE, lastSendDate);
     }
 
     public static long getLastSmsDate(RemotePreferences preferences) {
-        return getLongPref(preferences, LAST_SMS_DATE, -1L);
+        return getLong(preferences, LAST_SMS_DATE, -1L);
     }
 }
