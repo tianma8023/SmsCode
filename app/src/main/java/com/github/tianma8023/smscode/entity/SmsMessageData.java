@@ -1,13 +1,7 @@
 package com.github.tianma8023.smscode.entity;
 
-import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.telephony.SmsMessage;
-
-import com.github.tianma8023.smscode.utils.SmsMessageUtils;
-
-import java.text.Normalizer;
 
 public class SmsMessageData implements Parcelable {
 
@@ -17,19 +11,6 @@ public class SmsMessageData implements Parcelable {
     private String mBody;
     // Receive date
     private long mDate;
-
-    public static SmsMessageData fromIntent(Intent intent) {
-        SmsMessage[] smsMessageParts = SmsMessageUtils.fromIntent(intent);
-        String sender = smsMessageParts[0].getDisplayOriginatingAddress();
-        String body = SmsMessageUtils.getMessageBody(smsMessageParts);
-
-        sender = Normalizer.normalize(sender, Normalizer.Form.NFC);
-        body = Normalizer.normalize(body, Normalizer.Form.NFC);
-
-        SmsMessageData message = new SmsMessageData();
-        message.setSender(sender).setBody(body);
-        return message;
-    }
 
     public SmsMessageData setSender(String sender) {
         mSender = sender;

@@ -1,7 +1,5 @@
 package com.github.tianma8023.smscode.utils;
 
-import android.content.Intent;
-import android.provider.Telephony;
 import android.telephony.SmsMessage;
 
 public class SmsMessageUtils {
@@ -9,10 +7,6 @@ public class SmsMessageUtils {
     private static final int SMS_CHARACTER_LIMIT = 160;
 
     private SmsMessageUtils() {
-    }
-
-    public static SmsMessage[] fromIntent(Intent intent) {
-        return Telephony.Sms.Intents.getMessagesFromIntent(intent);
     }
 
     public static String getMessageBody(SmsMessage[] messageParts) {
