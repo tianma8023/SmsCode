@@ -18,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.github.tianma8023.smscode.BuildConfig;
@@ -121,11 +120,11 @@ public class SmsCodeHandleService extends IntentService {
 
         XLog.i("Received a new SMS message");
         if (BuildConfig.DEBUG) {
-            XLog.i("Sender: %s", sender);
-            XLog.i("Body: %s", msgBody);
+            XLog.i("Sender: {}", sender);
+            XLog.i("Body: {}", msgBody);
         } else {
-            XLog.i("Sender: %s", StringUtils.escape(sender));
-            XLog.i("Body: %s", StringUtils.escape(msgBody));
+            XLog.i("Sender: {}", StringUtils.escape(sender));
+            XLog.i("Body: {}", StringUtils.escape(msgBody));
         }
 
         if (TextUtils.isEmpty(msgBody))
@@ -136,30 +135,30 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
-        boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
-        if (isVerboseLog) {
-            XLog.setLogLevel(Log.VERBOSE);
-        } else {
-            XLog.setLogLevel(BuildConfig.LOG_LEVEL);
-        }
+//        boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
+//        if (isVerboseLog) {
+//            XLog.setLogLevel(Log.VERBOSE);
+//        } else {
+//            XLog.setLogLevel(BuildConfig.LOG_LEVEL);
+//        }
 
         mFocusMode = SPUtils.getFocusMode(this);
         mIsAutoInputRootMode = SPUtils.isAutoInputRootMode(this);
-        XLog.d("FocusMode: %s", mFocusMode);
-        XLog.d("AutoInputRootMode: " + mIsAutoInputRootMode);
+        XLog.d("FocusMode: {}", mFocusMode);
+        XLog.d("AutoInputRootMode: {}", mIsAutoInputRootMode);
 
         if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputRootMode) {
             // Root mode + Auto Focus Mode
             String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
             // 用root的方式启动
             boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
-            XLog.d("Accessibility enabled by Root: " + enabled);
+            XLog.d("Accessibility enabled by Root: {}", enabled);
             if (enabled) { // waiting for AutoInputService working on.
                 sleep(1);
             }
         }
 
-        XLog.i("Verification code: %s", verificationCode);
+        XLog.i("Verification code: {}", verificationCode);
         Message copyMsg = new Message();
         copyMsg.obj = verificationCode;
         copyMsg.what = MSG_COPY_TO_CLIPBOARD;
@@ -221,7 +220,7 @@ public class SmsCodeHandleService extends IntentService {
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
                     != PackageManager.PERMISSION_GRANTED) {
-                XLog.e("Don't have permission read sms");
+                XLog.e("Don't have permission to read sms");
                 return;
             }
             Uri uri = Telephony.Sms.Inbox.CONTENT_URI;
@@ -232,13 +231,13 @@ public class SmsCodeHandleService extends IntentService {
                 String curAddress = cursor.getString(cursor.getColumnIndex("address"));
                 int curRead = cursor.getInt(cursor.getColumnIndex("read"));
                 String curBody = cursor.getString(cursor.getColumnIndex("body"));
-                XLog.d("curBody = %s", curBody);
+                XLog.d("curBody = {}", curBody);
                 if (curAddress.equals(sender) && curRead == 0 && curBody.startsWith(body)) {
                     String smsMessageId = cursor.getString(cursor.getColumnIndex("_id"));
                     ContentValues values = new ContentValues();
                     values.put("read", true);
                     int rows = this.getContentResolver().update(uri, values, "_id = ?", new String[]{smsMessageId});
-                    XLog.d("Updates rows %d", rows);
+                    XLog.d("Updates rows {}", rows);
                 }
             }
             XLog.i("Mark as read succeed");

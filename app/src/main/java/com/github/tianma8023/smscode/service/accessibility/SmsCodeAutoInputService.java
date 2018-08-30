@@ -39,7 +39,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            XLog.d("AutoInputControllerReceiver action=%s", action);
+            XLog.d("AutoInputControllerReceiver action={}", action);
             if (ACTION_START_AUTO_INPUT.equals(action)) {
                 String smsCode = intent.getStringExtra(EXTRA_KEY_SMS_CODE);
                 autoInputSmsCode(smsCode);
@@ -48,7 +48,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                     String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
                     // 用root的方式关闭无障碍服务
                     boolean disabled = ShellUtils.disableAccessibilityService(accessSvcName);
-                    XLog.d("Accessibility disabled by Root: " + disabled);
+                    XLog.d("Accessibility disabled by Root: {}", disabled);
                 }
             }
         }
@@ -87,7 +87,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
     private void autoInputSmsCode(String smsCode) {
         boolean hit;
         for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
-            XLog.d("try times %d", i+1);
+            XLog.d("try times {}", i+1);
             hit = tryToAutoInputSMSCode(smsCode);
             if (hit) {
                 XLog.i("Auto input succeed");
@@ -276,7 +276,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                                     List<AccessibilityNodeInfo> editTextNodes) {
         try {
             Class<?> clz = Class.forName(nodeInfo.getClassName().toString());
-            XLog.d("class=%s, text=%s",
+            XLog.d("class={}, text={}",
                     nodeInfo.getClassName().toString(),
                     nodeInfo.getText());
             if (EditText.class.isAssignableFrom(clz)) { // is EditText

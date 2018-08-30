@@ -19,8 +19,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "LOG_TAG", "\"SmsCodeExtractor\"")
     }
 
     signingConfigs {
@@ -35,8 +33,6 @@ android {
     buildTypes {
 
         debug {
-            buildConfigField("int", "LOG_LEVEL", "2")
-
             if (key.exists()) {
                 println "using tianma's keystore"
                 signingConfig signingConfigs.release
@@ -49,8 +45,6 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-
-            buildConfigField("int", "LOG_LEVEL", "4")
 
             if (key.exists()) {
                 println "using tianma's keystore"
@@ -128,4 +122,8 @@ dependencies {
 
     // AndPermission
     implementation 'com.yanzhenjie:permission:2.0.0-rc12'
+
+    // logback android
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'com.github.tony19:logback-android:1.1.1-12'
 }

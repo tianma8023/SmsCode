@@ -17,14 +17,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.IConstants;
@@ -41,6 +39,8 @@ import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RequestExecutor;
 
 import java.util.List;
+
+import ch.qos.logback.classic.Level;
 
 /**
  * 首选项Fragment
@@ -226,9 +226,9 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
     private void onVerboseLogModeSwitched(boolean on) {
         if (on) {
-            XLog.setLogLevel(Log.VERBOSE);
+            XLog.setLogLevel(Level.TRACE);
         } else {
-            XLog.setLogLevel(BuildConfig.LOG_LEVEL);
+            XLog.setLogLevel(Level.INFO);
         }
     }
 

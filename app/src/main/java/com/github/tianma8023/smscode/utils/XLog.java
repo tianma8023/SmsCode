@@ -1,55 +1,65 @@
 package com.github.tianma8023.smscode.utils;
 
-import android.util.Log;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.github.tianma8023.smscode.BuildConfig;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 
 public class XLog {
 
-    private static final String LOG_TAG = BuildConfig.LOG_TAG;
-    private static int sLogLevel = BuildConfig.LOG_LEVEL;
+    private static Logger sLogger;
 
     private XLog() {
     }
 
-    private static void log(int priority, String message, Object... args) {
-        if (priority < sLogLevel)
-            return;
-
-        message = String.format(message, args);
-
-        if (args.length > 0 && args[args.length - 1] instanceof Throwable) {
-            Throwable throwable = (Throwable) args[args.length - 1];
-            String stacktraceStr = Log.getStackTraceString(throwable);
-            message += '\n' + stacktraceStr;
+    public static void init(Context context) {
+        if (sLogger == null) {
+            initLogger(context);
         }
+    }
 
-        // Write to the default log tag
-        Log.println(priority, LOG_TAG, message);
+    private static void initLogger(Context context) {
+        sLogger = (Logger) LoggerFactory.getLogger("SmsCodeLogger");
+        boolean isVerboseLogMode = SPUtils.isVerboseLogMode(context);
+        if (isVerboseLogMode) {
+            setLogLevel(Level.TRACE);
+        } else {
+            setLogLevel(Level.INFO);
+        }
     }
 
     public static void v(String message, Object... args) {
-        log(Log.VERBOSE, message, args);
+        sLogger.trace(message, args);
     }
 
     public static void d(String message, Object... args) {
-        log(Log.DEBUG, message, args);
+        sLogger.debug(message, args);
     }
 
     public static void i(String message, Object... args) {
-        log(Log.INFO, message, args);
+        sLogger.info(message, args);
     }
 
     public static void w(String message, Object... args) {
-        log(Log.WARN, message, args);
+        sLogger.info(message, args);
     }
 
     public static void e(String message, Object... args) {
-        log(Log.ERROR, message, args);
+        sLogger.error(message, args);
     }
 
-    public static void setLogLevel(int logLevel) {
-        sLogLevel = logLevel;
+    public static void e(String message, Throwable e) {
+        sLogger.error(message, e);
+    }
+
+    public static void setLogLevel(@NonNull Level level) {
+        Level curLevel = sLogger.getLevel();
+        if (curLevel.toInt() != level.toInt()) {
+            sLogger.setLevel(level);
+        }
     }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="EXTERNAL_DIR" value="${EXT_DIR}/Android/data/${PACKAGE_NAME}/files/log"/>
+    <property name="INTERNAL_DIR" value="${DATA_DIR}"/>
+    <property name="LOG_DIR" value="${EXTERNAL_DIR:-${INTERNAL_DIR}}"/>
+    <property name="MAX_HISTORY" value="7"/>
+    <property name="CHARSET" value="UTF-8"/>
+
+    <appender name="LogcatAppender" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:dd.SSS} [%thread] %level: %msg%n</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <lazy>true</lazy>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:dd.SSS} [%thread] %level: %msg%n%exception{full}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+
+    </appender>
+
+    <logger name="SmsCodeLogger" level="INFO" additivity="false">
+        <appender-ref ref="LogcatAppender"/>
+        <appender-ref ref="RollingFileAppender"/>
+    </logger>
+
+</configuration>

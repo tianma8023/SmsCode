@@ -35,7 +35,7 @@ public class ShellUtils {
             if (!TextUtils.isEmpty(enabledAccessibilityServices)) {
                 serviceList.addAll(Arrays.asList(enabledAccessibilityServices.split(":")));
             }
-            XLog.d("enabled services = %s", serviceList.toString());
+            XLog.d("enabled services = {}", serviceList);
             return serviceList;
         }
         XLog.e(getResult.getStderr());
@@ -84,13 +84,13 @@ public class ShellUtils {
                 if (enabled) {
                     // need to let accessibility_enabled = 1
                     boolean accessibilityEnabled = isAccessibilityEnabled();
-                    XLog.d("accessibility_enabled: " + accessibilityEnabled);
+                    XLog.d("accessibility_enabled: {}", accessibilityEnabled);
                     if (!accessibilityEnabled) {
                         accessibilityEnabled = setAccessibilityEnabled(true);
                         if (!accessibilityEnabled)
                             return false;
                     }
-                    XLog.d("put accessibility_enabled: " + accessibilityEnabled);
+                    XLog.d("set accessibility_enabled: {}", accessibilityEnabled);
                 }
             }
             return enabled;

@@ -69,7 +69,7 @@ public class MiuiUtils {
         if (isActivityIntentValid(context, intent)) {
             context.startActivity(intent);
         } else {
-            XLog.e("Intent is invalid " + intent);
+            XLog.e("Intent is invalid {}", intent);
         }
     }
 

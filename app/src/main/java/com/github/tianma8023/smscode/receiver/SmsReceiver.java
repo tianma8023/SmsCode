@@ -19,7 +19,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        XLog.d("SmsReceiver#onReceived() - %s", intent.getAction());
+        XLog.d("SmsReceiver#onReceived() - {}", intent.getAction());
         if (SMS_RECEIVED.equals(intent.getAction())) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
