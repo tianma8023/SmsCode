@@ -20,4 +20,35 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# ===============================
+# AndPermission start
 -dontwarn com.yanzhenjie.permission.**
+# AndPermission end
+# ===============================
+
+# ===============================
+# logback-android start
+-dontwarn javax.mail.**
+# logback-android end
+# ===============================
+
+-keep public class com.github.tianma8023.smscode.R$*{
+public static final int *;
+}
+
+# ==========================
+# Umeng analyze proguard start
+
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keep class com.umeng.** {*;}
+
+# Umeng analyze proguard end
+# ==========================

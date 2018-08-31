@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.INotificationConstants;
+import com.github.tianma8023.smscode.utils.CrashHandler;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
@@ -18,6 +19,8 @@ public class SmsCodeApp extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+
+        CrashHandler.init(this);
 
         initXLog();
 
