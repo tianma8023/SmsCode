@@ -207,7 +207,6 @@ public class SmsCodeHandleService extends IntentService {
             ShellUtils.inputText(verificationCode);
             XLog.i("Auto input succeed");
         } else {
-            // focus mode: auto focus
             // start auto input
             Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);
             intent.putExtra(SmsCodeAutoInputService.EXTRA_KEY_SMS_CODE, verificationCode);

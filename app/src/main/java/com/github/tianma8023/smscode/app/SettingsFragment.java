@@ -29,6 +29,7 @@ import com.github.tianma8023.smscode.constant.IConstants;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.utils.PackageUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
+import com.github.tianma8023.smscode.utils.StorageUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
@@ -92,10 +93,9 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
 
-        // Hide mark as read preference item.
-        Preference markAsReadPref = findPreference(IPrefConstants.KEY_MARK_AS_READ);
+        // Hide experimental group.
         PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_EXPERIMENTAL);
-        experimentalGroup.removePreference(markAsReadPref);
+        getPreferenceScreen().removePreference(experimentalGroup);
 
         // Hide donate by wechat preference item
         Preference donateByWechat = findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT);
@@ -217,15 +217,16 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
                 }
             }
         } else if (IPrefConstants.KEY_VERBOSE_LOG_MODE.equals(key)) {
-            onVerboseLogModeSwitched((Boolean) newValue);
+            onVerboseLogModeSwitched(preference, (Boolean) newValue);
         } else {
             return false;
         }
         return true;
     }
 
-    private void onVerboseLogModeSwitched(boolean on) {
+    private void onVerboseLogModeSwitched(Preference preference, boolean on) {
         if (on) {
+            preference.setSummary(StorageUtils.getLogDir(getActivity()).getAbsolutePath());
             XLog.setLogLevel(Level.TRACE);
         } else {
             XLog.setLogLevel(Level.INFO);

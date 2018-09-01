@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Looper;
 import android.os.Process;
 import android.widget.Toast;
@@ -65,7 +64,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             return;
         }
 
-        File crashLogDir = getCrashLogDir(mContext);
+        File crashLogDir = StorageUtils.getCrashLogDir(mContext);
         if (crashLogDir == null) {
             return;
         }
@@ -167,14 +166,5 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
         pw.close();
         return writer.toString();
-    }
-
-    private File getCrashLogDir(Context context) {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return context.getExternalFilesDir("crash");
-        } else {
-            return new File(context.getFilesDir(), "crash");
-        }
     }
 }
