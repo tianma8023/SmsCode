@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">短信验证码提取器</string>
+    <string name="app_name">验证码提取器</string>
 
     <!-- General -->
     <string name="okay">好的</string>

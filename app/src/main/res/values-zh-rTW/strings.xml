@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">簡訊驗證碼擷取器</string>
+    <string name="app_name">驗證碼擷取器</string>
 
     <!-- General -->
     <string name="okay">好的</string>

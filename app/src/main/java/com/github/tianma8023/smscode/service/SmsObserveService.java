@@ -29,7 +29,6 @@ public class SmsObserveService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        registerObserver();
     }
 
     @Nullable
