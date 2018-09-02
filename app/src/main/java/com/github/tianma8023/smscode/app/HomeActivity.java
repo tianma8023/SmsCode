@@ -26,6 +26,7 @@ import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.service.SmsObserveService;
+import com.github.tianma8023.smscode.utils.ResUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -285,7 +286,9 @@ public class HomeActivity extends BaseActivity implements
     private void onPermStateSelected() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
         WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
-        permStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
+        String data = ResUtils.loadRawRes(this, R.raw.perm_state);
+        permStateWebView.loadDataWithBaseURL("file:///android_asset/",
+                data, "text/html", "utf-8", null);
         new MaterialDialog.Builder(this)
                 .title(R.string.permission_statement)
                 .customView(permStateWebView, false)

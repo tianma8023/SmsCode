@@ -28,6 +28,7 @@ import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.IConstants;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.utils.PackageUtils;
+import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.StorageUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
@@ -361,7 +362,9 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     private void showPermissionStatement() {
         View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
         WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
-        permStateWebView.loadUrl("file:///android_res/raw/perm_state.html");
+        String data = ResUtils.loadRawRes(mActivity, R.raw.perm_state);
+        permStateWebView.loadDataWithBaseURL("file:///android_asset/",
+                data, "text/html", "utf-8", null);
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.permission_statement)
                 .customView(permStateWebView, false)
