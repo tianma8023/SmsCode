@@ -83,9 +83,6 @@ android {
         coolapk {
             dimension "default"
         }
-        xposedRepo {
-            dimension "default"
-        }
         github {
             dimension "default"
         }
