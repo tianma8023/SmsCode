@@ -26,15 +26,15 @@
 # AndPermission end
 # ===============================
 
+
 # ===============================
 # logback-android start
 -dontwarn javax.mail.**
+-keep class ch.qos.** { *; }
+-keep class org.slf4j.** { *; }
+-keepattributes *Annotation*
 # logback-android end
 # ===============================
-
--keep public class com.github.tianma8023.smscode.R$*{
-public static final int *;
-}
 
 # ==========================
 # Umeng analyze proguard start
