@@ -96,4 +96,7 @@
     <string name="violet">基佬紫</string>
     <string name="black">Dark♂黑</string>
     <!-- theme color end -->
+
+    <string name="simplified_question">问：</string>
+    <string name="simplified_answer">答：</string>
 </resources>

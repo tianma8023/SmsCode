@@ -1,5 +1,6 @@
 package com.github.tianma8023.smscode.app.faq;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,8 +16,13 @@ public class FaqItemAdapter extends RecyclerView.Adapter<FaqItemAdapter.ViewHold
 
     private final List<FaqItem> mFaqItems;
 
-    public FaqItemAdapter(List<FaqItem> items) {
+    private final String mQuestionPrefix;
+    private final String mAnswerPrefix;
+
+    public FaqItemAdapter(Context context, List<FaqItem> items) {
         mFaqItems = items;
+        mQuestionPrefix = context.getString(R.string.simplified_question);
+        mAnswerPrefix = context.getString(R.string.simplified_answer);
     }
 
     @NonNull
@@ -30,10 +36,7 @@ public class FaqItemAdapter extends RecyclerView.Adapter<FaqItemAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         FaqItem item = mFaqItems.get(position);
-        holder.mItem = item;
-
-        holder.mQuestionView.setText(item.getQuestion());
-        holder.mAnswerView.setText(item.getAnswer());
+        holder.bindData(item);
     }
 
     @Override
@@ -52,6 +55,14 @@ public class FaqItemAdapter extends RecyclerView.Adapter<FaqItemAdapter.ViewHold
             mView = view;
             mQuestionView = view.findViewById(R.id.item_question);
             mAnswerView = view.findViewById(R.id.item_answer);
+        }
+
+        void bindData(FaqItem item) {
+            mItem = item;
+            String question = mQuestionPrefix + item.getQuestion();
+            mQuestionView.setText(question);
+            String answer = mAnswerPrefix + item.getAnswer();
+            mAnswerView.setText(answer);
         }
 
         @Override
