@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Looper;
 import android.os.Process;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.io.File;
@@ -20,7 +21,17 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Crash Handler
+ */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
+
+    /**
+     * Crash info uploader
+     */
+    public interface CrashUploader {
+        void upload(String crashInfo);
+    }
 
     // Singleton instance
     private static boolean sHasInstance;
@@ -30,7 +41,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     private Context mContext;
 
-    private CrashHandler(Context context) {
+    private CrashUploader mCrashUploader;
+
+    private CrashHandler(Context context, CrashUploader crashUploader) {
         sHasInstance = true;
 
         mContext = context;
@@ -38,11 +51,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         // set system default crash handler
         Thread.setDefaultUncaughtExceptionHandler(this);
+
+        mCrashUploader = crashUploader;
     }
 
-    public static void init(Context context) {
+    public static void init(Context context, CrashUploader crashUploader) {
         if (!sHasInstance) {
-            new CrashHandler(context);
+            new CrashHandler(context, crashUploader);
         }
     }
 
@@ -59,11 +74,17 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    private void handleException(Throwable e) {
-        if (e == null) {
+    private void handleException(Throwable t) {
+        if (t == null) {
             return;
         }
 
+        String crashInfo = gatherCrashInfo(mContext, t);
+        saveCrashInfo(crashInfo);
+        uploadCrashInfo(crashInfo);
+    }
+
+    private void saveCrashInfo(String crashInfo) {
         File crashLogDir = StorageUtils.getCrashLogDir(mContext);
         if (crashLogDir == null) {
             return;
@@ -72,7 +93,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         exists = crashLogDir.exists() || crashLogDir.mkdirs();
 
         if (exists) {
-            final File crashLogFile = saveCrashLogToFile(crashLogDir, mContext, e);
+            final File crashLogFile = saveCrashInfoToFile(crashLogDir, crashInfo);
             if (crashLogFile != null) {
                 new Thread(new Runnable() {
                     @Override
@@ -89,7 +110,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    private File saveCrashLogToFile(File crashDir, Context context, Throwable e) {
+    private File saveCrashInfoToFile(File crashDir, String crashInfo) {
+        if (TextUtils.isEmpty(crashInfo)) {
+            return null;
+        }
         long timestamp = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-sss", Locale.getDefault());
         String time = sdf.format(new Date(timestamp));
@@ -99,22 +123,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(crashFile);
-
-            Map<String, String> deviceInfos = gatherDeviceInfos(context);
-            String exceptionInfo = gatherExceptionInfo(e);
-
-            StringBuilder sb = new StringBuilder();
-
-            for (Map.Entry<String, String> entry : deviceInfos.entrySet()) {
-                sb.append(entry.getKey())
-                        .append(" = ")
-                        .append(entry.getValue())
-                        .append("\n");
-            }
-            sb.append("\n");
-
-            sb.append(exceptionInfo);
-            fos.write(sb.toString().getBytes());
+            fos.write(crashInfo.getBytes());
             return crashFile;
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -128,6 +137,30 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             }
         }
         return null;
+    }
+
+    private void uploadCrashInfo(String crashInfo) {
+        if (mCrashUploader != null) {
+            mCrashUploader.upload(crashInfo);
+        }
+    }
+
+    private String gatherCrashInfo(Context context, Throwable t) {
+        Map<String, String> deviceInfos = gatherDeviceInfos(context);
+        String exceptionInfo = gatherExceptionInfo(t);
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Map.Entry<String, String> entry : deviceInfos.entrySet()) {
+            sb.append(entry.getKey())
+                    .append(" = ")
+                    .append(entry.getValue())
+                    .append("\n");
+        }
+        sb.append("\n");
+
+        sb.append(exceptionInfo);
+        return sb.toString();
     }
 
     // gather device info

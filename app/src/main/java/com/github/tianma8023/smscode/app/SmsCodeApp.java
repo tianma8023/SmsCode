@@ -20,17 +20,21 @@ public class SmsCodeApp extends Application{
     public void onCreate() {
         super.onCreate();
 
-        CrashHandler.init(this);
-
         initXLog();
 
+        initCrashHandler();
+
+        initWithUmengAnalyze();
+
+        initNotificationChannel();
+    }
+
+    private void initNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = INotificationConstants.CHANNEL_ID_FOREGROUND_SERVICE;
             String channelName = getString(R.string.channel_name_foreground_service);
             createNotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_MIN);
         }
-
-//        initWithUmengAnalyze();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -48,11 +52,20 @@ public class SmsCodeApp extends Application{
         UMConfigure.setLogEnabled(BuildConfig.DEBUG);
 
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_DUM_NORMAL);
-        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setCatchUncaughtExceptions(false);
     }
 
     private void initXLog() {
         XLog.init(this);
+    }
+
+    private void initCrashHandler() {
+        CrashHandler.init(this, new CrashHandler.CrashUploader() {
+            @Override
+            public void upload(String crashInfo) {
+                XLog.d("Upload crash info.");
+            }
+        });
     }
 
 }

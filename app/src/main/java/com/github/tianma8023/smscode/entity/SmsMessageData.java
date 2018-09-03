@@ -12,19 +12,16 @@ public class SmsMessageData implements Parcelable {
     // Receive date
     private long mDate;
 
-    public SmsMessageData setSender(String sender) {
+    public void setSender(String sender) {
         mSender = sender;
-        return this;
     }
 
-    public SmsMessageData setBody(String body) {
+    public void setBody(String body) {
         mBody = body;
-        return this;
     }
 
-    public SmsMessageData setDate(long date) {
+    public void setDate(long date) {
         mDate = date;
-        return this;
     }
 
     public String getSender() {
