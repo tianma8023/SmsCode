@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 
-
+/**
+ * Log utils based on logback.
+ */
 public class XLog {
 
     private static Logger sLogger;

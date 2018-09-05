@@ -12,6 +12,9 @@ import com.github.tianma8023.smscode.utils.XLog;
 
 import java.util.List;
 
+/**
+ * Utils for MIUI.
+ */
 public class MiuiUtils {
 
     public static final String KEY_VERSION_NAME_MIUI = "ro.miui.ui.version.name";

@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 
-
+/**
+ * Common Shared preferences utils.
+ */
 public class PreferenceUtils {
 
     private PreferenceUtils() {

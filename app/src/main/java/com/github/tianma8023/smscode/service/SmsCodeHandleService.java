@@ -135,13 +135,6 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
-//        boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
-//        if (isVerboseLog) {
-//            XLog.setLogLevel(Log.VERBOSE);
-//        } else {
-//            XLog.setLogLevel(BuildConfig.LOG_LEVEL);
-//        }
-
         mFocusMode = SPUtils.getFocusMode(this);
         mIsAutoInputRootMode = SPUtils.isAutoInputRootMode(this);
         XLog.d("FocusMode: {}", mFocusMode);
@@ -204,8 +197,10 @@ public class SmsCodeHandleService extends IntentService {
         if (mIsAutoInputRootMode && IPrefConstants.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
             // focus mode: manual focus
             // input mode: root mode
-            ShellUtils.inputText(verificationCode);
-            XLog.i("Auto input succeed");
+            boolean success = ShellUtils.inputText(verificationCode);
+            if (success) {
+                XLog.i("Auto input succeed");
+            }
         } else {
             // start auto input
             Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);

@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 
 
 /**
- * 国产ROM判断
+ * Utils for check Chinese ROM.
  */
 public class RomUtils {
 

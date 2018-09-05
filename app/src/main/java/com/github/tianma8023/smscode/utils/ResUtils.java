@@ -12,6 +12,12 @@ public class ResUtils {
 
     }
 
+    /**
+     * load data from raw resources.
+     * @param context context
+     * @param rawId raw file id.
+     * @return raw file text content.
+     */
     public static String loadRawRes(Context context, @RawRes int rawId) {
         InputStream is = null;
         String data = "";

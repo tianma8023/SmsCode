@@ -5,6 +5,9 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+/**
+ * Clipboard utils.
+ */
 public class ClipboardUtils {
 
     private ClipboardUtils() {

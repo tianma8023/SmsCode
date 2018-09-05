@@ -5,6 +5,9 @@ import android.os.Environment;
 
 import java.io.File;
 
+/**
+ * Utils for storage.
+ */
 public class StorageUtils {
 
     private StorageUtils() {

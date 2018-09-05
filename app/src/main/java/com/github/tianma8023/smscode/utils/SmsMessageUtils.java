@@ -2,6 +2,9 @@ package com.github.tianma8023.smscode.utils;
 
 import android.telephony.SmsMessage;
 
+/**
+ * Utils about android.telephony.SmsMessage
+ */
 public class SmsMessageUtils {
 
     private static final int SMS_CHARACTER_LIMIT = 160;

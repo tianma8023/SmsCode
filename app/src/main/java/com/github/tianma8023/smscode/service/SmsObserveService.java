@@ -100,7 +100,7 @@ public class SmsObserveService extends Service {
         }
         if(cursor.moveToFirst()) {
             int id = cursor.getInt(cursor.getColumnIndex(Telephony.Sms._ID));
-            if (id != lastId) { // the same with the last id
+            if (id != lastId) { // same with the last id
                 lastId = id;
 
                 String sender = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));

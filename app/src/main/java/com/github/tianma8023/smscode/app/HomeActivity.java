@@ -79,8 +79,8 @@ public class HomeActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
 
         boolean enable = mPreferences.getBoolean(IPrefConstants.KEY_ENABLE,
                 IPrefConstants.KEY_ENABLE_DEFAULT);

@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 
+/**
+ * Shared preferences utils only for this App.
+ */
 public class SPUtils {
 
     private static final String FIRST_RUN_SINCE_V1 = "first_run_v1";
