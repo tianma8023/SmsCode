@@ -107,4 +107,13 @@ public class SPUtils {
                 IPrefConstants.KEY_SMSCODE_KEYWORDS, IPrefConstants.KEY_SMSCODE_KEYWORDS_DEFAULT);
     }
 
+    public static int getCurrentThemeIndex(Context context) {
+        return PreferenceUtils.getInt(context,
+                IPrefConstants.KEY_CURRENT_THEME_INDEX, IPrefConstants.KEY_CURRENT_THEME_INDEX_DEFAULT);
+    }
+
+    public static void setCurrentThemeIndex(Context context, int curIndex) {
+        PreferenceUtils.putInt(context, IPrefConstants.KEY_CURRENT_THEME_INDEX, curIndex);
+    }
+
 }

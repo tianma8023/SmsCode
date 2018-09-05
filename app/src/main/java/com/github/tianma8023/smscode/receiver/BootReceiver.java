@@ -20,7 +20,8 @@ public class BootReceiver extends BroadcastReceiver {
         String listenMode = SPUtils.getListenMode(context);
         if (enable && IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
             XLog.d("BootReceiver#onReceived() - {}", intent.getAction());
-            SmsObserveService.startMe(context);
+            boolean isVerboseLog = SPUtils.isVerboseLogMode(context);
+            SmsObserveService.startMe(context, isVerboseLog);
         }
     }
 }

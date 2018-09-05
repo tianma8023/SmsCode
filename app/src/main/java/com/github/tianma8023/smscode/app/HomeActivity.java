@@ -2,7 +2,6 @@ package com.github.tianma8023.smscode.app;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
@@ -27,6 +26,7 @@ import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
 import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.service.SmsObserveService;
 import com.github.tianma8023.smscode.utils.ResUtils;
+import com.github.tianma8023.smscode.utils.SPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +52,10 @@ public class HomeActivity extends BaseActivity implements
     // current theme index
     private int mCurThemeIndex;
     private MaterialDialog mThemeChooseDialog;
-    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreferences = getSharedPreferences(
-                IPrefConstants.REMOTE_PREF_NAME, MODE_PRIVATE);
 
         initTheme();
         setContentView(R.layout.activity_home);
@@ -82,12 +79,11 @@ public class HomeActivity extends BaseActivity implements
     protected void onStop() {
         super.onStop();
 
-        boolean enable = mPreferences.getBoolean(IPrefConstants.KEY_ENABLE,
-                IPrefConstants.KEY_ENABLE_DEFAULT);
-        String listenMode = mPreferences.getString(IPrefConstants.KEY_LISTEN_MODE,
-                IPrefConstants.KEY_LISTEN_MODE_STANDARD);
+        boolean enable = SPUtils.isEnable(this);
+        String listenMode = SPUtils.getListenMode(this);
         if (enable && IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
-            SmsObserveService.startMe(this);
+            boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
+            SmsObserveService.startMe(this, isVerboseLog);
         } else {
             SmsObserveService.stopMe(this);
         }
@@ -95,8 +91,7 @@ public class HomeActivity extends BaseActivity implements
 
     private void initTheme() {
         mThemeItemList = loadThemeColorItems();
-        mCurThemeIndex = mPreferences.getInt(IPrefConstants.KEY_CURRENT_THEME_INDEX,
-                IPrefConstants.KEY_CURRENT_THEME_INDEX_DEFAULT);
+        mCurThemeIndex = SPUtils.getCurrentThemeIndex(this);
         // check current theme index in case of exception.
         if(mCurThemeIndex < 0 || mCurThemeIndex >= mThemeItemList.size()) {
             mCurThemeIndex = IPrefConstants.KEY_CURRENT_THEME_INDEX_DEFAULT;
@@ -173,9 +168,7 @@ public class HomeActivity extends BaseActivity implements
             if (mCurThemeIndex == position) {
                 return;
             }
-            mPreferences.edit()
-                    .putInt(IPrefConstants.KEY_CURRENT_THEME_INDEX, position)
-                    .apply();
+            SPUtils.setCurrentThemeIndex(HomeActivity.this, position);
             recreate();
         }
     };

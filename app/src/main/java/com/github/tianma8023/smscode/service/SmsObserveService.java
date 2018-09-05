@@ -15,7 +15,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.github.tianma8023.smscode.entity.SmsMessageData;
+import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.XLog;
+
+import ch.qos.logback.classic.Level;
 
 /**
  * 观察监测短信的Service
@@ -26,9 +29,14 @@ public class SmsObserveService extends Service {
 
     private int lastId = 0;
 
+    private boolean mCurIsVerboseLog;
+
+    private static final String EXTRA_KEY_VERBOSE_LOG = "extra_key_verbose_log";
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mCurIsVerboseLog = SPUtils.isVerboseLogMode(this);
     }
 
     @Nullable
@@ -39,6 +47,19 @@ public class SmsObserveService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.hasExtra(EXTRA_KEY_VERBOSE_LOG)) {
+            boolean argVerboseLog = intent.getBooleanExtra(EXTRA_KEY_VERBOSE_LOG, false);
+            if (mCurIsVerboseLog != argVerboseLog) {
+                // argument is changed, need to set new level to logger
+                // 因为Logger在不同进程的实例不止一个(多进程的弊端)，所以需要在这里同步
+                mCurIsVerboseLog = argVerboseLog;
+                if (mCurIsVerboseLog) {
+                    XLog.setLogLevel(Level.TRACE);
+                } else {
+                    XLog.setLogLevel(Level.INFO);
+                }
+            }
+        }
         registerObserver();
         return START_STICKY;
     }
@@ -122,8 +143,9 @@ public class SmsObserveService extends Service {
         }
     }
 
-    public static void startMe(Context context) {
+    public static void startMe(Context context, boolean isVerboseLog) {
         Intent service = new Intent(context, SmsObserveService.class);
+        service.putExtra(EXTRA_KEY_VERBOSE_LOG, isVerboseLog);
         context.startService(service);
     }
 
