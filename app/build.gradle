@@ -123,4 +123,7 @@ dependencies {
     // logback android
     implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'com.github.tony19:logback-android:1.1.1-12'
+
+    // tencent bugly
+    implementation 'com.tencent.bugly:crashreport:latest.release'
 }

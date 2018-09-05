@@ -11,6 +11,7 @@ import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.INotificationConstants;
 import com.github.tianma8023.smscode.utils.CrashHandler;
 import com.github.tianma8023.smscode.utils.XLog;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
 
@@ -24,7 +25,9 @@ public class SmsCodeApp extends Application{
 
         initCrashHandler();
 
-        initWithUmengAnalyze();
+        initUmengAnalyze();
+
+        initBugly();
 
         initNotificationChannel();
     }
@@ -47,7 +50,7 @@ public class SmsCodeApp extends Application{
     }
 
     // umeng analyze initialization
-    private void initWithUmengAnalyze() {
+    private void initUmengAnalyze() {
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
         UMConfigure.setLogEnabled(BuildConfig.DEBUG);
 
@@ -55,17 +58,18 @@ public class SmsCodeApp extends Application{
         MobclickAgent.setCatchUncaughtExceptions(false);
     }
 
+    // tencent bugly initialization
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "333c9e49e5", BuildConfig.DEBUG);
+    }
+
     private void initXLog() {
         XLog.init(this);
     }
 
+    // crash handler
     private void initCrashHandler() {
-        CrashHandler.init(this, new CrashHandler.CrashUploader() {
-            @Override
-            public void upload(String crashInfo) {
-                XLog.d("Upload crash info.");
-            }
-        });
+        CrashHandler.init(this, null);
     }
 
 }

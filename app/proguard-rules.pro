@@ -52,3 +52,14 @@
 
 # Umeng analyze proguard end
 # ==========================
+
+# ==========================
+# bugly proguard start
+
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.** {
+    *;
+}
+
+# bugly proguard end
+# ==========================
