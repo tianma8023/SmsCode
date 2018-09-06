@@ -113,9 +113,15 @@ public class SmsObserveService extends Service {
                 Telephony.Sms.BODY,
                 Telephony.Sms.DATE
         };
+        // 考虑到不止新增短信能触发Sms ContentObserver的onChange()，比如删除短信也能触发
+        // 所以需要时间判断, 10s之内的是新短信
+        final String selection = Telephony.Sms.DATE + " > ?";
+        final String[] selectionArgs = new String[]{
+                "" + (System.currentTimeMillis() - 10000),
+        };
         final String sortOrder = Telephony.Sms.DATE + " desc limit 1";
         Cursor cursor = getContentResolver().query(Telephony.Sms.Inbox.CONTENT_URI, projection,
-                null, null, sortOrder);
+                selection, selectionArgs, sortOrder);
         if (cursor == null) {
             return;
         }
