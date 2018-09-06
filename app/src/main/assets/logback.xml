@@ -9,7 +9,7 @@
 
     <appender name="LogcatAppender" class="ch.qos.logback.classic.android.LogcatAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:dd.SSS} [%thread] %level: %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %level: %msg%n</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
     </appender>
@@ -23,7 +23,7 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:dd.SSS} [%thread] %level: %msg%n%exception{full}</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %level: %msg%n%exception{full}</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
 

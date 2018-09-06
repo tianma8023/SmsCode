@@ -118,7 +118,6 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
-        XLog.i("Received a new SMS message");
         if (BuildConfig.DEBUG) {
             XLog.i("Sender: {}", sender);
             XLog.i("Body: {}", msgBody);

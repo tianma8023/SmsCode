@@ -174,7 +174,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         }
     }
 
-    private void donateByAlipay() {
+    private void donateByWechat() {
         if (!PackageUtils.isWeChatInstalled(mActivity)) { // uninstalled
             Toast.makeText(mActivity, R.string.wechat_install_prompt, Toast.LENGTH_SHORT).show();
             return;
@@ -189,7 +189,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         startActivity(intent);
     }
 
-    private void donateByWechat() {
+    private void donateByAlipay() {
         if (!PackageUtils.isAlipayInstalled(mActivity)) { // uninstalled
             Toast.makeText(mActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
             return;
