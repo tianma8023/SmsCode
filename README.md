@@ -4,7 +4,7 @@
 [English Version](/README-EN.md)
 
 # 应用截图
-<img src="art/cn/01.png" width="180"/><img src="art/cn/02.png" width="180"/><img src="art/cn/03.png" width="180"/><img src="art/cn/04.png" width="180"/><img src="art/cn/05.png" width="180"/>
+<img src="art/cn/01.png" width="180"/><img src="art/cn/02.png" width="180"/><img src="art/cn/03.png" width="180"/><img src="art/cn/04.png" width="180"/>
 
 # 已有功能
 - 收到验证码短信后将验证码复制到系统剪贴板
