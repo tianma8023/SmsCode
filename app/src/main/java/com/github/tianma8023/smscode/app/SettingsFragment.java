@@ -90,9 +90,14 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
         addPreferencesFromResource(R.xml.settings);
 
-        findPreference(KEY_VERBOSE_LOG_MODE).setOnPreferenceChangeListener(this);
         mEnablePreference = (SwitchPreference) findPreference(IPrefConstants.KEY_ENABLE);
         mEnablePreference.setOnPreferenceChangeListener(this);
+        // verbose log preference
+        SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
+        verboseLogPref.setOnPreferenceChangeListener(this);
+        // listen mode preference
+        ListPreference listenModePref = (ListPreference) findPreference(KEY_LISTEN_MODE);
+        listenModePref.setOnPreferenceChangeListener(this);
 
         findPreference(IPrefConstants.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
@@ -112,10 +117,10 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_ABOUT);
         aboutGroup.removePreference(donateByWechat);
 
-        ListPreference mListenModePreference = (ListPreference) findPreference(KEY_LISTEN_MODE);
-        mListenModePreference.setOnPreferenceChangeListener(this);
-        mCurListenMode = mListenModePreference.getValue();
-        refreshListenModePreference(mListenModePreference, mCurListenMode);
+        mCurListenMode = listenModePref.getValue();
+        refreshListenModePreference(listenModePref, mCurListenMode);
+
+        refreshVerboseLogPreference(verboseLogPref, verboseLogPref.isChecked());
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -126,13 +131,13 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         }
     }
 
-    private void refreshListenModePreference(ListPreference mListenModePreference, String newValue) {
+    private void refreshListenModePreference(ListPreference listenModePref, String newValue) {
         if (TextUtils.isEmpty(newValue))
             return;
-        CharSequence[] entries = mListenModePreference.getEntries();
-        int index = mListenModePreference.findIndexOfValue(newValue);
+        CharSequence[] entries = listenModePref.getEntries();
+        int index = listenModePref.findIndexOfValue(newValue);
         try {
-            mListenModePreference.setSummary(entries[index]);
+            listenModePref.setSummary(entries[index]);
         } catch (Exception e) {
             //ignore
         }
@@ -238,7 +243,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
                 break;
             }
             case KEY_VERBOSE_LOG_MODE:
-                onVerboseLogModeSwitched(preference, (Boolean) newValue);
+                refreshVerboseLogPreference(preference, (Boolean) newValue);
                 break;
             default:
                 return false;
@@ -246,7 +251,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         return true;
     }
 
-    private void onVerboseLogModeSwitched(Preference preference, boolean on) {
+    private void refreshVerboseLogPreference(Preference preference, boolean on) {
         if (on) {
             preference.setSummary(StorageUtils.getLogDir(getActivity()).getAbsolutePath());
             XLog.setLogLevel(Level.TRACE);
