@@ -48,15 +48,6 @@
             android:defaultValue="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_debug">
-        <SwitchPreference
-            android:key="pref_verbose_log_mode"
-            android:title="@string/pref_verbose_log_mode"
-            android:summaryOff="@string/pref_verbose_log_mode_summary_off"
-            android:dependency="pref_enable"
-            android:defaultValue="false"/>
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/pref_smscode">
 
         <com.github.tianma8023.smscode.preference.ResettableEditPreference
@@ -76,9 +67,23 @@
             android:persistent="false"/>
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/pref_debug">
+        <SwitchPreference
+            android:key="pref_verbose_log_mode"
+            android:title="@string/pref_verbose_log_mode"
+            android:summaryOff="@string/pref_verbose_log_mode_summary_off"
+            android:dependency="pref_enable"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:key="pref_about"
         android:title="@string/about">
+
+        <Preference
+            android:key="pref_version"
+            android:title="@string/pref_version_title"
+            android:summary="@string/pref_version_summary"/>
 
         <Preference
             android:key="pref_source_code"

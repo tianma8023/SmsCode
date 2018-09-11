@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.IConstants;
@@ -54,6 +55,7 @@ import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_LISTEN_M
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_VERBOSE_LOG_MODE;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_VERSION;
 
 /**
  * 首选项Fragment
@@ -122,6 +124,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         refreshListenModePreference(listenModePref, mCurListenMode);
 
         refreshVerboseLogPreference(verboseLogPref, verboseLogPref.isChecked());
+
+        // version info preference
+        Preference versionPref = findPreference(KEY_VERSION);
+        showVersionInfo(versionPref);
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -184,6 +190,12 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 return false;
         }
         return true;
+    }
+
+    private void showVersionInfo(Preference preference) {
+        String summary = getString(R.string.pref_version_summary,
+                BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
+        preference.setSummary(summary);
     }
 
     private void aboutProject() {
