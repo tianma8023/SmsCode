@@ -6,6 +6,8 @@
 # 应用截图
 <img src="art/cn/01.png" width="180"/><img src="art/cn/02.png" width="180"/><img src="art/cn/03.png" width="180"/><img src="art/cn/04.png" width="180"/>
 
+可以从 [酷安](https://www.coolapk.com/apk/com.github.tianma8023.smscode) 或者 [releases](https://github.com/tianma8023/SmsCodeExtractor/releases/) 下载最新的App。
+
 # 已有功能
 - 收到验证码短信后将验证码复制到系统剪贴板
 - 当验证码被复制后显示Toast

@@ -4,6 +4,8 @@ SmsCodeExtractor is non-xposed version of [XposedSmsCode](https://github.com/tia
 # Screenshots
 <img src="art/en/01.png" width="180"/><img src="art/en/02.png" width="180"/><img src="art/en/03.png" width="180"/><img src="art/en/04.png" width="180"/>
 
+You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.github.tianma8023.smscode) or [releases](https://github.com/tianma8023/SmsCodeExtractor/releases/).
+
 # Features
 - Copy verification code to clipboard when a new message arrives.
 - Show toast when a SMS verification code is copied.
