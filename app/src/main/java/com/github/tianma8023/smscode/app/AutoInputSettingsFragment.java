@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +22,7 @@ import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INP
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENABLE_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_FOCUS_MODE;
 
-public class AutoInputSettingsFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class AutoInputSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
     private Context mContext;
 

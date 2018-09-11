@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
@@ -57,7 +58,7 @@ import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_VERBOSE_
 /**
  * 首选项Fragment
  */
-public class SettingsFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
     public static final String EXTRA_KEY_CURRENT_THEME = "extra_key_current_theme";
 
