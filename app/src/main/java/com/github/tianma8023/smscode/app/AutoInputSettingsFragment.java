@@ -12,10 +12,14 @@ import android.text.TextUtils;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.constant.IPrefConstants;
 import com.github.tianma8023.smscode.service.accessibility.SmsCodeAutoInputService;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
+
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INPUT_MODE_ACCESSIBILITY;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENABLE_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_FOCUS_MODE;
 
 public class AutoInputSettingsFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
 
@@ -32,17 +36,16 @@ public class AutoInputSettingsFragment extends BasePreferenceFragment implements
 
         addPreferencesFromResource(R.xml.settings_auto_input_code);
 
-
-        mAutoInputPreference = (SwitchPreference) findPreference(IPrefConstants.KEY_ENABLE_AUTO_INPUT_CODE);
+        mAutoInputPreference = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
         mAutoInputPreference.setOnPreferenceChangeListener(this);
 
-        mAccessibilityModePreference = (SwitchPreference) findPreference(IPrefConstants.KEY_AUTO_INPUT_MODE_ACCESSIBILITY);
+        mAccessibilityModePreference = (SwitchPreference) findPreference(KEY_AUTO_INPUT_MODE_ACCESSIBILITY);
         mAccessibilityModePreference.setOnPreferenceChangeListener(this);
 
-        mRootModePreference = (SwitchPreference) findPreference(IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT);
+        mRootModePreference = (SwitchPreference) findPreference(KEY_AUTO_INPUT_MODE_ROOT);
         mRootModePreference.setOnPreferenceChangeListener(this);
 
-        mFocusModePreference = (ListPreference) findPreference(IPrefConstants.KEY_FOCUS_MODE);
+        mFocusModePreference = (ListPreference) findPreference(KEY_FOCUS_MODE);
         mFocusModePreference.setOnPreferenceChangeListener(this);
         refreshFocusModePreference(mFocusModePreference.getValue());
 
@@ -58,16 +61,21 @@ public class AutoInputSettingsFragment extends BasePreferenceFragment implements
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
-        if (IPrefConstants.KEY_ENABLE_AUTO_INPUT_CODE.equals(key)) {
-            refreshEnableAutoInputPreference((Boolean) newValue);
-        } else if (IPrefConstants.KEY_AUTO_INPUT_MODE_ACCESSIBILITY.equals(key)) {
-            onAccessibilityModeSwitched((Boolean) newValue);
-        } else if (IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT.equals(key)) {
-            onRootModeSwitched((Boolean) newValue);
-        } else if (IPrefConstants.KEY_FOCUS_MODE.equals(key)) {
-            refreshFocusModePreference((String) newValue);
-        } else {
-            return false;
+        switch (key) {
+            case KEY_ENABLE_AUTO_INPUT_CODE:
+                refreshEnableAutoInputPreference((Boolean) newValue);
+                break;
+            case KEY_AUTO_INPUT_MODE_ACCESSIBILITY:
+                onAccessibilityModeSwitched((Boolean) newValue);
+                break;
+            case KEY_AUTO_INPUT_MODE_ROOT:
+                onRootModeSwitched((Boolean) newValue);
+                break;
+            case KEY_FOCUS_MODE:
+                refreshFocusModePreference((String) newValue);
+                break;
+            default:
+                return false;
         }
         return true;
     }

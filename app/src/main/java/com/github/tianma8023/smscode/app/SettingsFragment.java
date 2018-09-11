@@ -44,6 +44,16 @@ import java.util.List;
 
 import ch.qos.logback.classic.Level;
 
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_CHOOSE_THEME;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_DONATE_BY_ALIPAY;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_DONATE_BY_WECHAT;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENABLE;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENTRY_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_LISTEN_MODE;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_SMSCODE_TEST;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_SOURCE_CODE;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_VERBOSE_LOG_MODE;
+
 /**
  * 首选项Fragment
  */
@@ -54,7 +64,6 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     private Activity mActivity;
 
     private SwitchPreference mEnablePreference;
-    private ListPreference mListenModePreference;
     private String mCurListenMode;
 
 
@@ -81,15 +90,15 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
 
         addPreferencesFromResource(R.xml.settings);
 
-        findPreference(IPrefConstants.KEY_VERBOSE_LOG_MODE).setOnPreferenceChangeListener(this);
+        findPreference(KEY_VERBOSE_LOG_MODE).setOnPreferenceChangeListener(this);
         mEnablePreference = (SwitchPreference) findPreference(IPrefConstants.KEY_ENABLE);
         mEnablePreference.setOnPreferenceChangeListener(this);
 
         findPreference(IPrefConstants.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
-        findPreference(IPrefConstants.KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
+        findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
         // findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
-        findPreference(IPrefConstants.KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
-        findPreference(IPrefConstants.KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
+        findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
+        findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
         Preference chooseThemePref = findPreference(IPrefConstants.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
@@ -99,14 +108,14 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         getPreferenceScreen().removePreference(experimentalGroup);
 
         // Hide donate by wechat preference item
-        Preference donateByWechat = findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT);
+        Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
         PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_ABOUT);
         aboutGroup.removePreference(donateByWechat);
 
-        mListenModePreference = (ListPreference) findPreference(IPrefConstants.KEY_LISTEN_MODE);
+        ListPreference mListenModePreference = (ListPreference) findPreference(KEY_LISTEN_MODE);
         mListenModePreference.setOnPreferenceChangeListener(this);
         mCurListenMode = mListenModePreference.getValue();
-        refreshListenModePreference(mCurListenMode);
+        refreshListenModePreference(mListenModePreference, mCurListenMode);
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -117,7 +126,7 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         }
     }
 
-    private void refreshListenModePreference(String newValue) {
+    private void refreshListenModePreference(ListPreference mListenModePreference, String newValue) {
         if (TextUtils.isEmpty(newValue))
             return;
         CharSequence[] entries = mListenModePreference.getEntries();
@@ -142,24 +151,31 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     @Override
     public boolean onPreferenceClick(Preference preference) {
         String key = preference.getKey();
-        if (IPrefConstants.KEY_ENTRY_AUTO_INPUT_CODE.equals(key)) {
-            if (mPreferenceClickCallback != null) {
-                mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), true);
-            }
-        } else if (IPrefConstants.KEY_CHOOSE_THEME.equals(key)) {
-            if (mPreferenceClickCallback != null) {
-                mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), false);
-            }
-        } else if (IPrefConstants.KEY_SMSCODE_TEST.equals(key)) {
-            showSmsCodeTestDialog();
-        } else if (IPrefConstants.KEY_SOURCE_CODE.equals(key)) {
-            aboutProject();
-        } else if (IPrefConstants.KEY_DONATE_BY_ALIPAY.equals(key)) {
-            donateByAlipay();
-        } else if (IPrefConstants.KEY_DONATE_BY_WECHAT.equals(key)) {
-            donateByWechat();
-        } else {
-            return false;
+        switch (key) {
+            case KEY_ENTRY_AUTO_INPUT_CODE:
+                if (mPreferenceClickCallback != null) {
+                    mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), true);
+                }
+                break;
+            case KEY_CHOOSE_THEME:
+                if (mPreferenceClickCallback != null) {
+                    mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), false);
+                }
+                break;
+            case KEY_SMSCODE_TEST:
+                showSmsCodeTestDialog();
+                break;
+            case KEY_SOURCE_CODE:
+                aboutProject();
+                break;
+            case KEY_DONATE_BY_ALIPAY:
+                donateByAlipay();
+                break;
+            case KEY_DONATE_BY_WECHAT:
+                donateByWechat();
+                break;
+            default:
+                return false;
         }
         return true;
     }
@@ -207,20 +223,25 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
-        if (IPrefConstants.KEY_ENABLE.equals(key)) {
-            onEnabledSwitched((Boolean) newValue);
-        } else if (IPrefConstants.KEY_LISTEN_MODE.equals(key)) {
-            if (!newValue.equals(mCurListenMode)) {
-                mCurListenMode = (String) newValue;
-                refreshListenModePreference(mCurListenMode);
-                if (IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
-                    showCompatibleModePrompt();
+        switch (key) {
+            case KEY_ENABLE:
+                onEnabledSwitched((Boolean) newValue);
+                break;
+            case KEY_LISTEN_MODE: {
+                if (!newValue.equals(mCurListenMode)) {
+                    mCurListenMode = (String) newValue;
+                    refreshListenModePreference((ListPreference) preference, mCurListenMode);
+                    if (IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
+                        showCompatibleModePrompt();
+                    }
                 }
+                break;
             }
-        } else if (IPrefConstants.KEY_VERBOSE_LOG_MODE.equals(key)) {
-            onVerboseLogModeSwitched(preference, (Boolean) newValue);
-        } else {
-            return false;
+            case KEY_VERBOSE_LOG_MODE:
+                onVerboseLogModeSwitched(preference, (Boolean) newValue);
+                break;
+            default:
+                return false;
         }
         return true;
     }
