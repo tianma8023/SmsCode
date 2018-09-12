@@ -23,7 +23,7 @@ import com.github.tianma8023.smscode.app.faq.FaqFragment;
 import com.github.tianma8023.smscode.app.theme.ItemCallback;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
-import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.service.SmsObserveService;
 import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
@@ -81,7 +81,7 @@ public class HomeActivity extends BaseActivity implements
 
         boolean enable = SPUtils.isEnable(this);
         String listenMode = SPUtils.getListenMode(this);
-        if (enable && IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
+        if (enable && PrefConst.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
             boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
             SmsObserveService.startMe(this, isVerboseLog);
         } else {
@@ -94,7 +94,7 @@ public class HomeActivity extends BaseActivity implements
         mCurThemeIndex = SPUtils.getCurrentThemeIndex(this);
         // check current theme index in case of exception.
         if(mCurThemeIndex < 0 || mCurThemeIndex >= mThemeItemList.size()) {
-            mCurThemeIndex = IPrefConstants.KEY_CURRENT_THEME_INDEX_DEFAULT;
+            mCurThemeIndex = PrefConst.KEY_CURRENT_THEME_INDEX_DEFAULT;
         }
         setTheme(mThemeItemList.get(mCurThemeIndex).getThemeRes());
     }
@@ -111,14 +111,14 @@ public class HomeActivity extends BaseActivity implements
             onNestedPreferenceClicked(key, title);
             return;
         }
-        if (IPrefConstants.KEY_CHOOSE_THEME.equals(key)) {
+        if (PrefConst.KEY_CHOOSE_THEME.equals(key)) {
             onChooseThemePreferenceClicked();
         }
     }
 
     private void onNestedPreferenceClicked(String key, String title) {
         Fragment newFragment = null;
-        if (IPrefConstants.KEY_ENTRY_AUTO_INPUT_CODE.equals(key)) {
+        if (PrefConst.KEY_ENTRY_AUTO_INPUT_CODE.equals(key)) {
             newFragment = new AutoInputSettingsFragment();
         }
         if (newFragment == null)

@@ -18,11 +18,11 @@ import com.github.tianma8023.smscode.service.accessibility.SmsCodeAutoInputServi
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 
-import static com.github.tianma8023.smscode.constant.IPrefConstants.AUTO_INPUT_MODE_ACCESSIBILITY;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.AUTO_INPUT_MODE_ROOT;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INPUT_MODE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENABLE_AUTO_INPUT_CODE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_FOCUS_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ACCESSIBILITY;
+import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ROOT;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_AUTO_INPUT_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_FOCUS_MODE;
 
 public class AutoInputSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 

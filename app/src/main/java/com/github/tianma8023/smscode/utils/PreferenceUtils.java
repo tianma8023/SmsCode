@@ -3,7 +3,7 @@ package com.github.tianma8023.smscode.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.constant.PrefConst;
 
 /**
  * Common Shared preferences utils.
@@ -15,7 +15,7 @@ public class PreferenceUtils {
     }
 
     private static SharedPreferences getPreferences(Context context) {
-        return context.getSharedPreferences(IPrefConstants.REMOTE_PREF_NAME,
+        return context.getSharedPreferences(PrefConst.REMOTE_PREF_NAME,
                 Context.MODE_PRIVATE);
     }
 

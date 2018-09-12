@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.service.SmsObserveService;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.XLog;
@@ -18,7 +18,7 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         boolean enable = SPUtils.isEnable(context);
         String listenMode = SPUtils.getListenMode(context);
-        if (enable && IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
+        if (enable && PrefConst.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
             XLog.d("BootReceiver#onReceived() - {}", intent.getAction());
             boolean isVerboseLog = SPUtils.isVerboseLogMode(context);
             SmsObserveService.startMe(context, isVerboseLog);

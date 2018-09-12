@@ -2,7 +2,7 @@ package com.github.tianma8023.smscode.utils;
 
 import android.content.Context;
 
-import com.github.tianma8023.smscode.constant.ISmsCodeConstants;
+import com.github.tianma8023.smscode.constant.SmsCodeConst;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,7 @@ public class VerificationUtils {
     /**
      * 是否包含中文
      *
-     * @param text
-     * @return
+     * @param text text
      */
     private static boolean containsChinese(String text) {
         String regex = "[\u4e00-\u9fa5]|。";
@@ -35,7 +34,6 @@ public class VerificationUtils {
      *
      * @param context context
      * @param content content
-     * @return
      */
     public static boolean containsVerificationKeywords(Context context, String content) {
         String keywordsRegex = loadVerificationKeywords(context);
@@ -47,7 +45,6 @@ public class VerificationUtils {
      *
      * @param keywordsRegex verification message keywords (regex expressions)
      * @param content sms message content
-     * @return
      */
     private static boolean containsVerificationKeywords(String keywordsRegex, String content) {
         Pattern pattern = Pattern.compile(keywordsRegex);
@@ -77,12 +74,10 @@ public class VerificationUtils {
 
     /**
      * 是否是中文验证码短信
-     *
-     * @return
      */
     public static boolean isVerificationMsgCN(String content) {
         boolean result = false;
-        for (String keyWord : ISmsCodeConstants.VERIFICATION_KEY_WORDS_CN) {
+        for (String keyWord : SmsCodeConst.VERIFICATION_KEY_WORDS_CN) {
             if (content.contains(keyWord)) {
                 result = true;
                 break;
@@ -93,13 +88,10 @@ public class VerificationUtils {
 
     /**
      * 是否是英文验证码短信
-     *
-     * @param content
-     * @return
      */
     public static boolean isVerificationMsgEN(String content) {
         boolean result = false;
-        for (String keyWord : ISmsCodeConstants.VERIFICATION_KEY_WORDS_EN) {
+        for (String keyWord : SmsCodeConst.VERIFICATION_KEY_WORDS_EN) {
             if (content.contains(keyWord)) {
                 result = true;
                 break;
@@ -221,7 +213,7 @@ public class VerificationUtils {
     }
 
     public static boolean containsPhoneNumberKeywords(String content) {
-        Pattern pattern = Pattern.compile(ISmsCodeConstants.PHONE_NUMBER_KEYWORDS);
+        Pattern pattern = Pattern.compile(SmsCodeConst.PHONE_NUMBER_KEYWORDS);
         Matcher matcher = pattern.matcher(content);
         return matcher.find();
     }

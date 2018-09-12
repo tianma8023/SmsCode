@@ -6,7 +6,7 @@ import com.github.tianma8023.smscode.BuildConfig;
 /**
  * Preference相关的常量
  */
-public interface IPrefConstants {
+public interface PrefConst {
 
     String REMOTE_PREF_NAME = BuildConfig.APPLICATION_ID + "_preferences";
     String REMOTE_PREF_AUTHORITY = BuildConfig.APPLICATION_ID + ".preferences";
@@ -33,7 +33,7 @@ public interface IPrefConstants {
     String KEY_ENTRY_AUTO_INPUT_CODE = "pref_entry_auto_input_code";
 
     String KEY_SMSCODE_KEYWORDS = "pref_smscode_keywords";
-    String KEY_SMSCODE_KEYWORDS_DEFAULT = ISmsCodeConstants.VERIFICATION_KEYWORDS_REGEX;
+    String KEY_SMSCODE_KEYWORDS_DEFAULT = SmsCodeConst.VERIFICATION_KEYWORDS_REGEX;
 
     String KEY_SMSCODE_TEST = "pref_smscode_test";
 

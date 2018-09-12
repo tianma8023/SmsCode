@@ -3,7 +3,7 @@ package com.github.tianma8023.smscode.constant;
 
 import com.github.tianma8023.smscode.BuildConfig;
 
-public interface IConstants {
+public interface Const {
 
     String PROJECT_SOURCE_CODE_URL = "https://github.com/tianma8023/SmsCodeExtractor";
 

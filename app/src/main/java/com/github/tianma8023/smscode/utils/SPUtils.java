@@ -2,7 +2,7 @@ package com.github.tianma8023.smscode.utils;
 
 import android.content.Context;
 
-import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.constant.PrefConst;
 
 /**
  * Shared preferences utils only for this App.
@@ -84,7 +84,7 @@ public class SPUtils {
      */
     public static boolean isEnable(Context context) {
         return PreferenceUtils.getBoolean(context,
-                IPrefConstants.KEY_ENABLE, IPrefConstants.KEY_ENABLE_DEFAULT);
+                PrefConst.KEY_ENABLE, PrefConst.KEY_ENABLE_DEFAULT);
     }
 
     /**
@@ -92,7 +92,7 @@ public class SPUtils {
      */
     public static String getListenMode(Context context) {
         return PreferenceUtils.getString(context,
-                IPrefConstants.KEY_LISTEN_MODE, IPrefConstants.KEY_LISTEN_MODE_STANDARD);
+                PrefConst.KEY_LISTEN_MODE, PrefConst.KEY_LISTEN_MODE_STANDARD);
     }
 
     /**
@@ -116,7 +116,7 @@ public class SPUtils {
      */
     public static void setAutoInputMode(Context context, String autoInputMode) {
         PreferenceUtils.putString(context,
-                IPrefConstants.KEY_AUTO_INPUT_MODE, autoInputMode);
+                PrefConst.KEY_AUTO_INPUT_MODE, autoInputMode);
     }
 
     /**
@@ -124,7 +124,7 @@ public class SPUtils {
      */
     public static String getAutoInputMode(Context context) {
         return PreferenceUtils.getString(context,
-                IPrefConstants.KEY_AUTO_INPUT_MODE, IPrefConstants.AUTO_INPUT_MODE_DEFAULT);
+                PrefConst.KEY_AUTO_INPUT_MODE, PrefConst.AUTO_INPUT_MODE_DEFAULT);
     }
 
     /**
@@ -132,7 +132,7 @@ public class SPUtils {
      */
     public static boolean isVerboseLogMode(Context context) {
         return PreferenceUtils.getBoolean(context,
-                IPrefConstants.KEY_VERBOSE_LOG_MODE, IPrefConstants.KEY_VERBOSE_LOG_MODE_DEFAULT);
+                PrefConst.KEY_VERBOSE_LOG_MODE, PrefConst.KEY_VERBOSE_LOG_MODE_DEFAULT);
     }
 
     /**
@@ -140,7 +140,7 @@ public class SPUtils {
      */
     public static boolean showToast(Context context) {
         return PreferenceUtils.getBoolean(context,
-                IPrefConstants.KEY_SHOW_TOAST, IPrefConstants.KEY_SHOW_TOAST_DEFAULT);
+                PrefConst.KEY_SHOW_TOAST, PrefConst.KEY_SHOW_TOAST_DEFAULT);
     }
 
     /**
@@ -148,7 +148,7 @@ public class SPUtils {
      */
     public static String getFocusMode(Context context) {
         return PreferenceUtils.getString(context,
-                IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
+                PrefConst.KEY_FOCUS_MODE, PrefConst.KEY_FOCUS_MODE_AUTO);
     }
 
     /**
@@ -156,7 +156,7 @@ public class SPUtils {
      */
     public static String getSMSCodeKeywords(Context context) {
         return PreferenceUtils.getString(context,
-                IPrefConstants.KEY_SMSCODE_KEYWORDS, IPrefConstants.KEY_SMSCODE_KEYWORDS_DEFAULT);
+                PrefConst.KEY_SMSCODE_KEYWORDS, PrefConst.KEY_SMSCODE_KEYWORDS_DEFAULT);
     }
 
     /**
@@ -164,14 +164,14 @@ public class SPUtils {
      */
     public static int getCurrentThemeIndex(Context context) {
         return PreferenceUtils.getInt(context,
-                IPrefConstants.KEY_CURRENT_THEME_INDEX, IPrefConstants.KEY_CURRENT_THEME_INDEX_DEFAULT);
+                PrefConst.KEY_CURRENT_THEME_INDEX, PrefConst.KEY_CURRENT_THEME_INDEX_DEFAULT);
     }
 
     /**
      * 设置当前主题的index
      */
     public static void setCurrentThemeIndex(Context context, int curIndex) {
-        PreferenceUtils.putInt(context, IPrefConstants.KEY_CURRENT_THEME_INDEX, curIndex);
+        PreferenceUtils.putInt(context, PrefConst.KEY_CURRENT_THEME_INDEX, curIndex);
     }
 
     /**

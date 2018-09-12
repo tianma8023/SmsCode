@@ -27,8 +27,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
-import com.github.tianma8023.smscode.constant.IConstants;
-import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.constant.Const;
+import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.utils.PackageUtils;
 import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
@@ -46,16 +46,16 @@ import java.util.List;
 
 import ch.qos.logback.classic.Level;
 
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_CHOOSE_THEME;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_DONATE_BY_ALIPAY;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_DONATE_BY_WECHAT;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENABLE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENTRY_AUTO_INPUT_CODE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_LISTEN_MODE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_SMSCODE_TEST;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_SOURCE_CODE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_VERBOSE_LOG_MODE;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_VERSION;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALIPAY;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WECHAT;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERSION;
 
 /**
  * 首选项Fragment
@@ -93,7 +93,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         addPreferencesFromResource(R.xml.settings);
 
-        mEnablePreference = (SwitchPreference) findPreference(IPrefConstants.KEY_ENABLE);
+        mEnablePreference = (SwitchPreference) findPreference(PrefConst.KEY_ENABLE);
         mEnablePreference.setOnPreferenceChangeListener(this);
         // verbose log preference
         SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
@@ -102,22 +102,22 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         ListPreference listenModePref = (ListPreference) findPreference(KEY_LISTEN_MODE);
         listenModePref.setOnPreferenceChangeListener(this);
 
-        findPreference(IPrefConstants.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
+        findPreference(PrefConst.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
-        // findPreference(IPrefConstants.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
+        // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
         findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
-        Preference chooseThemePref = findPreference(IPrefConstants.KEY_CHOOSE_THEME);
+        Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
 
         // Hide experimental group.
-        PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_EXPERIMENTAL);
+        PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
         getPreferenceScreen().removePreference(experimentalGroup);
 
         // Hide donate by wechat preference item
         Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
-        PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(IPrefConstants.KEY_ABOUT);
+        PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(PrefConst.KEY_ABOUT);
         aboutGroup.removePreference(donateByWechat);
 
         mCurListenMode = listenModePref.getValue();
@@ -201,7 +201,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private void aboutProject() {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(IConstants.PROJECT_SOURCE_CODE_URL));
+            intent.setData(Uri.parse(Const.PROJECT_SOURCE_CODE_URL));
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(mActivity, R.string.browser_install_or_enable_prompt, Toast.LENGTH_SHORT).show();
@@ -218,8 +218,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             return;
         }
         Intent intent = new Intent();
-        intent.setClassName(IConstants.WECHAT_PACKAGE_NAME, IConstants.WECHAT_LAUNCHER_UI);
-        intent.putExtra(IConstants.WECHAT_KEY_EXTRA_DONATE, true);
+        intent.setClassName(Const.WECHAT_PACKAGE_NAME, Const.WECHAT_LAUNCHER_UI);
+        intent.putExtra(Const.WECHAT_KEY_EXTRA_DONATE, true);
         startActivity(intent);
     }
 
@@ -233,7 +233,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(IConstants.ALIPAY_QRCODE_URI_PREFIX + IConstants.ALIPAY_QRCODE_URL));
+        intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
         startActivity(intent);
     }
 
@@ -249,7 +249,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 if (!newValue.equals(mCurListenMode)) {
                     mCurListenMode = (String) newValue;
                     refreshListenModePreference((ListPreference) preference, mCurListenMode);
-                    if (IPrefConstants.KEY_LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
+                    if (PrefConst.KEY_LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
                         showCompatibleModePrompt();
                     }
                 }

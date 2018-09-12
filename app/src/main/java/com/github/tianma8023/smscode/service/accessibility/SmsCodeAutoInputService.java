@@ -11,7 +11,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 
-import com.github.tianma8023.smscode.constant.IPrefConstants;
+import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
@@ -45,7 +45,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                 autoInputSmsCode(smsCode);
             } else if (ACTION_STOP_AUTO_INPUT.equals(action)) {
                 String autoInputMode = SPUtils.getAutoInputMode(context);
-                if (IPrefConstants.AUTO_INPUT_MODE_ROOT.equals(autoInputMode)) {
+                if (PrefConst.AUTO_INPUT_MODE_ROOT.equals(autoInputMode)) {
                     String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
                     // 用root的方式关闭无障碍服务
                     boolean disabled = ShellUtils.disableAccessibilityService(accessSvcName);
@@ -109,7 +109,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      */
     private boolean tryToAutoInputSMSCode(String smsCode) {
         String focusMode = SPUtils.getFocusMode(this);
-        if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(focusMode)) {
+        if (PrefConst.KEY_FOCUS_MODE_AUTO.equals(focusMode)) {
             // focus mode: auto focus
             return tryToAutoInputByAutoFocus(smsCode);
         } else {
