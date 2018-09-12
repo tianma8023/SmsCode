@@ -9,6 +9,7 @@ import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,8 +18,9 @@ import com.github.tianma8023.smscode.service.accessibility.SmsCodeAutoInputServi
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INPUT_MODE_ACCESSIBILITY;
-import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.AUTO_INPUT_MODE_ACCESSIBILITY;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.AUTO_INPUT_MODE_ROOT;
+import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_AUTO_INPUT_MODE;
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_ENABLE_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.IPrefConstants.KEY_FOCUS_MODE;
 
@@ -26,10 +28,10 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
 
     private Context mContext;
 
-    private SwitchPreference mAutoInputPreference;
-    private SwitchPreference mAccessibilityModePreference;
-    private SwitchPreference mRootModePreference;
-    private ListPreference mFocusModePreference;
+    private SwitchPreference mAutoInputEnablePref;
+    private ListPreference mAutoInputModePref;
+
+    private String mCurAutoMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,20 +39,19 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
 
         addPreferencesFromResource(R.xml.settings_auto_input_code);
 
-        mAutoInputPreference = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
-        mAutoInputPreference.setOnPreferenceChangeListener(this);
+        mAutoInputEnablePref = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
+        mAutoInputEnablePref.setOnPreferenceChangeListener(this);
 
-        mAccessibilityModePreference = (SwitchPreference) findPreference(KEY_AUTO_INPUT_MODE_ACCESSIBILITY);
-        mAccessibilityModePreference.setOnPreferenceChangeListener(this);
+        mAutoInputModePref = (ListPreference) findPreference(KEY_AUTO_INPUT_MODE);
+        mAutoInputModePref.setOnPreferenceChangeListener(this);
+        mCurAutoMode = mAutoInputModePref.getValue();
 
-        mRootModePreference = (SwitchPreference) findPreference(KEY_AUTO_INPUT_MODE_ROOT);
-        mRootModePreference.setOnPreferenceChangeListener(this);
+        ListPreference focusModePref = (ListPreference) findPreference(KEY_FOCUS_MODE);
+        focusModePref.setOnPreferenceChangeListener(this);
 
-        mFocusModePreference = (ListPreference) findPreference(KEY_FOCUS_MODE);
-        mFocusModePreference.setOnPreferenceChangeListener(this);
-        refreshFocusModePreference(mFocusModePreference.getValue());
-
-        refreshEnableAutoInputPreference(mAutoInputPreference.isChecked());
+        refreshEnableAutoInputPreference(mAutoInputEnablePref.isChecked());
+        refreshAutoInputModePreference(mCurAutoMode);
+        refreshFocusModePreference(focusModePref, focusModePref.getValue());
     }
 
     @Override
@@ -66,14 +67,19 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
             case KEY_ENABLE_AUTO_INPUT_CODE:
                 refreshEnableAutoInputPreference((Boolean) newValue);
                 break;
-            case KEY_AUTO_INPUT_MODE_ACCESSIBILITY:
-                onAccessibilityModeSwitched((Boolean) newValue);
-                break;
-            case KEY_AUTO_INPUT_MODE_ROOT:
-                onRootModeSwitched((Boolean) newValue);
+            case KEY_AUTO_INPUT_MODE:
+                if (!newValue.equals(mCurAutoMode)) {
+                    mCurAutoMode = (String) newValue;
+                    refreshAutoInputModePreference(mCurAutoMode);
+                    if (AUTO_INPUT_MODE_ROOT.equals(newValue)) {
+                        showRootModePrompt();
+                    } else if (AUTO_INPUT_MODE_ACCESSIBILITY.equals(mCurAutoMode)) {
+                        showAccessibilityModePrompt();
+                    }
+                }
                 break;
             case KEY_FOCUS_MODE:
-                refreshFocusModePreference((String) newValue);
+                refreshFocusModePreference((ListPreference) preference, (String) newValue);
                 break;
             default:
                 return false;
@@ -81,15 +87,15 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
         return true;
     }
 
-    private void onAccessibilityModeSwitched(boolean enable) {
-        boolean accessibilityEnabled = AccessibilityUtils.checkAccessibilityEnabled(getActivity(),
-                AccessibilityUtils.getServiceId(SmsCodeAutoInputService.class));
+    private void showAccessibilityModePrompt() {
+        String serviceId = AccessibilityUtils.getServiceId(SmsCodeAutoInputService.class);
+        boolean accessibilityEnabled = AccessibilityUtils.checkAccessibilityEnabled(getActivity(), serviceId);
 
-        if (accessibilityEnabled != enable) {
+        if (!accessibilityEnabled) {
             new MaterialDialog.Builder(mContext)
-                    .title(enable ? R.string.open_auto_input_accessibility : R.string.close_auto_input_accessibility)
-                    .content(enable ? R.string.open_auto_input_accessibility_prompt : R.string.close_auto_input_accessibility_prompt)
-                    .positiveText(enable ? R.string.go_to_open : R.string.go_to_close)
+                    .title(R.string.open_auto_input_accessibility)
+                    .content(R.string.open_auto_input_accessibility_prompt)
+                    .positiveText(R.string.go_to_open)
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -98,60 +104,53 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
                     })
                     .show();
         }
-        if (enable) {
-            mRootModePreference.setChecked(false);
-            mAutoInputPreference.setSummary(R.string.pref_auto_input_mode_accessibility);
-        } else {
-            mAutoInputPreference.setSummary(R.string.pref_enable_auto_input_code_summary);
-        }
     }
 
-    private void onRootModeSwitched(boolean enable) {
-        if (enable) {
-            new MaterialDialog.Builder(mContext)
-                    .title(R.string.acquire_root_permission)
-                    .content(R.string.acquire_root_permission_prompt)
-                    .positiveText(R.string.okay)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            ShellUtils.checkRootPermission();
-                        }
-                    })
-                    .show();
-
-            mAccessibilityModePreference.setChecked(false);
-            mAutoInputPreference.setSummary(R.string.pref_auto_input_mode_root);
-        } else {
-            mAutoInputPreference.setSummary(R.string.pref_enable_auto_input_code_summary);
-        }
+    private void showRootModePrompt() {
+        new MaterialDialog.Builder(mContext)
+                .title(R.string.acquire_root_permission)
+                .content(R.string.acquire_root_permission_prompt)
+                .positiveText(R.string.okay)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        ShellUtils.checkRootPermission();
+                    }
+                })
+                .show();
     }
 
     private void refreshEnableAutoInputPreference(boolean autoInputEnabled) {
         if (!autoInputEnabled) {
-            mAutoInputPreference.setSummary(R.string.pref_entry_auto_input_code_summary);
+            mAutoInputEnablePref.setSummary(R.string.pref_entry_auto_input_code_summary);
         } else {
-            boolean accessibilityModeChecked = mAccessibilityModePreference.isChecked();
-            boolean rootModeChecked = mRootModePreference.isChecked();
-            int summaryId;
-            if (accessibilityModeChecked) {
-                summaryId = R.string.pref_auto_input_mode_accessibility;
-            } else if (rootModeChecked) {
-                summaryId = R.string.pref_auto_input_mode_root;
-            } else {
-                summaryId = R.string.pref_enable_auto_input_code_summary;
+            if (TextUtils.isEmpty(mAutoInputModePref.getValue())) {
+                Toast.makeText(getActivity(), R.string.pref_auto_input_mode_summary_default, Toast.LENGTH_SHORT).show();
             }
-            mAutoInputPreference.setSummary(summaryId);
         }
     }
 
-    private void refreshFocusModePreference(String newValue) {
+    private void refreshAutoInputModePreference(String newValue) {
+        if (TextUtils.isEmpty(newValue)) {
+            mAutoInputModePref.setSummary(R.string.pref_auto_input_mode_summary_default);
+            return;
+        }
+        CharSequence[] entries = mAutoInputModePref.getEntries();
+        int index = mAutoInputModePref.findIndexOfValue(newValue);
+        try {
+            mAutoInputModePref.setSummary(entries[index]);
+        } catch (Exception e) {
+            // ignore
+        }
+    }
+
+    private void refreshFocusModePreference(ListPreference focusModePref, String newValue) {
         if (TextUtils.isEmpty(newValue))
             return;
-        CharSequence[] entries = mFocusModePreference.getEntries();
-        int index = mFocusModePreference.findIndexOfValue(newValue);
+        CharSequence[] entries = focusModePref.getEntries();
+        int index = focusModePref.findIndexOfValue(newValue);
         try {
-            mFocusModePreference.setSummary(entries[index]);
+            focusModePref.setSummary(entries[index]);
         } catch (Exception e) {
             //ignore
         }

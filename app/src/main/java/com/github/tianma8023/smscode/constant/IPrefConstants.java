@@ -45,10 +45,10 @@ public interface IPrefConstants {
 
     String KEY_ENABLE_AUTO_INPUT_CODE = "pref_enable_auto_input_code";
     boolean KEY_ENABLE_AUTO_INPUT_CODE_DEFAULT = false;
-    String KEY_AUTO_INPUT_MODE_ACCESSIBILITY = "pref_auto_input_mode_accessibility";
-    boolean KEY_AUTO_INPUT_MODE_ACCESSIBILITY_DEFAULT = false;
-    String KEY_AUTO_INPUT_MODE_ROOT = "pref_auto_input_mode_root";
-    boolean KEY_AUTO_INPUT_MODE_ROOT_DEFAULT = false;
+    String KEY_AUTO_INPUT_MODE = "pref_auto_input_mode";
+    String AUTO_INPUT_MODE_DEFAULT = "";
+    String AUTO_INPUT_MODE_ROOT = "auto_input_mode_root";
+    String AUTO_INPUT_MODE_ACCESSIBILITY = "auto_input_mode_accessibility";
     String KEY_FOCUS_MODE = "pref_focus_mode";
     String KEY_FOCUS_MODE_AUTO = "focus_mode_auto";
     String KEY_FOCUS_MODE_MANUAL = "focus_mode_manual";

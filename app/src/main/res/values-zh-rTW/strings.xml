@@ -51,10 +51,6 @@
     <string name="go_to_close">去關閉</string>
     <string name="smscode_auto_input_service_label">簡訊驗證碼自動輸入服務</string>
     <string name="pref_enable_auto_input_code">啟用自動輸入</string>
-    <string name="pref_auto_input_mode_accessibility">無障礙服務模式</string>
-    <string name="pref_auto_input_mode_accessibility_summary">需要打開無障礙服務啟用自動輸入</string>
-    <string name="pref_auto_input_mode_root">Root模式</string>
-    <string name="pref_auto_input_mode_root_summary">需要Root權限</string>
     <string name="pref_enable_auto_input_code_summary">請選擇自動輸入模式</string>
     <string name="acquire_root_permission">獲取Root權限</string>
     <string name="acquire_root_permission_prompt">需要獲取Root權限啟用自動輸入</string>
@@ -65,6 +61,13 @@
     <string name="pref_verbose_log_mode">輸出詳細日誌</string>
     <string name="pref_verbose_log_mode_summary_off">輸出詳細的日誌(僅用於調試)</string>
     <string name="pref_choose_theme_title">主題</string>
+
+    <!-- Auto input mode -->
+    <string name="pref_auto_input_mode_title">自動輸入模式</string>
+    <string name="pref_auto_input_mode_summary_default">請選擇自動輸入模式</string>
+    <string name="pref_auto_input_mode_accessibility">無障礙服務模式</string>
+    <string name="pref_auto_input_mode_root">Root模式</string>
+    <!-- Auto input mode end -->
 
     <!-- Focus Mode -->
     <string name="pref_focus_mode_title">對焦模式</string>

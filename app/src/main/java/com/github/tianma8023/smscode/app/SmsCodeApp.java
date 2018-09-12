@@ -9,11 +9,15 @@ import android.support.annotation.RequiresApi;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.INotificationConstants;
+import com.github.tianma8023.smscode.migrate.TransitionTask;
 import com.github.tianma8023.smscode.utils.CrashHandler;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.UMConfigure;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class SmsCodeApp extends Application{
 
@@ -30,6 +34,8 @@ public class SmsCodeApp extends Application{
         initBugly();
 
         initNotificationChannel();
+
+        performTransitionTask();
     }
 
     private void initNotificationChannel() {
@@ -70,6 +76,12 @@ public class SmsCodeApp extends Application{
     // crash handler
     private void initCrashHandler() {
         CrashHandler.init(this, null);
+    }
+
+    // data transition task
+    private void performTransitionTask() {
+        Executor singlePool = Executors.newSingleThreadExecutor();
+        singlePool.execute(new TransitionTask(this));
     }
 
 }

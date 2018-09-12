@@ -52,7 +52,7 @@ public class SmsCodeHandleService extends IntentService {
     private static final int MSG_COPY_TO_CLIPBOARD = 0xff;
     private static final int MSG_MARK_AS_READ = 0xfe;
 
-    private boolean mIsAutoInputRootMode;
+    private boolean mIsAutoInputModeRoot;
     private String mFocusMode;
 
     public SmsCodeHandleService() {
@@ -135,11 +135,11 @@ public class SmsCodeHandleService extends IntentService {
         }
 
         mFocusMode = SPUtils.getFocusMode(this);
-        mIsAutoInputRootMode = SPUtils.isAutoInputRootMode(this);
+        mIsAutoInputModeRoot = IPrefConstants.AUTO_INPUT_MODE_ROOT.equals(SPUtils.getAutoInputMode(this));
         XLog.d("FocusMode: {}", mFocusMode);
-        XLog.d("AutoInputRootMode: {}", mIsAutoInputRootMode);
+        XLog.d("AutoInputRootMode: {}", mIsAutoInputModeRoot);
 
-        if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputRootMode) {
+        if (IPrefConstants.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputModeRoot) {
             // Root mode + Auto Focus Mode
             String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
             // 用root的方式启动
@@ -193,7 +193,7 @@ public class SmsCodeHandleService extends IntentService {
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
-        if (mIsAutoInputRootMode && IPrefConstants.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
+        if (mIsAutoInputModeRoot && IPrefConstants.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
             // focus mode: manual focus
             // input mode: root mode
             boolean success = ShellUtils.inputText(verificationCode);

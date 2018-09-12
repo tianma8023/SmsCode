@@ -14,6 +14,13 @@ public class SPUtils {
     private static final String SERVICE_SMS_PROMPT_SHOWN = "service_sms_prompt_shown";
     private static final String LAST_SMS_DATE = "last_sms_date";
     private static final String LAST_SMS_SENDER = "last_sms_sender";
+    // 本地的版本号
+    private static final String LOCAL_VERSION_CODE = "local_version_code";
+
+    private static final String KEY_AUTO_INPUT_MODE_ACCESSIBILITY = "pref_auto_input_mode_accessibility";
+    private static final boolean KEY_AUTO_INPUT_MODE_ACCESSIBILITY_DEFAULT = false;
+    private static final String KEY_AUTO_INPUT_MODE_ROOT = "pref_auto_input_mode_root";
+    private static final boolean KEY_AUTO_INPUT_MODE_ROOT_DEFAULT = false;
 
     private SPUtils() {
 
@@ -72,48 +79,114 @@ public class SPUtils {
         return PreferenceUtils.getLong(context, LAST_SMS_DATE, -1L);
     }
 
+    /**
+     * 总开关是否打开
+     */
     public static boolean isEnable(Context context) {
         return PreferenceUtils.getBoolean(context,
                 IPrefConstants.KEY_ENABLE, IPrefConstants.KEY_ENABLE_DEFAULT);
     }
 
+    /**
+     * 获取短信监听模式
+     */
     public static String getListenMode(Context context) {
         return PreferenceUtils.getString(context,
                 IPrefConstants.KEY_LISTEN_MODE, IPrefConstants.KEY_LISTEN_MODE_STANDARD);
     }
 
+    /**
+     * 自动输入模式是否是root模式(仅用于兼容之前版本)
+     */
     public static boolean isAutoInputRootMode(Context context) {
         return PreferenceUtils.getBoolean(context,
-                IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT, IPrefConstants.KEY_AUTO_INPUT_MODE_ROOT_DEFAULT);
+                KEY_AUTO_INPUT_MODE_ROOT, KEY_AUTO_INPUT_MODE_ROOT_DEFAULT);
     }
 
+    /**
+     * 自动输入模式是否是无障碍模式(仅用于兼容之前版本)
+     */
+    public static boolean isAutoInputAccessibilityMode(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                KEY_AUTO_INPUT_MODE_ACCESSIBILITY, KEY_AUTO_INPUT_MODE_ACCESSIBILITY_DEFAULT);
+    }
+
+    /**
+     * 设置自动输入模式
+     */
+    public static void setAutoInputMode(Context context, String autoInputMode) {
+        PreferenceUtils.putString(context,
+                IPrefConstants.KEY_AUTO_INPUT_MODE, autoInputMode);
+    }
+
+    /**
+     * 获取自动输入模式
+     */
+    public static String getAutoInputMode(Context context) {
+        return PreferenceUtils.getString(context,
+                IPrefConstants.KEY_AUTO_INPUT_MODE, IPrefConstants.AUTO_INPUT_MODE_DEFAULT);
+    }
+
+    /**
+     * 日志模式是否是 Verbose log 模式
+     */
     public static boolean isVerboseLogMode(Context context) {
         return PreferenceUtils.getBoolean(context,
                 IPrefConstants.KEY_VERBOSE_LOG_MODE, IPrefConstants.KEY_VERBOSE_LOG_MODE_DEFAULT);
     }
 
+    /**
+     * 复制到剪切板之后，是否显示toast
+     */
     public static boolean showToast(Context context) {
         return PreferenceUtils.getBoolean(context,
                 IPrefConstants.KEY_SHOW_TOAST, IPrefConstants.KEY_SHOW_TOAST_DEFAULT);
     }
 
+    /**
+     * 获取对焦模式
+     */
     public static String getFocusMode(Context context) {
         return PreferenceUtils.getString(context,
                 IPrefConstants.KEY_FOCUS_MODE, IPrefConstants.KEY_FOCUS_MODE_AUTO);
     }
 
+    /**
+     * 获取验证码短信关键字(正则表达式)
+     */
     public static String getSMSCodeKeywords(Context context) {
         return PreferenceUtils.getString(context,
                 IPrefConstants.KEY_SMSCODE_KEYWORDS, IPrefConstants.KEY_SMSCODE_KEYWORDS_DEFAULT);
     }
 
+    /**
+     * 获取当前主题的index
+     */
     public static int getCurrentThemeIndex(Context context) {
         return PreferenceUtils.getInt(context,
                 IPrefConstants.KEY_CURRENT_THEME_INDEX, IPrefConstants.KEY_CURRENT_THEME_INDEX_DEFAULT);
     }
 
+    /**
+     * 设置当前主题的index
+     */
     public static void setCurrentThemeIndex(Context context, int curIndex) {
         PreferenceUtils.putInt(context, IPrefConstants.KEY_CURRENT_THEME_INDEX, curIndex);
     }
 
+    /**
+     * 获取本地记录的版本号
+     */
+    public static int getLocalVersionCode(Context context) {
+        // 如果不存在,则默认返回2,即v1.0.1版本
+        return PreferenceUtils.getInt(context,
+                LOCAL_VERSION_CODE, 2);
+    }
+
+    /**
+     * 设置当前版本号
+     */
+    public static void setLocalVersionCode(Context context, int versionCode) {
+        PreferenceUtils.putInt(context, LOCAL_VERSION_CODE, versionCode);
+    }
 }
