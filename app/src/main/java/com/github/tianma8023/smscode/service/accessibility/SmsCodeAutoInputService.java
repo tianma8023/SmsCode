@@ -131,13 +131,29 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      * @return 成功输入则返回true，否则返回false
      */
     private boolean tryToAutoInputByManualFocus(String smsCode) {
-        AccessibilityNodeInfo rootNodeInfo = getRootInActiveWindow();
-        AccessibilityNodeInfo focusedNodeInfo = rootNodeInfo.findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
+        AccessibilityNodeInfo focusedNodeInfo = findFocusNodeInfo();
         if (focusedNodeInfo != null && focusedNodeInfo.isEditable()) {
             inputText(focusedNodeInfo, smsCode);
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取当前输入焦点控件
+     * @return 当前输入焦点,获取失败返回null
+     */
+    private AccessibilityNodeInfo findFocusNodeInfo() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
+        } else {
+            AccessibilityNodeInfo rootNodeInfo = getRootInActiveWindow();
+            if (rootNodeInfo == null) {
+                XLog.d("rootNodeInfo is null");
+                return null;
+            }
+            return rootNodeInfo.findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
+        }
     }
 
     /**
