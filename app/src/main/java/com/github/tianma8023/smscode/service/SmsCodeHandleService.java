@@ -52,6 +52,7 @@ public class SmsCodeHandleService extends IntentService {
     private static final int MSG_COPY_TO_CLIPBOARD = 0xff;
     private static final int MSG_MARK_AS_READ = 0xfe;
 
+    private boolean mAutoInputEnabled;
     private boolean mIsAutoInputModeRoot;
     private String mFocusMode;
 
@@ -134,19 +135,24 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
-        mFocusMode = SPUtils.getFocusMode(this);
-        mIsAutoInputModeRoot = PrefConst.AUTO_INPUT_MODE_ROOT.equals(SPUtils.getAutoInputMode(this));
-        XLog.d("FocusMode: {}", mFocusMode);
-        XLog.d("AutoInputRootMode: {}", mIsAutoInputModeRoot);
+        mAutoInputEnabled = SPUtils.autoInputCodeEnabled(this);
+        XLog.d("AutoInputEnabled: {}", mAutoInputEnabled);
 
-        if (PrefConst.FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputModeRoot) {
-            // Root mode + Auto Focus Mode
-            String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
-            // 用root的方式启动
-            boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
-            XLog.d("Accessibility enabled by Root: {}", enabled);
-            if (enabled) { // waiting for AutoInputService working on.
-                sleep(1);
+        if (mAutoInputEnabled) {
+            mFocusMode = SPUtils.getFocusMode(this);
+            mIsAutoInputModeRoot = PrefConst.AUTO_INPUT_MODE_ROOT.equals(SPUtils.getAutoInputMode(this));
+
+            XLog.d("FocusMode: {}", mFocusMode);
+            XLog.d("AutoInputRootMode: {}", mIsAutoInputModeRoot);
+            if (mIsAutoInputModeRoot && PrefConst.FOCUS_MODE_AUTO.equals(mFocusMode)) {
+                // Root mode + Auto Focus Mode
+                String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
+                // 用root的方式启动
+                boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
+                XLog.d("Accessibility enabled by Root: {}", enabled);
+                if (enabled) { // waiting for AutoInputService working on.
+                    sleep(1);
+                }
             }
         }
 
@@ -193,18 +199,20 @@ public class SmsCodeHandleService extends IntentService {
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
-        if (mIsAutoInputModeRoot && PrefConst.FOCUS_MODE_MANUAL.equals(mFocusMode)) {
-            // focus mode: manual focus
-            // input mode: root mode
-            boolean success = ShellUtils.inputText(verificationCode);
-            if (success) {
-                XLog.i("Auto input succeed");
+        if (mAutoInputEnabled) {
+            if (mIsAutoInputModeRoot && PrefConst.FOCUS_MODE_MANUAL.equals(mFocusMode)) {
+                // focus mode: manual focus
+                // input mode: root mode
+                boolean success = ShellUtils.inputText(verificationCode);
+                if (success) {
+                    XLog.i("Auto input succeed");
+                }
+            } else {
+                // start auto input
+                Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);
+                intent.putExtra(SmsCodeAutoInputService.EXTRA_KEY_SMS_CODE, verificationCode);
+                sendBroadcast(intent);
             }
-        } else {
-            // start auto input
-            Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);
-            intent.putExtra(SmsCodeAutoInputService.EXTRA_KEY_SMS_CODE, verificationCode);
-            sendBroadcast(intent);
         }
     }
 

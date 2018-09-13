@@ -96,6 +96,14 @@ public class SPUtils {
     }
 
     /**
+     * 自动输入总开关是否打开
+     */
+    public static boolean autoInputCodeEnabled(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                PrefConst.KEY_ENABLE_AUTO_INPUT_CODE, PrefConst.ENABLE_AUTO_INPUT_CODE_DEFAULT);
+    }
+
+    /**
      * 自动输入模式是否是root模式(仅用于兼容之前版本)
      */
     public static boolean isAutoInputRootMode(Context context) {
