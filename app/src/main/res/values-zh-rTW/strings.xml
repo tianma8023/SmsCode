@@ -51,7 +51,6 @@
     <string name="go_to_close">去關閉</string>
     <string name="smscode_auto_input_service_label">簡訊驗證碼自動輸入服務</string>
     <string name="pref_enable_auto_input_code_title">啟用自動輸入</string>
-    <string name="pref_enable_auto_input_code_summary">請選擇自動輸入模式</string>
     <string name="acquire_root_permission">獲取Root權限</string>
     <string name="acquire_root_permission_prompt">需要獲取Root權限啟用自動輸入</string>
     <string name="channel_name_foreground_service">分析簡訊時的通知</string>
