@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.github.tianma8023.smscode.constant.PrefConst;
 
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CLEAR_CLIPBOARD;
+import static com.github.tianma8023.smscode.constant.PrefConst.CLEAR_CLIPBOARD_DEFAULT;
+
 /**
  * Shared preferences utils only for this App.
  */
@@ -196,5 +199,13 @@ public class SPUtils {
      */
     public static void setLocalVersionCode(Context context, int versionCode) {
         PreferenceUtils.putInt(context, LOCAL_VERSION_CODE, versionCode);
+    }
+
+    /**
+     * 是否应该在自动输入成功之后清理剪切板
+     */
+    public static boolean shouldClearClipboard(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                KEY_CLEAR_CLIPBOARD, CLEAR_CLIPBOARD_DEFAULT);
     }
 }

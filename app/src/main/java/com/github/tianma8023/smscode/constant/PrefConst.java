@@ -53,6 +53,9 @@ public interface PrefConst {
     String FOCUS_MODE_AUTO = "focus_mode_auto";
     String FOCUS_MODE_MANUAL = "focus_mode_manual";
 
+    String KEY_CLEAR_CLIPBOARD = "pref_clear_clipboard";
+    boolean CLEAR_CLIPBOARD_DEFAULT = false;
+
     String KEY_VERBOSE_LOG_MODE = "pref_verbose_log_mode";
     boolean VERBOSE_LOG_MODE_DEFAULT = false;
 }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
+import com.github.tianma8023.smscode.utils.ClipboardUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
@@ -86,15 +87,21 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
     }
 
     private void autoInputSmsCode(String smsCode) {
-        boolean hit;
+        boolean success = false;
         for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
             XLog.d("try times {}", i+1);
-            hit = tryToAutoInputSMSCode(smsCode);
-            if (hit) {
-                XLog.i("Auto input succeed");
+            success = tryToAutoInputSMSCode(smsCode);
+            if (success) {
                 break;
             }
             sleep(100);
+        }
+
+        if (success) {
+            XLog.i("Auto input succeed");
+            if (SPUtils.shouldClearClipboard(this)) {
+                ClipboardUtils.clearClipboard(this);
+            }
         }
 
         Intent stopAutoInput = new Intent();

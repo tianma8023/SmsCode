@@ -206,6 +206,9 @@ public class SmsCodeHandleService extends IntentService {
                 boolean success = ShellUtils.inputText(verificationCode);
                 if (success) {
                     XLog.i("Auto input succeed");
+                    if (SPUtils.shouldClearClipboard(this)) {
+                        ClipboardUtils.clearClipboard(this);
+                    }
                 }
             } else {
                 // start auto input
