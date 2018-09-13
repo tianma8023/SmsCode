@@ -109,7 +109,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      */
     private boolean tryToAutoInputSMSCode(String smsCode) {
         String focusMode = SPUtils.getFocusMode(this);
-        if (PrefConst.KEY_FOCUS_MODE_AUTO.equals(focusMode)) {
+        if (PrefConst.FOCUS_MODE_AUTO.equals(focusMode)) {
             // focus mode: auto focus
             return tryToAutoInputByAutoFocus(smsCode);
         } else {

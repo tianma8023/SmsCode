@@ -249,7 +249,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 if (!newValue.equals(mCurListenMode)) {
                     mCurListenMode = (String) newValue;
                     refreshListenModePreference((ListPreference) preference, mCurListenMode);
-                    if (PrefConst.KEY_LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
+                    if (PrefConst.LISTEN_MODE_COMPATIBLE.equals(mCurListenMode)) {
                         showCompatibleModePrompt();
                     }
                 }
@@ -275,7 +275,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     private void showSmsCodeTestDialog() {
         new MaterialDialog.Builder(mActivity)
-                .title(R.string.pref_smscode_test)
+                .title(R.string.pref_smscode_test_title)
                 .input(R.string.sms_content_hint, 0, true, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {

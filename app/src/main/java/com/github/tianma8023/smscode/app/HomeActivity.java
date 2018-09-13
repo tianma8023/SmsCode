@@ -81,7 +81,7 @@ public class HomeActivity extends BaseActivity implements
 
         boolean enable = SPUtils.isEnable(this);
         String listenMode = SPUtils.getListenMode(this);
-        if (enable && PrefConst.KEY_LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
+        if (enable && PrefConst.LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
             boolean isVerboseLog = SPUtils.isVerboseLogMode(this);
             SmsObserveService.startMe(this, isVerboseLog);
         } else {
@@ -94,7 +94,7 @@ public class HomeActivity extends BaseActivity implements
         mCurThemeIndex = SPUtils.getCurrentThemeIndex(this);
         // check current theme index in case of exception.
         if(mCurThemeIndex < 0 || mCurThemeIndex >= mThemeItemList.size()) {
-            mCurThemeIndex = PrefConst.KEY_CURRENT_THEME_INDEX_DEFAULT;
+            mCurThemeIndex = PrefConst.CURRENT_THEME_INDEX_DEFAULT;
         }
         setTheme(mThemeItemList.get(mCurThemeIndex).getThemeRes());
     }

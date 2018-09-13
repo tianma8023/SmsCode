@@ -84,7 +84,7 @@ public class SPUtils {
      */
     public static boolean isEnable(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_ENABLE, PrefConst.KEY_ENABLE_DEFAULT);
+                PrefConst.KEY_ENABLE, PrefConst.ENABLE_DEFAULT);
     }
 
     /**
@@ -92,7 +92,7 @@ public class SPUtils {
      */
     public static String getListenMode(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_LISTEN_MODE, PrefConst.KEY_LISTEN_MODE_STANDARD);
+                PrefConst.KEY_LISTEN_MODE, PrefConst.LISTEN_MODE_STANDARD);
     }
 
     /**
@@ -132,7 +132,7 @@ public class SPUtils {
      */
     public static boolean isVerboseLogMode(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_VERBOSE_LOG_MODE, PrefConst.KEY_VERBOSE_LOG_MODE_DEFAULT);
+                PrefConst.KEY_VERBOSE_LOG_MODE, PrefConst.VERBOSE_LOG_MODE_DEFAULT);
     }
 
     /**
@@ -140,7 +140,7 @@ public class SPUtils {
      */
     public static boolean showToast(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_SHOW_TOAST, PrefConst.KEY_SHOW_TOAST_DEFAULT);
+                PrefConst.KEY_SHOW_TOAST, PrefConst.SHOW_TOAST_DEFAULT);
     }
 
     /**
@@ -148,7 +148,7 @@ public class SPUtils {
      */
     public static String getFocusMode(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_FOCUS_MODE, PrefConst.KEY_FOCUS_MODE_AUTO);
+                PrefConst.KEY_FOCUS_MODE, PrefConst.FOCUS_MODE_AUTO);
     }
 
     /**
@@ -156,7 +156,7 @@ public class SPUtils {
      */
     public static String getSMSCodeKeywords(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_SMSCODE_KEYWORDS, PrefConst.KEY_SMSCODE_KEYWORDS_DEFAULT);
+                PrefConst.KEY_SMSCODE_KEYWORDS, PrefConst.SMSCODE_KEYWORDS_DEFAULT);
     }
 
     /**
@@ -164,7 +164,7 @@ public class SPUtils {
      */
     public static int getCurrentThemeIndex(Context context) {
         return PreferenceUtils.getInt(context,
-                PrefConst.KEY_CURRENT_THEME_INDEX, PrefConst.KEY_CURRENT_THEME_INDEX_DEFAULT);
+                PrefConst.KEY_CURRENT_THEME_INDEX, PrefConst.CURRENT_THEME_INDEX_DEFAULT);
     }
 
     /**

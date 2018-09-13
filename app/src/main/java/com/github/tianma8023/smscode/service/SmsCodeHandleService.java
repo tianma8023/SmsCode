@@ -139,7 +139,7 @@ public class SmsCodeHandleService extends IntentService {
         XLog.d("FocusMode: {}", mFocusMode);
         XLog.d("AutoInputRootMode: {}", mIsAutoInputModeRoot);
 
-        if (PrefConst.KEY_FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputModeRoot) {
+        if (PrefConst.FOCUS_MODE_AUTO.equals(mFocusMode) && mIsAutoInputModeRoot) {
             // Root mode + Auto Focus Mode
             String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
             // 用root的方式启动
@@ -157,7 +157,7 @@ public class SmsCodeHandleService extends IntentService {
         innerHandler.sendMessage(copyMsg);
 
         // mark sms as read or not.
-//        if (getBoolean(mPreferences, PrefConst.KEY_MARK_AS_READ, PrefConst.KEY_MARK_AS_READ_DEFAULT)) {
+//        if (getBoolean(mPreferences, PrefConst.KEY_MARK_AS_READ, PrefConst.MARK_AS_READ_DEFAULT)) {
 ////            sleep(8);
 //            Message markMsg = new Message();
 //            markMsg.obj = smsMessageData;
@@ -193,7 +193,7 @@ public class SmsCodeHandleService extends IntentService {
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
-        if (mIsAutoInputModeRoot && PrefConst.KEY_FOCUS_MODE_MANUAL.equals(mFocusMode)) {
+        if (mIsAutoInputModeRoot && PrefConst.FOCUS_MODE_MANUAL.equals(mFocusMode)) {
             // focus mode: manual focus
             // input mode: root mode
             boolean success = ShellUtils.inputText(verificationCode);
