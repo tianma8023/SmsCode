@@ -48,7 +48,7 @@ public class PreferencesTransition implements ITransition {
             SPUtils.setLocalVersionCode(mContext, BuildConfig.VERSION_CODE);
             return true;
         } catch (Exception e) {
-            XLog.d("Error occurs when do preferences transition.", e);
+            XLog.e("Error occurs when do preferences transition.", e);
         }
         return false;
     }

@@ -28,7 +28,6 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
 
     private Context mContext;
 
-    private SwitchPreference mAutoInputEnablePref;
     private ListPreference mAutoInputModePref;
 
     private String mCurAutoMode;
@@ -39,8 +38,8 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
 
         addPreferencesFromResource(R.xml.settings_auto_input_code);
 
-        mAutoInputEnablePref = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
-        mAutoInputEnablePref.setOnPreferenceChangeListener(this);
+        SwitchPreference autoInputEnablePref = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
+        autoInputEnablePref.setOnPreferenceChangeListener(this);
 
         mAutoInputModePref = (ListPreference) findPreference(KEY_AUTO_INPUT_MODE);
         mAutoInputModePref.setOnPreferenceChangeListener(this);
@@ -49,7 +48,7 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
         ListPreference focusModePref = (ListPreference) findPreference(KEY_FOCUS_MODE);
         focusModePref.setOnPreferenceChangeListener(this);
 
-        refreshEnableAutoInputPreference(mAutoInputEnablePref.isChecked());
+        refreshEnableAutoInputPreference(autoInputEnablePref.isChecked());
         refreshAutoInputModePreference(mCurAutoMode);
         refreshFocusModePreference(focusModePref, focusModePref.getValue());
     }
@@ -121,12 +120,8 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
     }
 
     private void refreshEnableAutoInputPreference(boolean autoInputEnabled) {
-        if (!autoInputEnabled) {
-            mAutoInputEnablePref.setSummary(R.string.pref_entry_auto_input_code_summary);
-        } else {
-            if (TextUtils.isEmpty(mAutoInputModePref.getValue())) {
-                Toast.makeText(getActivity(), R.string.pref_auto_input_mode_summary_default, Toast.LENGTH_SHORT).show();
-            }
+        if (autoInputEnabled && TextUtils.isEmpty(mAutoInputModePref.getValue())) {
+            Toast.makeText(getActivity(), R.string.pref_auto_input_mode_summary_default, Toast.LENGTH_SHORT).show();
         }
     }
 
