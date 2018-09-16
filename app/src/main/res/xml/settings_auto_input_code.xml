@@ -22,7 +22,7 @@
             android:entries="@array/pref_focus_mode_entries"
             android:entryValues="@array/pref_focus_mode_entryValues"
             android:dependency="pref_enable_auto_input_code"
-            android:defaultValue="@string/focus_mode_auto" />
+            android:defaultValue="@string/focus_mode_manual" />
 
         <SwitchPreference
             android:key="@string/pref_clear_clipboard"

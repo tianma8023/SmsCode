@@ -185,6 +185,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean autoInputSinceOreo(List<AccessibilityNodeInfo> editTextNodes, String smsCode) {
         // 判断有没有验证码输入框
+        // Android O 起可以通过getHintText获取EditText的hint内容
         for (AccessibilityNodeInfo nodeInfo : editTextNodes) {
             if (nodeInfo.isFocusable()) {
                 CharSequence hintSequence = nodeInfo.getHintText();
@@ -194,6 +195,26 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                 String hint = hintSequence.toString();
 
                 boolean flag = VerificationUtils.containsVerificationKeywords(getApplicationContext(), hint);
+                if (flag) {
+                    // 模拟输入
+                    inputText(nodeInfo, smsCode);
+                    XLog.d("SMS code EditText found!");
+                    return true;
+                }
+            }
+        }
+
+        // 但是在Android O 上WebView中的EditText，没办法通过 getHintText 获取hint内容
+        // 所以需要通过 getText 进一步判断
+        for (AccessibilityNodeInfo nodeInfo : editTextNodes) {
+            if (nodeInfo.isFocusable()) {
+                CharSequence text = nodeInfo.getText();
+                if (text == null) {
+                    continue;
+                }
+                String hintOrText = text.toString();
+
+                boolean flag = VerificationUtils.containsVerificationKeywords(getApplicationContext(), hintOrText);
                 if (flag) {
                     // 模拟输入
                     inputText(nodeInfo, smsCode);

@@ -159,7 +159,7 @@ public class SPUtils {
      */
     public static String getFocusMode(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_FOCUS_MODE, PrefConst.FOCUS_MODE_AUTO);
+                PrefConst.KEY_FOCUS_MODE, PrefConst.FOCUS_MODE_MANUAL);
     }
 
     /**
