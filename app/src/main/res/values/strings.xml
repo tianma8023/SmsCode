@@ -104,6 +104,17 @@
     <!-- Q&A -->
     <string name="simplified_question">Q:\u00A0</string>
     <string name="simplified_answer">A:\u00A0·</string>
+    <string name="write_sms_appops_prompt_content">
+        Writing SMS for Non-default SMS app has been limited since Android 4.4. Except for granting write SMS runtime permission, WRITE_SMS permission in AppOpsManager also should be granted.\n\nThere are two ways to handle it:\n
+        1. Granting by root, you can just click the \"GRANT BY ROOT\" button if you have ROOT access.\n\n
+        2. Granting by ADB, you can click the "VIEW ADB SETTING HELP" for more information. Note that you should reopen this switch after setting it.
+    </string>
+    <string name="extra_permission_request_prompt_title">Extra Permission Requirement</string>
+    <string name="view_adb_setting_help">VIEW ADB SETTING HELP</string>
+    <string name="granted_by_root">GRANT BY ROOT</string>
+    <string name="granted_appops_by_root_failed">Grant AppOps WRITE_SMS by root failed</string>
+    <string name="granted_appops_by_root_succeed">Grant AppOps WRITE_SMS by root succeed</string>
+    <string name="relevant_permission_already_granted">Relevant permissions already have been granted</string>
 
     <string-array name="question_list">
         <item>本产品理念是什么？</item>
@@ -113,7 +124,6 @@
         <item>App无效该怎么办？</item>
         <item>为什么自动输入在大部分App上能成功，在部分App上却失败？</item>
         <item>对焦模式中的自动寻找和手动指定有什么区别，各有什么优劣？</item>
-        <item>为什么没有将验证码短信标记为已读的功能？</item>
     </string-array>
 
     <string-array name="answer_list">
@@ -124,7 +134,6 @@
         <item>1. 在验证码短信测试中先测试短信内容能否被正确解析。\n\n2. 因为用到了服务和广播，所以检查是否在应用控制类软件（黑域、应用管理、绿色守护等）的黑名单中。\n\n3. 检查App的组件（广播接收器、服务、内容提供者等）是否被组件控制类软件（Blocker、写轮眼等）禁用。\n\n4. 检查是否在电池优化名单中，如果在请移到白名单（原理已说明，其实不耗电）。\n\n5. 检查是否已打开验证码保护开关（华为，OPPO等国内Rom存在此机制），或者是否已授予"通知类短信"权限（如MIUI）。\n\n6. 联系开发者，反馈问题。</item>
         <item>属于正常现象，因为有些应用的验证码输入框是自定义的控件，可能没有遵循Android设计规范，故而不能被正确识别。</item>
         <item>自动寻找模式：App程序自动寻找识别到验证码输入框之后，再自动粘贴进去。\n优势：全自动化。\n劣势：在极少数界面中因识别不了验证码输入框而失效。\n\n手动对焦模式：用户手动指定验证码输入框，即光标在哪里就在那里自动输入。\n优势：准确率高。\n劣势：非全自动化，需要多点一下屏幕。</item>
-        <item>自Android 4.4起，只有系统默认的短信应用才可以对短信进行写操作。(也可能是因为目前开发者能力不够，没找到合适的方法。)</item>
     </string-array>
     <!-- Q&A end -->
 </resources>

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -29,10 +30,13 @@ import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.Const;
 import com.github.tianma8023.smscode.constant.PrefConst;
+import com.github.tianma8023.smscode.utils.AppOpsUtils;
 import com.github.tianma8023.smscode.utils.PackageUtils;
 import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
+import com.github.tianma8023.smscode.utils.ShellUtils;
 import com.github.tianma8023.smscode.utils.StorageUtils;
+import com.github.tianma8023.smscode.utils.Utils;
 import com.github.tianma8023.smscode.utils.VerificationUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
@@ -52,6 +56,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WEC
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
@@ -102,7 +107,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         ListPreference listenModePref = (ListPreference) findPreference(KEY_LISTEN_MODE);
         listenModePref.setOnPreferenceChangeListener(this);
 
-        findPreference(PrefConst.KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
+        findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
         // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
         findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
@@ -110,6 +115,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
+
+        findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
 
         // Hide experimental group.
         PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
@@ -199,13 +206,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     }
 
     private void aboutProject() {
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(Const.PROJECT_SOURCE_CODE_URL));
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(mActivity, R.string.browser_install_or_enable_prompt, Toast.LENGTH_SHORT).show();
-        }
+        Utils.showWebPage(mActivity, Const.PROJECT_SOURCE_CODE_URL);
     }
 
     private void donateByWechat() {
@@ -255,6 +256,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 }
                 break;
             }
+            case KEY_MARK_AS_READ:
+                onMarkAsReadSwitched((SwitchPreference) preference, (Boolean)newValue);
+                break;
             case KEY_VERBOSE_LOG_MODE:
                 refreshVerboseLogPreference(preference, (Boolean) newValue);
                 break;
@@ -452,5 +456,42 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 .content(R.string.compatible_mode_prompt_content)
                 .positiveText(R.string.confirm)
                 .show();
+    }
+
+    private void onMarkAsReadSwitched(final SwitchPreference markAsReadPref, boolean on) {
+        if (!on) {
+            return;
+        }
+
+        String packageName = BuildConfig.APPLICATION_ID;
+        int uid = Process.myUid();
+        if (!AppOpsUtils.checkOp(mActivity, AppOpsUtils.OP_WRITE_SMS, uid, packageName)) {
+            new MaterialDialog.Builder(mActivity)
+                    .title(R.string.extra_permission_request_prompt_title)
+                    .content(R.string.write_sms_appops_prompt_content)
+                    .positiveText(R.string.view_adb_setting_help)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            markAsReadPref.setChecked(false);
+                            String url = Utils.getProjectDocUrl(Const.PROJECT_DOC_BASE_URL, Const.DOC_APPOPS_ADB_HELP);
+                            Utils.showWebPage(mActivity, url);
+                        }
+                    })
+                    .negativeText(R.string.granted_by_root)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (!ShellUtils.allowOpWriteSMS()) {
+                                Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
+                                markAsReadPref.setChecked(false);
+                            } else {
+                                Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).show();
+        } else {
+            Toast.makeText(mActivity, R.string.relevant_permission_already_granted, Toast.LENGTH_LONG).show();
+        }
     }
 }

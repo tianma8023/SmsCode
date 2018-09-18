@@ -12,5 +12,5 @@
   ```shell
   adb shell appops set com.github.tianma8023.smscode WRITE_SMS allow
   ```
-  4. 重新打开`标记为已读`开关，检查是否已经设置成功。
+  4. 重新打开 `标记为已读` 开关，检查是否已经设置成功。
 

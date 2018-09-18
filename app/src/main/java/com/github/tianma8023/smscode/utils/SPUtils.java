@@ -208,4 +208,12 @@ public class SPUtils {
         return PreferenceUtils.getBoolean(context,
                 KEY_CLEAR_CLIPBOARD, CLEAR_CLIPBOARD_DEFAULT);
     }
+
+    /**
+     * 标记为已读是否打开
+     */
+    public static boolean markAsReadEnabled(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                PrefConst.KEY_MARK_AS_READ, PrefConst.MARK_AS_READ_DEFAULT);
+    }
 }

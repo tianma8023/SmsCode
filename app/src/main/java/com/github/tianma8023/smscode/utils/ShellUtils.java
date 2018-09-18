@@ -4,6 +4,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import com.github.tianma8023.smscode.BuildConfig;
 import com.jaredrummler.android.shell.CommandResult;
 import com.jaredrummler.android.shell.Shell;
 
@@ -150,6 +151,12 @@ public class ShellUtils {
      */
     public static boolean inputText(String text) {
         CommandResult cmdResult = Shell.SU.run("input text \"" + text + "\"");
+        return cmdResult.isSuccessful();
+    }
+
+    public static boolean allowOpWriteSMS() {
+        String cmd = "appops set " + BuildConfig.APPLICATION_ID + " WRITE_SMS allow";
+        CommandResult cmdResult = Shell.SU.run(cmd);
         return cmdResult.isSuccessful();
     }
 }

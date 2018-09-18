@@ -163,13 +163,12 @@ public class SmsCodeHandleService extends IntentService {
         innerHandler.sendMessage(copyMsg);
 
         // mark sms as read or not.
-//        if (getBoolean(mPreferences, PrefConst.KEY_MARK_AS_READ, PrefConst.MARK_AS_READ_DEFAULT)) {
-////            sleep(8);
-//            Message markMsg = new Message();
-//            markMsg.obj = smsMessageData;
-//            markMsg.what = MSG_MARK_AS_READ;
-//            innerHandler.sendMessageDelayed(markMsg, 8000);
-//        }
+        if(SPUtils.markAsReadEnabled(this)){
+            Message markMsg = new Message();
+            markMsg.obj = smsMessageData;
+            markMsg.what = MSG_MARK_AS_READ;
+            innerHandler.sendMessageDelayed(markMsg, 100);
+        }
     }
 
     private Handler innerHandler = new Handler(Looper.getMainLooper()) {

@@ -1,8 +1,6 @@
 package com.github.tianma8023.smscode.constant;
 
 
-import com.github.tianma8023.smscode.BuildConfig;
-
 public interface Const {
 
     String PROJECT_SOURCE_CODE_URL = "https://github.com/tianma8023/SmsCodeExtractor";
@@ -18,5 +16,7 @@ public interface Const {
     String WECHAT_KEY_EXTRA_DONATE = "TianmaDonate";
     String WECHAT_QRCODE_URL = "m01pPa@:hEyGJ5P*a1@$xPI";
 
-    String HOME_ACTIVITY_ALIAS = BuildConfig.APPLICATION_ID + ".HomeActivityAlias";
+    String PROJECT_DOC_BASE_URL = "https://tianma8023.github.io/SmsCodeExtractor";
+    String DOC_APPOPS_ADB_HELP = "appops_adb_help";
+    String PROJECT_DOC_APPOPS_ADB_HELP_URL = "https://tianma8023.github.io/SmsCodeExtractor/appops_adb_help";
 }

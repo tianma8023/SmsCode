@@ -116,7 +116,6 @@
         <item>App無效該怎麼辦？</item>
         <item>為什麼自動輸入在大部分應用上能成功，在特定應用上卻失敗？</item>
         <item>對焦模式中的自動尋找和手動指定有什麽區別，各有什麽優劣？</item>
-        <item>可以將驗證碼簡訊複製後標記為已讀嗎？</item>
     </string-array>
 
     <string-array name="answer_list">
@@ -127,7 +126,20 @@
         <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此App加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 檢查App的組件（廣播接收器、服務、內容提供者）是否被組件控制類軟體（Blocker、寫輪眼等）禁用。\m\m4.檢查本App是否在電池優化名單中，如果在請移至白名單（原理已說明，其實不耗電）。\n\n5. 檢查是否已經打開驗證碼保護開關（華為，OPPO等ROM存在此機制），或者是否已授予"通知類簡訊"權限（如MIUI）。\n\n 6. 請聯繫開發者，並回報相關問題。</item>
         <item>屬於正常現象，因為有些應用的驗證碼輸入框是自定義的控件，可能沒有遵循Android設計規範，故而不能被正確識別。</item>
         <item>自動尋找模式：App程式自動尋找識別出驗證碼輸入框之後，再自動粘貼進去。\n優勢：全自動化。\n劣勢：在極少數界面中因識別不了驗證碼輸入框而失效。\n\n手動對焦模式：用戶手動指定驗證碼輸入框，即光標在哪裏就在那裏自動輸入。\n優勢：準確率高。\n劣勢：非全自動化，需要多點一下屏幕。</item>
-        <item>從Android 4.4起，只有系統預設的簡訊程式才能對簡訊進行修改與操作。(也可能是開發者能力不夠，沒有找到合適的方法。)</item>
     </string-array>
     <!-- Q&A end -->
+
+    <!-- App Ops WRITE_SMS -->
+    <string name="write_sms_appops_prompt_content">
+        自Android 4.4起，非默认短信应用修改短信的权限得到限制。除了授予写短信的权限外，还需要修改AppOps的设置给予 WRITE_SMS 权限。\n\n有两种设置方式：\n
+        1. 通过 ROOT 方式授予，具体点击下方的\"ROOT授予\"即可。\n\n
+        2. 通过 ADB 命令方式修改，具体点击右下方的\"查看ADB设置帮助\"，设置完毕后需重新打开该开关选项。
+    </string>
+    <string name="extra_permission_request_prompt_title">額外權限請求聲明</string>
+    <string name="view_adb_setting_help">查看ADB設置幫助</string>
+    <string name="granted_by_root">Root授予</string>
+    <string name="granted_appops_by_root_failed">Root授予 AppOps WRITE_SMS 權限失敗</string>
+    <string name="granted_appops_by_root_succeed">Root授予 AppOps WRITE_SMS 權限成功</string>
+    <string name="relevant_permission_already_granted">已授予相關權限</string>
+    <!-- App Ops WRITE_SMS end -->
 </resources>
