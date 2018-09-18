@@ -10,6 +10,7 @@ You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.g
 - Copy verification code to clipboard when a new message arrives.
 - Show toast when a SMS verification code is copied.
 - Custom keywords about verification code message (regular expressions allowed).
+- Mark verification code SMS as read.
 - Auto-input SMS code.
 - Various theme color to choose.
 

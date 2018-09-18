@@ -1,4 +1,6 @@
 # Update Logs
+- 18.09.19 v1.2.0
+  1. New feature: mark sms as read.
 - 18.09.16 v1.1.1
   1. Let "manual focus" to be the default focus mode.
   2. Enhance the ablity of auto-input in webview since Android Oreo.
