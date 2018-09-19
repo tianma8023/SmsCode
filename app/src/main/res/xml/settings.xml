@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_general_title">
+    <PreferenceCategory
+        android:key="@string/pref_general"
+        android:title="@string/pref_general_title">
 
         <SwitchPreference
             android:key="@string/pref_enable"

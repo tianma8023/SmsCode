@@ -10,6 +10,8 @@ public interface PrefConst {
 
     String REMOTE_PREF_NAME = BuildConfig.APPLICATION_ID + "_preferences";
 
+    String KEY_GENERAL = "pref_general";
+
     String KEY_ENABLE = "pref_enable";
     boolean ENABLE_DEFAULT = false;
 

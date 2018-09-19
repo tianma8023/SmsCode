@@ -111,7 +111,7 @@
     <string name="write_sms_appops_prompt_content">
         自Android 4.4起，非默认短信应用修改短信的权限得到限制。除了授予写短信的权限外，还需要修改AppOps的设置给予 WRITE_SMS 权限。\n\n有两种设置方式：\n
         1. 通过 ROOT 方式授予，具体点击下方的\"ROOT授予\"即可。\n\n
-        2. 通过 ADB 命令方式修改，具体点击右下方的\"查看ADB设置帮助\"，设置完毕后需重新打开该开关选项。
+        2. 通过 ADB 命令方式修改，具体点击下方的\"查看ADB设置帮助\"，设置完毕后需重新打开该开关选项。
     </string>
     <string name="extra_permission_request_prompt_title">额外权限请求声明</string>
     <string name="view_adb_setting_help">查看ADB设置帮助</string>

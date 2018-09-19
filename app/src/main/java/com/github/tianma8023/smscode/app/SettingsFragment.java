@@ -3,6 +3,7 @@ package com.github.tianma8023.smscode.app;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -116,7 +117,13 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
 
-        findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
+        Preference markAsReadPref = findPreference(KEY_MARK_AS_READ);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            markAsReadPref.setOnPreferenceChangeListener(this);
+        } else {
+            PreferenceGroup generalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_GENERAL);
+            generalGroup.removePreference(markAsReadPref);
+        }
 
         // Hide experimental group.
         PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
@@ -463,31 +470,36 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             return;
         }
 
-        String packageName = BuildConfig.APPLICATION_ID;
-        int uid = Process.myUid();
+        final String packageName = BuildConfig.APPLICATION_ID;
+        final int uid = Process.myUid();
         if (!AppOpsUtils.checkOp(mActivity, AppOpsUtils.OP_WRITE_SMS, uid, packageName)) {
             new MaterialDialog.Builder(mActivity)
                     .title(R.string.extra_permission_request_prompt_title)
                     .content(R.string.write_sms_appops_prompt_content)
-                    .positiveText(R.string.view_adb_setting_help)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    .negativeText(R.string.view_adb_setting_help)
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            markAsReadPref.setChecked(false);
                             String url = Utils.getProjectDocUrl(Const.PROJECT_DOC_BASE_URL, Const.DOC_APPOPS_ADB_HELP);
                             Utils.showWebPage(mActivity, url);
                         }
                     })
-                    .negativeText(R.string.granted_by_root)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    .positiveText(R.string.granted_by_root)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (!ShellUtils.allowOpWriteSMS()) {
-                                Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
                                 markAsReadPref.setChecked(false);
+                                Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    })
+                    .cancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            markAsReadPref.setChecked(false);
                         }
                     }).show();
         } else {

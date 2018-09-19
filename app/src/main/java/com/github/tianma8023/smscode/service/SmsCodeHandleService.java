@@ -226,24 +226,34 @@ public class SmsCodeHandleService extends IntentService {
                 XLog.e("Don't have permission to read sms");
                 return;
             }
+            String[] projection = new String[] {
+                    Telephony.Sms._ID,
+                    Telephony.Sms.ADDRESS,
+                    Telephony.Sms.BODY,
+                    Telephony.Sms.READ,
+                    Telephony.Sms.DATE
+            };
+            // 查看最近5条短信
+            String sortOrder = Telephony.Sms.DATE + " desc limit 5";
             Uri uri = Telephony.Sms.Inbox.CONTENT_URI;
-            cursor = this.getContentResolver().query(uri, null, null, null, null);
+            cursor = this.getContentResolver().query(uri, projection, null, null, sortOrder);
             if (cursor == null)
                 return;
             while (cursor.moveToNext()) {
-                String curAddress = cursor.getString(cursor.getColumnIndex("address"));
-                int curRead = cursor.getInt(cursor.getColumnIndex("read"));
-                String curBody = cursor.getString(cursor.getColumnIndex("body"));
-                XLog.d("curBody = {}", curBody);
+                String curAddress = cursor.getString(cursor.getColumnIndex(Telephony.Sms.ADDRESS));
+                int curRead = cursor.getInt(cursor.getColumnIndex(Telephony.Sms.READ));
+                String curBody = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
                 if (curAddress.equals(sender) && curRead == 0 && curBody.startsWith(body)) {
-                    String smsMessageId = cursor.getString(cursor.getColumnIndex("_id"));
+                    String smsMessageId = cursor.getString(cursor.getColumnIndex(Telephony.Sms._ID));
                     ContentValues values = new ContentValues();
-                    values.put("read", true);
-                    int rows = this.getContentResolver().update(uri, values, "_id = ?", new String[]{smsMessageId});
-                    XLog.d("Updates rows {}", rows);
+                    values.put(Telephony.Sms.READ, true);
+                    int rows = this.getContentResolver().update(uri, values, Telephony.Sms._ID + " = ?", new String[]{smsMessageId});
+                    if (rows > 0) {
+                        XLog.i("Mark as read succeed");
+                        break;
+                    }
                 }
             }
-            XLog.i("Mark as read succeed");
         } catch (Exception e) {
             XLog.e("Mark as read failed: ", e);
         } finally {

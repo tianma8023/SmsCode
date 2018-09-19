@@ -140,7 +140,7 @@ public class ShellUtils {
     }
 
     public static boolean checkRootPermission() {
-        CommandResult result = Shell.SU.run("ls");
+        CommandResult result = Shell.SU.run("");
         return result.isSuccessful();
     }
 
