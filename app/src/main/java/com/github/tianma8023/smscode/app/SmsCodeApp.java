@@ -9,6 +9,7 @@ import android.support.annotation.RequiresApi;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.NotificationConst;
+import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.migrate.TransitionTask;
 import com.github.tianma8023.smscode.utils.CrashHandler;
 import com.github.tianma8023.smscode.utils.XLog;
@@ -19,7 +20,7 @@ import com.umeng.commonsdk.UMConfigure;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class SmsCodeApp extends Application{
+public class SmsCodeApp extends Application {
 
     @Override
     public void onCreate() {
@@ -34,6 +35,8 @@ public class SmsCodeApp extends Application{
         initBugly();
 
         initNotificationChannel();
+
+        initDatabase();
 
         performTransitionTask();
     }
@@ -76,6 +79,10 @@ public class SmsCodeApp extends Application{
     // crash handler
     private void initCrashHandler() {
         CrashHandler.init(this, null);
+    }
+
+    private void initDatabase() {
+        DBManager.get(this);
     }
 
     // data transition task

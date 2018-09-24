@@ -28,6 +28,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.rule.CodeRulesActivity;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.Const;
 import com.github.tianma8023.smscode.constant.PrefConst;
@@ -52,6 +53,7 @@ import java.util.List;
 import ch.qos.logback.classic.Level;
 
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CODE_RULES;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALIPAY;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WECHAT;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
@@ -113,6 +115,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
         findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
+        findPreference(KEY_CODE_RULES).setOnPreferenceClickListener(this);
         Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
@@ -187,6 +190,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 if (mPreferenceClickCallback != null) {
                     mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), false);
                 }
+                break;
+            case KEY_CODE_RULES:
+                CodeRulesActivity.startToMe(mActivity);
                 break;
             case KEY_SMSCODE_TEST:
                 showSmsCodeTestDialog();

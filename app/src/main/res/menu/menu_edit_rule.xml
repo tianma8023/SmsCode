@@ -3,9 +3,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_home_faq"
-        android:icon="@drawable/ic_question"
-        android:title="@string/action_home_faq_title"
+        android:id="@+id/action_rules_tick"
+        android:icon="@drawable/ic_done"
+        android:title="@string/action_rule_edit_done"
         app:showAsAction="ifRoom"/>
 
     <item

@@ -35,13 +35,16 @@
             android:name=".app.HomeActivity"
             android:exported="true"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".app.rule.CodeRulesActivity"/>
 
         <service
             android:name=".service.accessibility.SmsCodeAutoInputService"

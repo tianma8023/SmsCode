@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.adapter.ItemCallback;
 
 import java.util.List;
 

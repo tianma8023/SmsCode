@@ -104,7 +104,7 @@
 
     <!-- Q&A -->
     <string name="simplified_question">Q:\u00A0</string>
-    <string name="simplified_answer">A:\u00A0·</string>
+    <string name="simplified_answer">A:\u00A0</string>
     <string name="write_sms_appops_prompt_content">
         Writing SMS for Non-default SMS app has been limited since Android 4.4. Except for granting write SMS runtime permission, WRITE_SMS permission in AppOpsManager also should be granted.\n\nThere are two ways to handle it:\n
         1. Granting by root, you can just click the \"GRANT BY ROOT\" button if you have ROOT access.\n\n
@@ -137,4 +137,35 @@
         <item>自动寻找模式：App程序自动寻找识别到验证码输入框之后，再自动粘贴进去。\n优势：全自动化。\n劣势：在极少数界面中因识别不了验证码输入框而失效。\n\n手动对焦模式：用户手动指定验证码输入框，即光标在哪里就在那里自动输入。\n优势：准确率高。\n劣势：非全自动化，需要多点一下屏幕。</item>
     </string-array>
     <!-- Q&A end -->
+
+    <!-- sms code rule -->
+    <string name="rule_company_hint">Institution or Company</string>
+    <string name="rule_keyword_hint">SMS Code Keyword</string>
+    <string name="rule_type_text">SMS Code Type</string>
+    <string name="rule_code_length">SMS code length</string>
+    <string name="rule_code_regex_hint">SMS code regular expression</string>
+    <string name="pref_code_rules_title">SMS code match rules</string>
+    <string name="pref_code_rules_summary">Custom code match rules for specific SMS</string>
+    <string name="quick_choose">Quick Choose</string>
+    <string name="sms_code_type_digit_entry">Digit Only [0\-9]</string>
+    <string name="sms_code_type_letter_entry">Letter Only [a\-zA\-Z]</string>
+    <string name="sms_code_type_text_entry">Text [a\-zA\-Z0\-9]</string>
+    <string name="action_rule_edit_done">Done</string>
+    <string name="action_import_rules">Import</string>
+    <string name="action_export_rules">Export</string>
+    <string name="revoke">Revoke</string>
+    <string name="removed">Removed</string>
+    <string name="remove">Remove</string>
+    <string name="edit">Edit</string>
+    <string name="actions">Actions</string>
+    <string name="rule_list_empty_prompt">No SMS code rules yet!</string>
+    <string name="code_length_empty_prompt">Please enter the code length</string>
+    <string name="rule_company_empty_hint">Please enter institution or company</string>
+    <string name="rule_keyword_empty_hint">Please enter SMS code keyword</string>
+    <string name="rule_code_regex_empty_hint">Please enter SMS code regular expression</string>
+    <string name="rule_duplicated_prompt">Rule exists, please reedit it or exit</string>
+    <string name="rule_list">Rule List</string>
+    <string name="create_rule">New Rule</string>
+    <string name="edit_rule">Edit Rule</string>
+    <!-- sms code rule end -->
 </resources>

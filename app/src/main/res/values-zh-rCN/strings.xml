@@ -119,4 +119,36 @@
     <string name="granted_appops_by_root_failed">Root授予 AppOps WRITE_SMS 权限失败</string>
     <string name="granted_appops_by_root_succeed">Root授予 AppOps WRITE_SMS 权限成功</string>
     <string name="relevant_permission_already_granted">已授予相关权限</string>
+    <!-- app ops write sms end -->
+
+    <!-- sms code rule -->
+    <string name="rule_company_hint">公司或组织名</string>
+    <string name="rule_keyword_hint">验证码关键字</string>
+    <string name="rule_type_text">验证码类型</string>
+    <string name="rule_code_length">验证码长度</string>
+    <string name="rule_code_regex_hint">验证码正则表达式</string>
+    <string name="pref_code_rules_title">验证码规则</string>
+    <string name="pref_code_rules_summary">自定义特定的验证码匹配规则</string>
+    <string name="quick_choose">快速选择</string>
+    <string name="sms_code_type_digit_entry">数字 [0\-9]</string>
+    <string name="sms_code_type_letter_entry">字母 [a\-zA\-Z]</string>
+    <string name="sms_code_type_text_entry">数字+字母 [a\-zA\-Z0\-9]</string>
+    <string name="action_rule_edit_done">保存</string>
+    <string name="action_import_rules">导入</string>
+    <string name="action_export_rules">导出</string>
+    <string name="revoke">撤回</string>
+    <string name="removed">已删除</string>
+    <string name="remove">删除</string>
+    <string name="edit">编辑</string>
+    <string name="actions">操作</string>
+    <string name="rule_list_empty_prompt">空空如也~</string>
+    <string name="code_length_empty_prompt">请输入验证码长度</string>
+    <string name="rule_company_empty_hint">请输入公司或组织名</string>
+    <string name="rule_keyword_empty_hint">请输入验证码关键字</string>
+    <string name="rule_code_regex_empty_hint">请输入验证码正则表达式</string>
+    <string name="rule_duplicated_prompt">此规则已存在,请重新编辑或退出编辑</string>
+    <string name="rule_list">规则列表</string>
+    <string name="create_rule">新建规则</string>
+    <string name="edit_rule">编辑规则</string>
+    <!-- sms code rule end -->
 </resources>
