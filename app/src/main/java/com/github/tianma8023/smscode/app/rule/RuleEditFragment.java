@@ -2,22 +2,28 @@ package com.github.tianma8023.smscode.app.rule;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -96,6 +102,16 @@ public class RuleEditFragment extends Fragment {
             }
         });
 
+        mCodeRegexEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    saveIfValid();
+                    return true;
+                }
+                return false;
+            }
+        });
         initArguments();
     }
 
@@ -104,9 +120,9 @@ public class RuleEditFragment extends Fragment {
         mRuleEditType = args.getInt(KEY_RULE_EDIT_TYPE);
         mCodeRule = args.getParcelable(KEY_CODE_RULE);
         if (mRuleEditType == EDIT_TYPE_UPDATE && mCodeRule != null) {
-            mCompanyEditText.setText(mCodeRule.getCompany());
-            mKeywordEditText.setText(mCodeRule.getCodeKeyword());
-            mCodeRegexEditText.setText(mCodeRule.getCodeRegex());
+            setText(mCompanyEditText, mCodeRule.getCompany());
+            setText(mKeywordEditText, mCodeRule.getCodeKeyword());
+            setText(mCodeRegexEditText, mCodeRule.getCodeRegex());
         } else {
             mCodeRule = new SmsCodeRule();
         }
@@ -153,14 +169,24 @@ public class RuleEditFragment extends Fragment {
                         }
 
                         String codeRegex = String.format("%s{%s}", codeType, codeLenText);
-                        mCodeRegexEditText.setText(codeRegex);
-                        mCodeRegexEditText.setSelection(codeRegex.length());
+                        setText(mCodeRegexEditText, codeRegex);
                         dialog.dismiss();
                     }
                 })
                 .autoDismiss(false)
                 .build();
         quickChooseDialog.show();
+    }
+
+    private void setText(EditText editText, CharSequence text) {
+        if (!TextUtils.isEmpty(text)) {
+            editText.setText(text);
+            editText.setSelection(text.length());
+        }
+    }
+
+    private void setError(EditText editText,@StringRes int textId) {
+        editText.setError(getString(textId));
     }
 
     @Override
@@ -183,6 +209,12 @@ public class RuleEditFragment extends Fragment {
     private void saveIfValid() {
         if (!checkValid()) {
             return;
+        }
+
+        InputMethodManager imeManager = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imeManager != null && imeManager.isActive()) {
+            imeManager.toggleSoftInputFromWindow(
+                    mCodeRegexEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
         String company = mCompanyEditText.getText().toString();
@@ -214,19 +246,19 @@ public class RuleEditFragment extends Fragment {
     private boolean checkValid() {
         boolean companyValid = true;
         if (isEmpty(mCompanyEditText)) {
-            mCompanyEditText.setError(getString(R.string.rule_company_empty_hint));
+            setError(mCompanyEditText, R.string.rule_company_empty_hint);
             companyValid = false;
         }
 
         boolean keywordValid = true;
         if (isEmpty(mKeywordEditText)) {
-            mKeywordEditText.setError(getString(R.string.rule_keyword_empty_hint));
+            setError(mKeywordEditText, R.string.rule_keyword_empty_hint);
             keywordValid = false;
         }
 
         boolean codeRegexValid = true;
         if (isEmpty(mCodeRegexEditText)) {
-            mCodeRegexEditText.setError(getString(R.string.rule_code_regex_empty_hint));
+            setError(mCodeRegexEditText, R.string.rule_code_regex_empty_hint);
             codeRegexValid = false;
         }
 

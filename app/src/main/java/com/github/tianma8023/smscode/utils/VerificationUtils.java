@@ -1,8 +1,11 @@
 package com.github.tianma8023.smscode.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.github.tianma8023.smscode.constant.SmsCodeConst;
+import com.github.tianma8023.smscode.db.DBManager;
+import com.github.tianma8023.smscode.entity.SmsCodeRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +63,20 @@ public class VerificationUtils {
      * 解析文本中的验证码并返回，如果不存在返回空字符
      */
     public static String parseVerificationCodeIfExists(Context context, String content) {
+        String result = parseByCustomRules(context, content);
+        if (TextUtils.isEmpty(result)) {
+            result = parseByDefaultRule(context, content);
+        }
+        return result;
+    }
+
+    /**
+     * Parse verification code by default rule
+     * @param context context
+     * @param content message body
+     * @return the verification code if matches, otherwise return empty string
+     */
+    private static String parseByDefaultRule(Context context, String content) {
         String result = "";
         String keywordsRegex = loadVerificationKeywords(context);
         if (containsVerificationKeywords(keywordsRegex, content)) {
@@ -103,7 +120,7 @@ public class VerificationUtils {
     /**
      * 获取中文短信中包含的验证码
      */
-    public static String getVerificationCodeCN(String keywordsRegex, String content) {
+    private static String getVerificationCodeCN(String keywordsRegex, String content) {
         // 之前的正则表达式是 [a-zA-Z0-9]{4,8}
         // 现在的正则表达式是 [a-zA-Z0-9]+(\.[a-zA-Z0-9]+)? 匹配数字和字母之间最多一个.的字符串
         // 之前的不能识别和剔除小数，比如 123456.231，很容易就把 123456 作为验证码。
@@ -216,5 +233,25 @@ public class VerificationUtils {
         Pattern pattern = Pattern.compile(SmsCodeConst.PHONE_NUMBER_KEYWORDS);
         Matcher matcher = pattern.matcher(content);
         return matcher.find();
+    }
+
+    /**
+     * Parse verification code by custom rules
+     * @param context context
+     * @param content message body
+     * @return the verification code if matches, otherwise return empty string
+     */
+    private static String parseByCustomRules(Context context, String content) {
+        List<SmsCodeRule> rules = DBManager.get(context).queryAllSmsCodeRules();
+        for(SmsCodeRule rule : rules) {
+            if (content.contains(rule.getCompany()) && content.contains(rule.getCodeKeyword())) {
+                Pattern pattern = Pattern.compile(rule.getCodeRegex());
+                Matcher matcher = pattern.matcher(content);
+                if (matcher.find()) {
+                    return matcher.group();
+                }
+            }
+        }
+        return "";
     }
 }
