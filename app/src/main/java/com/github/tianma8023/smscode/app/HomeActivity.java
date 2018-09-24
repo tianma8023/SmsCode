@@ -3,9 +3,6 @@ package com.github.tianma8023.smscode.app;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.annotation.ColorRes;
-import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,17 +16,16 @@ import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.adapter.BaseItemCallback;
+import com.github.tianma8023.smscode.adapter.ItemCallback;
 import com.github.tianma8023.smscode.app.faq.FaqFragment;
-import com.github.tianma8023.smscode.app.theme.ItemCallback;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
+import com.github.tianma8023.smscode.app.theme.ThemeItemContainer;
 import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.service.SmsObserveService;
 import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,21 +44,18 @@ public class HomeActivity extends BaseActivity implements
     private Fragment mCurrentFragment;
     private FragmentManager mFragmentManager;
 
-    private List<ThemeItem> mThemeItemList;
-    // current theme index
-    private int mCurThemeIndex;
     private MaterialDialog mThemeChooseDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initTheme();
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
         // init main fragment
-        ThemeItem curThemeItem = mThemeItemList.get(mCurThemeIndex);
+        int index = SPUtils.getCurrentThemeIndex(this);
+        ThemeItem curThemeItem = ThemeItemContainer.get().getItemAt(index);
         SettingsFragment settingsFragment = SettingsFragment.newInstance(curThemeItem);
         settingsFragment.setOnPreferenceClickCallback(this);
         mFragmentManager = getFragmentManager();
@@ -89,15 +82,6 @@ public class HomeActivity extends BaseActivity implements
         }
     }
 
-    private void initTheme() {
-        mThemeItemList = loadThemeColorItems();
-        mCurThemeIndex = SPUtils.getCurrentThemeIndex(this);
-        // check current theme index in case of exception.
-        if(mCurThemeIndex < 0 || mCurThemeIndex >= mThemeItemList.size()) {
-            mCurThemeIndex = PrefConst.CURRENT_THEME_INDEX_DEFAULT;
-        }
-        setTheme(mThemeItemList.get(mCurThemeIndex).getThemeRes());
-    }
 
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
@@ -158,14 +142,14 @@ public class HomeActivity extends BaseActivity implements
         invalidateOptionsMenu();
     }
 
-    private ItemCallback<ThemeItem> mThemeItemCallback = new ItemCallback<ThemeItem>() {
+    private ItemCallback<ThemeItem> mThemeItemCallback = new BaseItemCallback<ThemeItem>() {
         @Override
         public void onItemClicked(ThemeItem item, int position) {
             if (mThemeChooseDialog != null && mThemeChooseDialog.isShowing()) {
                 mThemeChooseDialog.dismiss();
             }
 
-            if (mCurThemeIndex == position) {
+            if (SPUtils.getCurrentThemeIndex(HomeActivity.this) == position) {
                 return;
             }
             SPUtils.setCurrentThemeIndex(HomeActivity.this, position);
@@ -174,66 +158,22 @@ public class HomeActivity extends BaseActivity implements
     };
 
     private void onChooseThemePreferenceClicked() {
-        if (mThemeItemList == null || mThemeItemList.isEmpty()) {
-            mThemeItemList = loadThemeColorItems();
+        if (mThemeChooseDialog == null) {
+            ThemeItemAdapter adapter = new ThemeItemAdapter(this,
+                    ThemeItemContainer.get().getThemeItemList());
+            adapter.setItemCallback(mThemeItemCallback);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
+            mThemeChooseDialog = new MaterialDialog.Builder(this)
+                    .title(R.string.pref_choose_theme_title)
+                    .adapter(adapter, layoutManager)
+                    .negativeText(R.string.cancel)
+                    .build();
+
+            RecyclerView recyclerView = mThemeChooseDialog.getRecyclerView();
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         }
-        ThemeItemAdapter adapter = new ThemeItemAdapter(this, mThemeItemList);
-        adapter.setItemCallback(mThemeItemCallback);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        mThemeChooseDialog = new MaterialDialog.Builder(this)
-                .title(R.string.pref_choose_theme_title)
-                .adapter(adapter, layoutManager)
-                .negativeText(R.string.cancel)
-                .build();
-
-        RecyclerView recyclerView = mThemeChooseDialog.getRecyclerView();
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-
         mThemeChooseDialog.show();
-    }
-
-    private List<ThemeItem> loadThemeColorItems() {
-        List<ThemeItem> themeItems = new ArrayList<>();
-        @StringRes int[] colorNameResArray = {
-                R.string.color_default,
-                R.string.red,
-                R.string.pink,
-                R.string.yellow,
-                R.string.green,
-                R.string.blue,
-                R.string.violet,
-                R.string.black,
-        };
-        @ColorRes int[] colorValueResArray = {
-                R.color.colorPrimaryDark,
-                R.color.colorPrimaryDark_red,
-                R.color.colorPrimaryDark_pink,
-                R.color.colorPrimaryDark_yellow,
-                R.color.colorPrimaryDark_green,
-                R.color.colorPrimaryDark_blue,
-                R.color.colorPrimary_violet,
-                R.color.colorPrimary_black,
-        };
-        @StyleRes int[] themeResArray = {
-                R.style.AppTheme,
-                R.style.AppTheme_Red,
-                R.style.AppTheme_Pink,
-                R.style.AppTheme_Yellow,
-                R.style.AppTheme_Green,
-                R.style.AppTheme_Blue,
-                R.style.AppTheme_Violet,
-                R.style.AppTheme_Black,
-        };
-
-        for(int i = 0; i < colorNameResArray.length; i++) {
-            themeItems.add(new ThemeItem(
-                    colorNameResArray[i],
-                    colorValueResArray[i],
-                    themeResArray[i]
-            ));
-        }
-        return themeItems;
     }
 
     @Override
@@ -254,7 +194,7 @@ public class HomeActivity extends BaseActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         MenuItem faqItem = menu.findItem(R.id.action_home_faq);
         if (mCurrentFragment instanceof FaqFragment) {
             faqItem.setVisible(false);
