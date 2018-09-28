@@ -173,5 +173,23 @@
     <string name="rule_list">規則列表</string>
     <string name="create_rule">新建規則</string>
     <string name="edit_rule">編輯規則</string>
+    <string name="import_succeed">導入成功</string>
+    <string name="import_failed_version_missed">導入失敗，缺失版本號</string>
+    <string name="import_failed_version_unknown">導入失敗，未知版本號</string>
+    <string name="import_failed_backup_invalid">導入失敗，備份文件格式錯誤</string>
+    <string name="import_failed_read_error">導入失敗，讀取文件錯誤</string>
+    <string name="export_succeed">導出成功</string>
+    <string name="export_failed">導出失敗，請重試</string>
+    <string name="import_confirmation_title">導入確認</string>
+    <string name="import_confirmation_message">導入時是否需要保留當前規則？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="importing">正在導入</string>
+    <string name="no_backup_exists">沒有備份文件</string>
+    <string name="choose_backup_file">選擇備份文件</string>
+    <string name="backup_file_dir">備份位置:\n%s</string>
+    <string name="backup_file_name">備份文件名</string>
+    <string name="exporting">正在導出</string>
+    <string name="external_storage_perm_denied_prompt">已拒絕SD卡權限</string>
     <!-- sms code rule end -->
 </resources>

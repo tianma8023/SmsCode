@@ -1,14 +1,22 @@
 package com.github.tianma8023.smscode.app.rule;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,27 +24,49 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDButton;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.adapter.BaseItemCallback;
+import com.github.tianma8023.smscode.backup.BackupManager;
+import com.github.tianma8023.smscode.backup.ExportResult;
+import com.github.tianma8023.smscode.backup.ImportResult;
 import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.entity.SmsCodeRule;
 import com.github.tianma8023.smscode.event.Event;
 import com.github.tianma8023.smscode.event.XEventBus;
+import com.github.tianma8023.smscode.utils.Utils;
 import com.github.tianma8023.smscode.utils.XLog;
+import com.github.tianma8023.smscode.widget.DialogAsyncTask;
+import com.github.tianma8023.smscode.widget.TextWatcherAdapter;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 /**
  * SMS code codeRule list fragment
  */
 public class RuleListFragment extends Fragment {
+
+    private static final int TYPE_EXPORT = 1;
+    private static final int TYPE_IMPORT = 2;
+
+    @IntDef({TYPE_EXPORT, TYPE_IMPORT})
+    @interface BackupType {
+    }
 
     @BindView(R.id.rule_list_recycler_view)
     RecyclerView mRecyclerView;
@@ -113,6 +143,23 @@ public class RuleListFragment extends Fragment {
         refreshEmptyView();
     }
 
+    private void refreshData() {
+        List<SmsCodeRule> rules = DBManager.get(mActivity).queryAllSmsCodeRules();
+        mRuleAdapter.setRules(rules);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        XEventBus.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        XEventBus.unregister(this);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -129,10 +176,10 @@ public class RuleListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_import_rules:
-                // TODO
+                requestPermission(TYPE_IMPORT);
                 break;
             case R.id.action_export_rules:
-                // TODO
+                requestPermission(TYPE_EXPORT);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -220,11 +267,222 @@ public class RuleListFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onRuleSaveOrUpdate(Event.OnRuleCreateOrUpdate event) {
+    public void onRuleSaveOrUpdate(Event.OnRuleCreateOrUpdate event) {
         if (event.type == RuleEditFragment.EDIT_TYPE_CREATE) {
             mRuleAdapter.addRule(event.codeRule);
         } else if (event.type == RuleEditFragment.EDIT_TYPE_UPDATE) {
             mRuleAdapter.updateAt(mSelectedPosition, event.codeRule);
         }
+    }
+
+    private void requestPermission(final @BackupType int type) {
+        AndPermission.with(this)
+                .runtime()
+                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        if (type == TYPE_IMPORT) {
+                            attemptImportRuleList();
+                        } else {
+                            attemptExportRuleList();
+                        }
+                    }
+                })
+                .onDenied(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        Snackbar.make(mRecyclerView, R.string.external_storage_perm_denied_prompt, Snackbar.LENGTH_LONG).show();
+                    }
+                })
+                .start();
+    }
+
+    private void attemptExportRuleList() {
+        final String defaultFilename = BackupManager.getDefaultBackupFilename();
+        String hint = getString(R.string.backup_file_name);
+        String content = getString(R.string.backup_file_dir, BackupManager.getBackupDir().getAbsolutePath());
+        final MaterialDialog exportFilenameDialog = new MaterialDialog.Builder(mActivity)
+                .title(R.string.backup_file_name)
+                .content(content)
+                .input(hint, defaultFilename, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                        File file = new File(BackupManager.getBackupDir(), input.toString());
+                        new ExportAsyncTask(mActivity, mRuleAdapter,
+                                file, getString(R.string.exporting)).execute();
+                    }
+                })
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+                .negativeText(R.string.cancel)
+                .build();
+
+        final EditText editText = exportFilenameDialog.getInputEditText();
+        if (editText != null) {
+            exportFilenameDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    editText.setSelection(0, defaultFilename.length() - BackupManager.getBackupFileExtension().length());
+                }
+            });
+            final MDButton positiveBtn =
+                    exportFilenameDialog.getActionButton(DialogAction.POSITIVE);
+            editText.addTextChangedListener(new TextWatcherAdapter() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    positiveBtn.setEnabled(Utils.isValidFilename(s.toString()));
+                }
+            });
+        }
+        exportFilenameDialog.show();
+    }
+
+    private void attemptImportRuleList() {
+        final File[] files = BackupManager.getBackupFiles();
+
+        if (files == null || files.length == 0) {
+            Snackbar.make(mRecyclerView, R.string.no_backup_exists, Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        String[] filenames = new String[files.length];
+        for (int i = 0; i < filenames.length; i++) {
+            filenames[i] = files[i].getName();
+        }
+
+        final MaterialDialog importDialog = new MaterialDialog.Builder(mActivity)
+                .title(R.string.choose_backup_file)
+                .items(filenames)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                        File file = files[position];
+                        showImportDialogConfirm(file);
+                    }
+                })
+                .build();
+        importDialog.show();
+    }
+
+    private void showImportDialogConfirm(final File file) {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.import_confirmation_title)
+                .content(R.string.import_confirmation_message)
+                .positiveText(R.string.yes)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        new ImportAsyncTask(mActivity, file,
+                                getString(R.string.importing), true).execute();
+                    }
+                })
+                .negativeText(R.string.no)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new ImportAsyncTask(mActivity, file,
+                                getString(R.string.importing), false).execute();
+                    }
+                })
+                .show();
+    }
+
+    private static class ExportAsyncTask extends DialogAsyncTask<Void, Void, ExportResult> {
+
+        private File mFile;
+        private RuleAdapter mRuleAdapter;
+
+        ExportAsyncTask(Context context, RuleAdapter ruleAdapter, File file, String progressMsg) {
+            this(context, progressMsg, false);
+            mRuleAdapter = ruleAdapter;
+            mFile = file;
+        }
+
+        private ExportAsyncTask(Context context, String progressMsg, boolean cancelable) {
+            super(context, progressMsg, cancelable);
+        }
+
+        @Override
+        protected ExportResult doInBackground(Void... voids) {
+            return BackupManager.exportRuleList(mFile, mRuleAdapter.getRuleList());
+        }
+
+        @Override
+        protected void onPostExecute(ExportResult exportResult) {
+            super.onPostExecute(exportResult);
+            XEventBus.post(exportResult);
+        }
+    }
+
+    private static class ImportAsyncTask extends DialogAsyncTask<Void, Void, ImportResult> {
+
+        private WeakReference<Context> mContextRef;
+        private File mFile;
+        private boolean mRetain;
+
+        ImportAsyncTask(Context context, File file, String progressMsg, boolean retain) {
+            this(context, progressMsg, false);
+            mContextRef = new WeakReference<>(context);
+            mFile = file;
+            mRetain = retain;
+        }
+
+        ImportAsyncTask(Context context, String progressMsg, boolean cancelable) {
+            super(context, progressMsg, cancelable);
+        }
+
+        @Override
+        protected ImportResult doInBackground(Void... voids) {
+            Context context;
+            if ((context = mContextRef.get()) != null) {
+                return BackupManager.importRuleList(context, mFile, mRetain);
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ImportResult importResult) {
+            super.onPostExecute(importResult);
+            XEventBus.post(importResult);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onExportCompleted(ExportResult exportResult) {
+        int msgId;
+        if (exportResult == ExportResult.SUCCESS) {
+            msgId = R.string.export_succeed;
+        } else {
+            // ExportResult.FAILED
+            msgId = R.string.export_failed;
+        }
+        Snackbar.make(mRecyclerView, msgId, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onImportComplete(ImportResult importResult) {
+        @StringRes int msg;
+        switch (importResult) {
+            case SUCCESS:
+                refreshData();
+                msg = R.string.import_succeed;
+                break;
+            case VERSION_MISSED:
+                msg = R.string.import_failed_version_missed;
+                break;
+            case VERSION_UNKNOWN:
+                msg = R.string.import_failed_version_unknown;
+                break;
+            case BACKUP_INVALID:
+                msg = R.string.import_failed_backup_invalid;
+                break;
+            case READ_FAILED:
+            default:
+                msg = R.string.import_failed_read_error;
+                break;
+        }
+        Snackbar.make(mRecyclerView, msg, Snackbar.LENGTH_LONG).show();
     }
 }

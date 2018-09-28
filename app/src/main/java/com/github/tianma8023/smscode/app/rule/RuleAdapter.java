@@ -136,4 +136,15 @@ public class RuleAdapter extends RecyclerView.Adapter<RuleAdapter.VH> {
         }
     }
 
+    public List<SmsCodeRule> getRuleList() {
+        return mDataList;
+    }
+
+    public void setRules(List<SmsCodeRule> ruleList) {
+        if (ruleList != null) {
+            mDataList.clear();
+            mDataList.addAll(ruleList);
+            notifyDataSetChanged();
+        }
+    }
 }

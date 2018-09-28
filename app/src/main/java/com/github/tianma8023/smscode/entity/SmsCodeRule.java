@@ -4,13 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.NotNull;
 
 import java.util.Objects;
 
-@Entity
+@Entity(
+        indexes = {
+            @Index(value = "company, codeKeyword, codeRegex", unique = true)
+        }
+)
 public class SmsCodeRule implements Parcelable {
 
     /**
@@ -36,33 +41,12 @@ public class SmsCodeRule implements Parcelable {
     @NotNull
     private String codeRegex;
 
-    /**
-     * case sensitive
-     */
-    private boolean caseSensitive;
-
     public SmsCodeRule(String company, @NotNull String codeKeyword,
-                       @NotNull String codeRegex, boolean caseSensitive) {
+                       @NotNull String codeRegex) {
         this.company = company;
         this.codeKeyword = codeKeyword;
         this.codeRegex = codeRegex;
-        this.caseSensitive = caseSensitive;
     }
-
-    @Generated(hash = 1902054369)
-    public SmsCodeRule(Long id, String company, @NotNull String codeKeyword,
-                       @NotNull String codeRegex, boolean caseSensitive) {
-        this.id = id;
-        this.company = company;
-        this.codeKeyword = codeKeyword;
-        this.codeRegex = codeRegex;
-        this.caseSensitive = caseSensitive;
-    }
-
-    @Generated(hash = 1135501737)
-    public SmsCodeRule() {
-    }
-
 
     private SmsCodeRule(Parcel in) {
         if (in.readByte() == 0) {
@@ -73,7 +57,19 @@ public class SmsCodeRule implements Parcelable {
         company = in.readString();
         codeKeyword = in.readString();
         codeRegex = in.readString();
-        caseSensitive = in.readByte() != 0;
+    }
+
+    @Generated(hash = 1853112924)
+    public SmsCodeRule(Long id, String company, @NotNull String codeKeyword,
+            @NotNull String codeRegex) {
+        this.id = id;
+        this.company = company;
+        this.codeKeyword = codeKeyword;
+        this.codeRegex = codeRegex;
+    }
+
+    @Generated(hash = 1135501737)
+    public SmsCodeRule() {
     }
 
     public String getCompany() {
@@ -100,16 +96,8 @@ public class SmsCodeRule implements Parcelable {
         this.codeRegex = codeRegex;
     }
 
-    public void setCaseSensitive(boolean caseSensitive) {
-        this.caseSensitive = caseSensitive;
-    }
-
     public Long getId() {
         return this.id;
-    }
-
-    public boolean getCaseSensitive() {
-        return this.caseSensitive;
     }
 
     public void setId(Long id) {
@@ -121,15 +109,14 @@ public class SmsCodeRule implements Parcelable {
         if (this == o) return true;
         if (!(o instanceof SmsCodeRule)) return false;
         SmsCodeRule that = (SmsCodeRule) o;
-        return caseSensitive == that.caseSensitive &&
-                Objects.equals(company, that.company) &&
+        return Objects.equals(company, that.company) &&
                 Objects.equals(codeKeyword, that.codeKeyword) &&
                 Objects.equals(codeRegex, that.codeRegex);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(company, codeKeyword, codeRegex, caseSensitive);
+        return Objects.hash(company, codeKeyword, codeRegex);
     }
 
     @Override
@@ -148,7 +135,6 @@ public class SmsCodeRule implements Parcelable {
         dest.writeString(company);
         dest.writeString(codeKeyword);
         dest.writeString(codeRegex);
-        dest.writeByte((byte) (caseSensitive ? 1 : 0));
     }
 
     public static final Creator<SmsCodeRule> CREATOR = new Creator<SmsCodeRule>() {
@@ -168,7 +154,6 @@ public class SmsCodeRule implements Parcelable {
         this.company = newRule.company;
         this.codeKeyword = newRule.codeKeyword;
         this.codeRegex = newRule.codeRegex;
-        this.caseSensitive = newRule.caseSensitive;
     }
 
     @Override
@@ -177,7 +162,6 @@ public class SmsCodeRule implements Parcelable {
                 "company='" + company + '\'' +
                 ", codeKeyword='" + codeKeyword + '\'' +
                 ", codeRegex='" + codeRegex + '\'' +
-                ", caseSensitive=" + caseSensitive +
                 '}';
     }
 }

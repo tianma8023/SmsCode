@@ -49,13 +49,13 @@ public class DBManager {
     @SuppressWarnings("unchecked")
     private <T> long addEntity(Class<T> entityClass, T entity) {
         AbstractDao abstractDao = getAbstractDao(entityClass);
-        return abstractDao.insert(entity);
+        return abstractDao.insertOrReplace(entity);
     }
 
     @SuppressWarnings("unchecked")
     private <T> void addEntities(Class<T> entityClass, List<T> entities) {
         AbstractDao abstractDao = getAbstractDao(entityClass);
-        abstractDao.insertInTx(entities);
+        abstractDao.insertOrReplaceInTx(entities);
     }
 
     @SuppressWarnings("unchecked")
@@ -68,6 +68,11 @@ public class DBManager {
     private <T> void removeEntity(Class<T> entityClass, T entity) {
         AbstractDao abstractDao = getAbstractDao(entityClass);
         abstractDao.delete(entity);
+    }
+
+    private <T> void removeAll(Class<T> entityClass) {
+        AbstractDao abstractDao = getAbstractDao(entityClass);
+        abstractDao.deleteAll();
     }
 
     public long addSmsCodeRule(SmsCodeRule smsCodeRule) {
@@ -92,8 +97,7 @@ public class DBManager {
                 where(
                         SmsCodeRuleDao.Properties.Company.eq(criteria.getCompany()),
                         SmsCodeRuleDao.Properties.CodeKeyword.eq(criteria.getCodeKeyword()),
-                        SmsCodeRuleDao.Properties.CodeRegex.eq(criteria.getCodeRegex()),
-                        SmsCodeRuleDao.Properties.CaseSensitive.eq(criteria.getCaseSensitive())
+                        SmsCodeRuleDao.Properties.CodeRegex.eq(criteria.getCodeRegex())
                 ).list();
     }
 
@@ -103,5 +107,9 @@ public class DBManager {
 
     public void removeSmsCodeRule(SmsCodeRule smsCodeRule) {
         removeEntity(SmsCodeRule.class, smsCodeRule);
+    }
+
+    public void removeAllSmsCodeRules() {
+        removeAll(SmsCodeRule.class);
     }
 }

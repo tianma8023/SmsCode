@@ -41,4 +41,12 @@ public class StorageUtils {
         }
     }
 
+    /**
+     * Get sdcard directory
+     * @return SD card directory
+     */
+    public static File getSDCardDir() {
+        return Environment.getExternalStorageDirectory();
+    }
+
 }

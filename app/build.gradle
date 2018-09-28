@@ -136,4 +136,7 @@ dependencies {
     
     // GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

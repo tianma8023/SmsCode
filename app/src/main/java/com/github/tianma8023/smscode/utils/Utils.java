@@ -44,4 +44,47 @@ public class Utils {
     public static String getProjectDocUrl(String docBaseUrl, String docPath) {
         return docBaseUrl + "/" + getLanguagePath() + "/" + docPath;
     }
+
+    public static boolean isValidFilename(String filename) {
+        if (filename == null || filename.trim().length() == 0) {
+            return false;
+        }
+
+        if (".".equals(filename.trim()) || "..".equals(filename.trim())) {
+            return false;
+        }
+
+        for(int i = 0; i < filename.length(); i++) {
+            char c = filename.charAt(i);
+            if (!isValidFilenameChar(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isValidFilenameChar(char c) {
+        // check control characters
+        if (c <= 1f || c == 7f) {
+            return false;
+        }
+
+        // check special characters
+        switch (c) {
+            case '"':
+            case '*':
+            case '/':
+            case '\\':
+            case '<':
+            case '>':
+            case '|':
+            case '?':
+            case ',':
+            case ';':
+            case ':':
+                return false;
+        }
+
+        return true;
+    }
 }

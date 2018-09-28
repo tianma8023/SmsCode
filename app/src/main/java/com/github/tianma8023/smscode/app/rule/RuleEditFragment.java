@@ -213,8 +213,8 @@ public class RuleEditFragment extends Fragment {
 
         InputMethodManager imeManager = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imeManager != null && imeManager.isActive()) {
-            imeManager.toggleSoftInputFromWindow(
-                    mCodeRegexEditText.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+            imeManager.hideSoftInputFromWindow(
+                    mCodeRegexEditText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
         String company = mCompanyEditText.getText().toString();
