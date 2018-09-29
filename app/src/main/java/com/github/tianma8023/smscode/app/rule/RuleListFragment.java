@@ -10,6 +10,7 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,6 +42,7 @@ import com.github.tianma8023.smscode.event.XEventBus;
 import com.github.tianma8023.smscode.utils.Utils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.widget.DialogAsyncTask;
+import com.github.tianma8023.smscode.widget.FabScrollBehavior;
 import com.github.tianma8023.smscode.widget.TextWatcherAdapter;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -130,6 +132,11 @@ public class RuleListFragment extends Fragment {
         });
 
         mRuleAdapter.registerAdapterDataObserver(mDataObserver);
+
+        // fab settings
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFabButton.getLayoutParams();
+        params.setBehavior(new FabScrollBehavior());
+        mFabButton.setLayoutParams(params);
 
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
