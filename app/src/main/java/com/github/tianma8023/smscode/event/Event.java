@@ -1,7 +1,10 @@
 package com.github.tianma8023.smscode.event;
 
 import com.github.tianma8023.smscode.app.rule.RuleEditFragment;
+import com.github.tianma8023.smscode.backup.ExportResult;
 import com.github.tianma8023.smscode.entity.SmsCodeRule;
+
+import java.io.File;
 
 public class Event {
 
@@ -48,6 +51,15 @@ public class Event {
         public SmsCodeRule template;
         public TemplateLoadEvent(SmsCodeRule template) {
             this.template = template;
+        }
+    }
+
+    public static class ExportEvent {
+        public ExportResult result;
+        public File file;
+        public ExportEvent(ExportResult result, File file) {
+            this.result = result;
+            this.file = file;
         }
     }
 

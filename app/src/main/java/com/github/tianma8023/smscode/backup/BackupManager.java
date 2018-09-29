@@ -1,6 +1,9 @@
 package com.github.tianma8023.smscode.backup;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.backup.exception.BackupInvalidException;
@@ -27,7 +30,7 @@ public class BackupManager {
     private static final String BACKUP_FILE_NAME_PREFIX = "bak-";
 
     private static final String BACKUP_MIME_TYPE = "application/jason";
-    private static final String BACKUP_FILE_AUTHORITY = BuildConfig.APPLICATION_ID + ".file";
+    private static final String BACKUP_FILE_AUTHORITY = BuildConfig.APPLICATION_ID + ".files";
 
     private BackupManager() {
     }
@@ -116,5 +119,17 @@ public class BackupManager {
                 ruleImporter.close();
             }
         }
+    }
+
+    public static void shareBackupFile(Context context, File file) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        Uri uri = FileProvider.getUriForFile(context, BACKUP_FILE_AUTHORITY, file);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType(BACKUP_MIME_TYPE);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        context.startActivity(Intent.createChooser(intent, null));
     }
 }

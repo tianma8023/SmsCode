@@ -195,5 +195,6 @@
     <string name="save_template_succeed">保存模版成功</string>
     <string name="save_template_failed">保存模版失败</string>
     <string name="action_rule_help">幫助</string>
+    <string name="share">分享</string>
     <!-- sms code rule end -->
 </resources>

@@ -418,7 +418,7 @@ public class RuleListFragment extends Fragment {
         @Override
         protected void onPostExecute(ExportResult exportResult) {
             super.onPostExecute(exportResult);
-            XEventBus.post(exportResult);
+            XEventBus.post(new Event.ExportEvent(exportResult, mFile));
         }
     }
 
@@ -457,15 +457,26 @@ public class RuleListFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onExportCompleted(ExportResult exportResult) {
+    public void onExportCompleted(final Event.ExportEvent event) {
         int msgId;
-        if (exportResult == ExportResult.SUCCESS) {
+        if (event.result == ExportResult.SUCCESS) {
             msgId = R.string.export_succeed;
         } else {
             // ExportResult.FAILED
             msgId = R.string.export_failed;
         }
-        Snackbar.make(mRecyclerView, msgId, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(mRecyclerView, msgId, Snackbar.LENGTH_LONG);
+        if (event.result == ExportResult.SUCCESS) {
+            snackbar.setAction(R.string.share, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mActivity != null) {
+                        BackupManager.shareBackupFile(mActivity, event.file);
+                    }
+                }
+            });
+        }
+        snackbar.show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

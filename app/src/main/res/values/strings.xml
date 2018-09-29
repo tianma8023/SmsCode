@@ -189,5 +189,6 @@
     <string name="save_template_succeed">Save template succeed</string>
     <string name="save_template_failed">Save template failed</string>
     <string name="action_rule_help">Help</string>
+    <string name="share">Share</string>
     <!-- sms code rule end -->
 </resources>

@@ -28,7 +28,7 @@ public class CodeRulesActivity extends BaseActivity {
     public static final String EXTRA_SECTION_RULE_LIST = "rule_list";
     public static final String EXTRA_SECTION_RULE_EDIT = "rule_edit";
 
-    private static final String TAG_RULE_EIDT = "tag_rule_edit";
+    private static final String TAG_RULE_EDIT = "tag_rule_edit";
     private static final String TAG_RULE_LIST = "tag_rule_list";
 
     @BindView(R.id.toolbar)
@@ -88,8 +88,8 @@ public class CodeRulesActivity extends BaseActivity {
     public void onStartRuleEdit(Event.StartRuleEditEvent event) {
         RuleEditFragment ruleEditFragment = RuleEditFragment.newInstance(event.type, event.codeRule);
         mFragmentManager.beginTransaction()
-                .replace(R.id.code_rules_main_content, ruleEditFragment, TAG_RULE_EIDT)
-                .addToBackStack(TAG_RULE_EIDT)
+                .replace(R.id.code_rules_main_content, ruleEditFragment, TAG_RULE_EDIT)
+                .addToBackStack(TAG_RULE_EDIT)
                 .commit();
         if (event.type == RuleEditFragment.EDIT_TYPE_CREATE) {
             refreshActionBar(getString(R.string.create_rule));
