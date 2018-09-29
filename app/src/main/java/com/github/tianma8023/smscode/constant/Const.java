@@ -18,5 +18,5 @@ public interface Const {
 
     String PROJECT_DOC_BASE_URL = "https://tianma8023.github.io/SmsCodeExtractor";
     String DOC_APPOPS_ADB_HELP = "appops_adb_help";
-    String PROJECT_DOC_APPOPS_ADB_HELP_URL = "https://tianma8023.github.io/SmsCodeExtractor/appops_adb_help";
+    String DOC_SMS_CODE_RULE_HELP ="sms_code_rule_help";
 }

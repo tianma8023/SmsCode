@@ -171,5 +171,6 @@
     <string name="action_save_as_template">保存为模版</string>
     <string name="save_template_succeed">保存模版成功</string>
     <string name="save_template_failed">保存模版失败</string>
+    <string name="action_rule_help">帮助</string>
     <!-- sms code rule end -->
 </resources>

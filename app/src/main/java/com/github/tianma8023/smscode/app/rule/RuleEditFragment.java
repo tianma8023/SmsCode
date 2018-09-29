@@ -29,10 +29,12 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.constant.Const;
 import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.entity.SmsCodeRule;
 import com.github.tianma8023.smscode.event.Event;
 import com.github.tianma8023.smscode.event.XEventBus;
+import com.github.tianma8023.smscode.utils.Utils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -228,6 +230,9 @@ public class RuleEditFragment extends Fragment {
             case R.id.action_save_as_template:
                 saveAsTemplate();
                 break;
+            case R.id.action_rule_help:
+                showCodeRuleHelp();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -351,6 +356,11 @@ public class RuleEditFragment extends Fragment {
             msg = R.string.save_template_failed;
         }
         Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showCodeRuleHelp() {
+        String ruleHelpUrl = Utils.getProjectDocUrl(Const.PROJECT_DOC_BASE_URL, Const.DOC_SMS_CODE_RULE_HELP);
+        Utils.showWebPage(mActivity, ruleHelpUrl);
     }
 
 }
