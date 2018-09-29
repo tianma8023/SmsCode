@@ -3,6 +3,10 @@ package com.github.tianma8023.smscode.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.github.tianma8023.smscode.backup.BackupConst;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -27,17 +31,23 @@ public class SmsCodeRule implements Parcelable {
     /**
      * company or company or organization name
      */
+    @SerializedName(BackupConst.KEY_COMPANY)
+    @Expose
     private String company;
 
     /**
      * verification code keyword
      */
+    @SerializedName(BackupConst.KEY_CODE_KEYWORD)
+    @Expose
     @NotNull
     private String codeKeyword;
 
     /**
      * verification code regex
      */
+    @SerializedName(BackupConst.KEY_CODE_REGEX)
+    @Expose
     @NotNull
     private String codeRegex;
 

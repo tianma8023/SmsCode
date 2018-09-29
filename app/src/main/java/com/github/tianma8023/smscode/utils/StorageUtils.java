@@ -14,7 +14,7 @@ public class StorageUtils {
 
     }
 
-    private static boolean isSDCardMounted() {
+    public static boolean isSDCardMounted() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }

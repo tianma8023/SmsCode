@@ -9,7 +9,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_perm_state"
-        android:title="@string/permission_statement"
+        android:id="@+id/action_save_as_template"
+        android:title="@string/action_save_as_template"
         app:showAsAction="never"/>
 </menu>

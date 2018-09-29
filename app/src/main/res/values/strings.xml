@@ -185,5 +185,8 @@
     <string name="backup_file_name">Backup filename</string>
     <string name="exporting">Exporting</string>
     <string name="external_storage_perm_denied_prompt">External storage permission denied</string>
+    <string name="action_save_as_template">Save as template</string>
+    <string name="save_template_succeed">Save template succeed</string>
+    <string name="save_template_failed">Save template failed</string>
     <!-- sms code rule end -->
 </resources>

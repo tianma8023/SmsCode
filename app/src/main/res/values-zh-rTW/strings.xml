@@ -191,5 +191,8 @@
     <string name="backup_file_name">備份文件名</string>
     <string name="exporting">正在導出</string>
     <string name="external_storage_perm_denied_prompt">已拒絕SD卡權限</string>
+    <string name="action_save_as_template">保存為模版</string>
+    <string name="save_template_succeed">保存模版成功</string>
+    <string name="save_template_failed">保存模版失败</string>
     <!-- sms code rule end -->
 </resources>

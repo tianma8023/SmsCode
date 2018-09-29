@@ -34,9 +34,18 @@ import com.github.tianma8023.smscode.entity.SmsCodeRule;
 import com.github.tianma8023.smscode.event.Event;
 import com.github.tianma8023.smscode.event.XEventBus;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Rule edit fragment
+ */
 public class RuleEditFragment extends Fragment {
 
     public static final int EDIT_TYPE_CREATE = 1;
@@ -115,6 +124,18 @@ public class RuleEditFragment extends Fragment {
         initArguments();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        XEventBus.register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        XEventBus.unregister(this);
+    }
+
     private void initArguments() {
         Bundle args = getArguments();
         mRuleEditType = args.getInt(KEY_RULE_EDIT_TYPE);
@@ -124,7 +145,7 @@ public class RuleEditFragment extends Fragment {
             setText(mKeywordEditText, mCodeRule.getCodeKeyword());
             setText(mCodeRegexEditText, mCodeRule.getCodeRegex());
         } else {
-            mCodeRule = new SmsCodeRule();
+            loadTemplate();
         }
     }
 
@@ -186,7 +207,11 @@ public class RuleEditFragment extends Fragment {
     }
 
     private void setError(EditText editText,@StringRes int textId) {
-        editText.setError(getString(textId));
+        setError(editText, getString(textId));
+    }
+
+    private void setError(EditText editText, String error) {
+        editText.setError(error);
     }
 
     @Override
@@ -199,6 +224,9 @@ public class RuleEditFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_rules_tick:
                 saveIfValid();
+                break;
+            case R.id.action_save_as_template:
+                saveAsTemplate();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -268,4 +296,61 @@ public class RuleEditFragment extends Fragment {
     private boolean isEmpty(EditText editText) {
         return TextUtils.isEmpty(editText.getText());
     }
+
+    private void loadTemplate() {
+        ExecutorService singleThreadPool = Executors.newSingleThreadExecutor();
+        singleThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                SmsCodeRule template = TemplateRuleManager.loadTemplate(mActivity);
+                XEventBus.post(new Event.TemplateLoadEvent(template));
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTemplateLoaded(Event.TemplateLoadEvent event) {
+        mCodeRule = event.template;
+
+        setText(mCompanyEditText, mCodeRule.getCompany());
+        setText(mKeywordEditText, mCodeRule.getCodeKeyword());
+        setText(mCodeRegexEditText, mCodeRule.getCodeRegex());
+    }
+
+    private void saveAsTemplate() {
+        // clear error info
+        setError(mCompanyEditText, null);
+        setError(mKeywordEditText, null);
+        setError(mCodeRegexEditText, null);
+
+        ExecutorService singleThreadPool = Executors.newSingleThreadExecutor();
+        singleThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                String company = mCompanyEditText.getText().toString();
+                String keyword = mKeywordEditText.getText().toString();
+                String codeRegex = mCodeRegexEditText.getText().toString();
+
+                SmsCodeRule template = new SmsCodeRule();
+
+                template.setCompany(company);
+                template.setCodeKeyword(keyword);
+                template.setCodeRegex(codeRegex);
+                boolean result = TemplateRuleManager.saveTemplate(mActivity, template);
+                XEventBus.post(new Event.TemplateSaveEvent(result));
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTemplateSaved(Event.TemplateSaveEvent event) {
+        @StringRes int msg;
+        if (event.success) {
+            msg = R.string.save_template_succeed;
+        } else {
+            msg = R.string.save_template_failed;
+        }
+        Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+    }
+
 }

@@ -19,12 +19,35 @@ public class Event {
         }
     }
 
+    /**
+     * Rule create or update event
+     */
     public static class OnRuleCreateOrUpdate {
         public SmsCodeRule codeRule;
         public @RuleEditFragment.RuleEditType int type;
         public OnRuleCreateOrUpdate(@RuleEditFragment.RuleEditType int type, SmsCodeRule rule) {
             this.codeRule = rule;
             this.type = type;
+        }
+    }
+
+    /**
+     * Save template rule event
+     */
+    public static class TemplateSaveEvent {
+        public boolean success;
+        public TemplateSaveEvent(boolean success) {
+            this.success = success;
+        }
+    }
+
+    /**
+     * Load template rule event
+     */
+    public static class TemplateLoadEvent {
+        public SmsCodeRule template;
+        public TemplateLoadEvent(SmsCodeRule template) {
+            this.template = template;
         }
     }
 
