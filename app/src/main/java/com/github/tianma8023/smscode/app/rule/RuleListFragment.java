@@ -3,8 +3,10 @@ package com.github.tianma8023.smscode.app.rule;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -65,8 +67,11 @@ public class RuleListFragment extends Fragment {
 
     private static final int TYPE_EXPORT = 1;
     private static final int TYPE_IMPORT = 2;
+    private static final int TYPE_IMPORT_DIRECT = 3;
 
-    @IntDef({TYPE_EXPORT, TYPE_IMPORT})
+    public static final String EXTRA_IMPORT_URI = "extra_import_uri";
+
+    @IntDef({TYPE_EXPORT, TYPE_IMPORT, TYPE_IMPORT_DIRECT})
     @interface BackupType {
     }
 
@@ -84,6 +89,19 @@ public class RuleListFragment extends Fragment {
     private int mSelectedPosition = -1;
 
     private Activity mActivity;
+
+    public static RuleListFragment newInstance(Uri importUri) {
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_IMPORT_URI, importUri);
+
+        RuleListFragment fragment = new RuleListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static RuleListFragment newInstance() {
+        return newInstance(null);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -148,6 +166,30 @@ public class RuleListFragment extends Fragment {
         });
 
         refreshEmptyView();
+
+        onHandleArguments(getArguments());
+    }
+
+    /**
+     * Handle arguments
+     */
+    private void onHandleArguments(Bundle args) {
+        if (args == null) {
+            return;
+        }
+
+        final Uri importUri = args.getParcelable(EXTRA_IMPORT_URI);
+        if (importUri != null) {
+            args.remove(EXTRA_IMPORT_URI);
+
+            if (ContentResolver.SCHEME_FILE.equals(importUri.getScheme())) {
+                // file:// URI need storage permission
+                requestPermission(TYPE_IMPORT_DIRECT, importUri);
+            } else {
+                // content:// URI don't need storage permission
+                showImportDialogConfirm(importUri);
+            }
+        }
     }
 
     private void refreshData() {
@@ -183,10 +225,10 @@ public class RuleListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_import_rules:
-                requestPermission(TYPE_IMPORT);
+                requestPermission(TYPE_IMPORT, null);
                 break;
             case R.id.action_export_rules:
-                requestPermission(TYPE_EXPORT);
+                requestPermission(TYPE_EXPORT, null);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -282,17 +324,29 @@ public class RuleListFragment extends Fragment {
         }
     }
 
-    private void requestPermission(final @BackupType int type) {
+    private void requestPermission(final @BackupType int type, final Uri importUri) {
+        String[] permission ;
+        if (type == TYPE_EXPORT) {
+            permission = new String[] {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            };
+        } else {
+            permission = new String[] {
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+            };
+        }
         AndPermission.with(this)
                 .runtime()
-                .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .permission(permission)
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
                         if (type == TYPE_IMPORT) {
                             attemptImportRuleList();
-                        } else {
+                        } else if (type == TYPE_EXPORT) {
                             attemptExportRuleList();
+                        } else if (type == TYPE_IMPORT_DIRECT) {
+                            showImportDialogConfirm(importUri);
                         }
                     }
                 })
@@ -364,14 +418,15 @@ public class RuleListFragment extends Fragment {
                     @Override
                     public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                         File file = files[position];
-                        showImportDialogConfirm(file);
+                        Uri uri = Uri.fromFile(file);
+                        showImportDialogConfirm(uri);
                     }
                 })
                 .build();
         importDialog.show();
     }
 
-    private void showImportDialogConfirm(final File file) {
+    private void showImportDialogConfirm(final Uri uri) {
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.import_confirmation_title)
                 .content(R.string.import_confirmation_message)
@@ -380,7 +435,7 @@ public class RuleListFragment extends Fragment {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        new ImportAsyncTask(mActivity, file,
+                        new ImportAsyncTask(mActivity, uri,
                                 getString(R.string.importing), true).execute();
                     }
                 })
@@ -388,7 +443,7 @@ public class RuleListFragment extends Fragment {
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new ImportAsyncTask(mActivity, file,
+                        new ImportAsyncTask(mActivity, uri,
                                 getString(R.string.importing), false).execute();
                     }
                 })
@@ -425,13 +480,13 @@ public class RuleListFragment extends Fragment {
     private static class ImportAsyncTask extends DialogAsyncTask<Void, Void, ImportResult> {
 
         private WeakReference<Context> mContextRef;
-        private File mFile;
+        private Uri mUri;
         private boolean mRetain;
 
-        ImportAsyncTask(Context context, File file, String progressMsg, boolean retain) {
+        ImportAsyncTask(Context context, Uri uri, String progressMsg, boolean retain) {
             this(context, progressMsg, false);
             mContextRef = new WeakReference<>(context);
-            mFile = file;
+            mUri = uri;
             mRetain = retain;
         }
 
@@ -443,7 +498,7 @@ public class RuleListFragment extends Fragment {
         protected ImportResult doInBackground(Void... voids) {
             Context context;
             if ((context = mContextRef.get()) != null) {
-                return BackupManager.importRuleList(context, mFile, mRetain);
+                return BackupManager.importRuleList(context, mUri, mRetain);
             } else {
                 return null;
             }

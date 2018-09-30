@@ -96,10 +96,10 @@ public class BackupManager {
         }
     }
 
-    public static ImportResult importRuleList(Context context, File file, boolean retain) {
+    public static ImportResult importRuleList(Context context, Uri uri, boolean retain) {
         RuleImporter ruleImporter = null;
         try {
-            ruleImporter = new RuleImporter(file);
+            ruleImporter = new RuleImporter(context.getContentResolver().openInputStream(uri));
             ruleImporter.doImport(context, retain);
             return ImportResult.SUCCESS;
         } catch (IOException e) {

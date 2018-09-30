@@ -3,6 +3,7 @@ package com.github.tianma8023.smscode.app.rule;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -51,11 +52,7 @@ public class CodeRulesActivity extends BaseActivity {
         // set up toolbar
         setupToolbar();
 
-        RuleListFragment ruleListFragment = new RuleListFragment();
-        mFragmentManager = getFragmentManager();
-        mFragmentManager.beginTransaction()
-                .replace(R.id.code_rules_main_content, ruleListFragment, TAG_RULE_LIST)
-                .commit();
+        handleIntent(getIntent());
     }
 
     private void setupToolbar() {
@@ -70,6 +67,28 @@ public class CodeRulesActivity extends BaseActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void handleIntent(Intent intent) {
+        String action = intent.getAction();
+        RuleListFragment ruleListFragment = null;
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            Uri uri = intent.getData();
+            if (uri != null) {
+                // Import rules by back file URI
+                ruleListFragment = RuleListFragment.newInstance(uri);
+            }
+        }
+
+        if (ruleListFragment == null) {
+            ruleListFragment = RuleListFragment.newInstance();
+        }
+
+        mFragmentManager = getFragmentManager();
+        mFragmentManager.beginTransaction()
+                .replace(R.id.code_rules_main_content, ruleListFragment, TAG_RULE_LIST)
+                .commit();
     }
 
     @Override
