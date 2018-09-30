@@ -1,4 +1,7 @@
 # Update Logs
+- 18.09.30 v1.3.0
+  1. New feature: add the support of custom SMS code rules.
+  2. Move mark as read to experimental group.
 - 18.09.19 v1.2.0
   1. New feature: mark sms as read.
 - 18.09.16 v1.1.1
