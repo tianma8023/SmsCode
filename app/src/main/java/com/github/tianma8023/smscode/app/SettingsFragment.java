@@ -129,8 +129,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
 
         // Hide experimental group.
-        PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
-        getPreferenceScreen().removePreference(experimentalGroup);
+        // PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
+        // getPreferenceScreen().removePreference(experimentalGroup);
 
         // Hide donate by wechat preference item
         Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
