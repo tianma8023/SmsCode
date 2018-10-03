@@ -1,4 +1,8 @@
 # Update Logs
+- 18.10.03 v1.3.1
+  1. Optimize the SMS code rule regex auto-generation.
+  2. Company and keywords are case insensitive for code rules.
+  3. bug fixes.
 - 18.09.30 v1.3.0
   1. New feature: add the support of custom SMS code rules.
   2. Move mark as read to experimental group.

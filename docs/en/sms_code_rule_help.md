@@ -13,6 +13,6 @@ Example：
   ```text
   [Google] Your verification code is 198901
   ```
-  - Company can be: `Google`(Recommended), `[Google]` etc.
-  - Code keyword can be: `verification code`(Recommended), `code` etc. 
+  - Company can be: `Google`(Recommended), `[Google]` etc. Case insensitive by default.
+  - Code keyword can be: `verification code`(Recommended), `code` etc. Case insenditive by default.
   - Code regular expression： `(?<![0-9])[0-9]{6}(?![0-9])`
