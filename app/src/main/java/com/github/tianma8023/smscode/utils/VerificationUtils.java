@@ -243,8 +243,10 @@ public class VerificationUtils {
      */
     private static String parseByCustomRules(Context context, String content) {
         List<SmsCodeRule> rules = DBManager.get(context).queryAllSmsCodeRules();
+        String lowerContent = content.toLowerCase();
         for(SmsCodeRule rule : rules) {
-            if (content.contains(rule.getCompany()) && content.contains(rule.getCodeKeyword())) {
+            if (lowerContent.contains(rule.getCompany().toLowerCase())
+                    && lowerContent.contains(rule.getCodeKeyword().toLowerCase())) {
                 Pattern pattern = Pattern.compile(rule.getCodeRegex());
                 Matcher matcher = pattern.matcher(content);
                 if (matcher.find()) {

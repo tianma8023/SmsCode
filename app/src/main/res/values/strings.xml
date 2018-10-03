@@ -159,6 +159,7 @@
     <string name="edit">Edit</string>
     <string name="actions">Actions</string>
     <string name="rule_list_empty_prompt">No SMS code rules yet!</string>
+    <string name="rule_list_empty_snack_prompt">Rule list is empty, no need to export.</string>
     <string name="code_length_empty_prompt">Please enter the code length</string>
     <string name="rule_company_empty_hint">Please enter institution or company</string>
     <string name="rule_keyword_empty_hint">Please enter SMS code keyword</string>
