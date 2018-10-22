@@ -55,6 +55,7 @@ import ch.qos.logback.classic.Level;
 
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CODE_RULES;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DELETE_SMS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALIPAY;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WECHAT;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
@@ -81,8 +82,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     private SwitchPreference mExcludeFromRecentsPref;
 
     private String mCurListenMode;
-
-
 
     public interface OnPreferenceClickCallback {
         void onPreferenceClicked(String key, String title, boolean nestedPreference);
@@ -126,17 +125,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
 
-        Preference markAsReadPref = findPreference(KEY_MARK_AS_READ);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-            markAsReadPref.setOnPreferenceChangeListener(this);
+            findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
+            findPreference(KEY_DELETE_SMS).setOnPreferenceChangeListener(this);
         } else {
-            PreferenceGroup generalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_GENERAL);
-            generalGroup.removePreference(markAsReadPref);
+            // Hide experimental group under L.
+            PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
+            getPreferenceScreen().removePreference(experimentalGroup);
         }
-
-        // Hide experimental group.
-        // PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
-        // getPreferenceScreen().removePreference(experimentalGroup);
 
         // Hide donate by wechat preference item
         Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
@@ -291,7 +287,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 break;
             }
             case KEY_MARK_AS_READ:
-                onMarkAsReadSwitched((SwitchPreference) preference, (Boolean)newValue);
+                showAppOpsPrompt((SwitchPreference) preference, (Boolean)newValue);
+                break;
+            case KEY_DELETE_SMS:
+                showAppOpsPrompt((SwitchPreference) preference, (Boolean) newValue);
                 break;
             case KEY_VERBOSE_LOG_MODE:
                 refreshVerboseLogPreference(preference, (Boolean) newValue);
@@ -495,7 +494,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 .show();
     }
 
-    private void onMarkAsReadSwitched(final SwitchPreference markAsReadPref, boolean on) {
+    private void showAppOpsPrompt(final SwitchPreference switchPref, boolean on) {
         if (!on) {
             return;
         }
@@ -519,7 +518,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (!ShellUtils.allowOpWriteSMS()) {
-                                markAsReadPref.setChecked(false);
+                                switchPref.setChecked(false);
                                 Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
@@ -529,7 +528,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     .cancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            markAsReadPref.setChecked(false);
+                            switchPref.setChecked(false);
                         }
                     }).show();
         } else {

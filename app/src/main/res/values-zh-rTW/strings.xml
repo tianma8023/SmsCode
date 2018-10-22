@@ -6,7 +6,7 @@
     <string name="okay">好的</string>
     <string name="confirm">確定</string>
 
-    <!-- Preferences -->
+    <!-- preferences -->
     <string name="pref_general_title">一般設定</string>
     <string name="pref_enable_title">啟用</string>
     <string name="pref_enable_summary_off">需要接收和讀取簡訊權限</string>
@@ -63,6 +63,11 @@
     <string name="pref_choose_theme_title">主題</string>
     <string name="pref_clear_clipboard_title">清除剪切板</string>
     <string name="pref_clear_clipboard_summary">自動輸入成功后清除剪切板</string>
+    <string name="pref_others_title">其它</string>
+    <string name="pref_exclude_from_recents_title">不在最近任務列表中顯示</string>
+    <string name="pref_delete_sms_title">簡訊刪除</string>
+    <string name="pref_delete_sms_summary">警告：擷取成功后將簡訊刪除</string>
+    <!-- preferences end -->
 
     <!-- Auto input mode -->
     <string name="pref_auto_input_mode_title">自動輸入模式</string>
@@ -132,9 +137,10 @@
 
     <!-- App Ops WRITE_SMS -->
     <string name="write_sms_appops_prompt_content">
-        自Android 4.4起，非默认短信应用修改短信的权限得到限制。除了授予写短信的权限外，还需要修改AppOps的设置给予 WRITE_SMS 权限。\n\n有两种设置方式：\n
-        1. 通过 ROOT 方式授予，具体点击下方的\"ROOT授予\"即可。\n\n
-        2. 通过 ADB 命令方式修改，具体点击下方的\"查看ADB设置帮助\"，设置完毕后需重新打开该开关选项。
+        自Android 4.4起，非默認簡訊應用修改簡訊的權限得到限制。除了授予寫簡訊的權限外，還需要修改AppOps的設置給予 WRITE_SMS 權限。\n\n有兩種設定方式：\n
+        1. 通過 ROOT 方式授予，詳情點擊下方的\"ROOT授予\"即可。\n\n
+        2. 通過 ADB 命令方式修改，詳情點擊下方的\"查看ADB設置幫助\"，設置完畢後需重新打開該開關選項。\n\n
+        如果應用此開關後並不生效，則此選項並不適用於您當前的ROM。
     </string>
     <string name="extra_permission_request_prompt_title">額外權限請求聲明</string>
     <string name="view_adb_setting_help">查看ADB設置幫助</string>
@@ -198,7 +204,5 @@
     <string name="action_rule_help">幫助</string>
     <string name="share">分享</string>
     <string name="import_rules">導入規則</string>
-    <string name="others">其它</string>
-    <string name="pref_exclude_from_recents_title">不在最近任務列表中顯示</string>
     <!-- sms code rule end -->
 </resources>

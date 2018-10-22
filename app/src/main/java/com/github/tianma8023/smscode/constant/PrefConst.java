@@ -27,9 +27,10 @@ public interface PrefConst {
     int CURRENT_THEME_INDEX_DEFAULT = 0;
 
     String KEY_EXPERIMENTAL = "pref_experimental";
-
     String KEY_MARK_AS_READ = "pref_mark_as_read";
     boolean MARK_AS_READ_DEFAULT = false;
+    String KEY_DELETE_SMS = "pref_delete_sms";
+    boolean DELETE_SMS_DEFAULT = false;
 
     String KEY_ENTRY_AUTO_INPUT_CODE = "pref_entry_auto_input_code";
 

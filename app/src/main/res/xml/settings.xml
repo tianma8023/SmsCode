@@ -17,19 +17,19 @@
             android:title="@string/pref_listen_mode_title"
             android:entries="@array/pref_listen_mode_entries"
             android:entryValues="@array/pref_listen_mode_entryValues"
-            android:dependency="pref_enable"
+            android:dependency="@string/pref_enable"
             android:defaultValue="@string/listen_mode_standard" />
 
         <SwitchPreference
             android:key="@string/pref_show_toast"
             android:title="@string/pref_show_toast_title"
             android:summary="@string/pref_show_toast_summary"
-            android:dependency="pref_enable"
+            android:dependency="@string/pref_enable"
             android:defaultValue="true"/>
 
         <Preference
             android:key="@string/pref_entry_auto_input_code"
-            android:dependency="pref_enable"
+            android:dependency="@string/pref_enable"
             android:title="@string/pref_entry_auto_input_code_title"
             android:summary="@string/pref_entry_auto_input_code_summary" />
 
@@ -46,9 +46,14 @@
             android:key="@string/pref_mark_as_read"
             android:title="@string/pref_mark_as_read_title"
             android:summary="@string/pref_mark_as_read_summary"
-            android:dependency="pref_enable"
+            android:dependency="@string/pref_enable"
             android:defaultValue="false" />
 
+        <SwitchPreference
+            android:key="@string/pref_delete_sms"
+            android:title="@string/pref_delete_sms_title"
+            android:summary="@string/pref_delete_sms_summary"
+            android:dependency="@string/pref_enable"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_smscode_title">
@@ -77,7 +82,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/others"
+        android:title="@string/pref_others_title"
         android:key="@string/pref_others">
 
         <SwitchPreference
@@ -91,7 +96,7 @@
             android:key="@string/pref_verbose_log_mode"
             android:title="@string/pref_verbose_log_mode_title"
             android:summaryOff="@string/pref_verbose_log_mode_summary_off"
-            android:dependency="pref_enable"
+            android:dependency="@string/pref_enable"
             android:defaultValue="false"/>
     </PreferenceCategory>
 

@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Telephony;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -51,20 +52,21 @@ public class SmsCodeHandleService extends IntentService {
 
     private static final int MSG_COPY_TO_CLIPBOARD = 0xff;
     private static final int MSG_MARK_AS_READ = 0xfe;
+    private static final int MSG_DELETE_SMS = 0xfd;
 
     private boolean mAutoInputEnabled;
     private boolean mIsAutoInputModeRoot;
     private String mFocusMode;
 
+    private static final int OP_DELETE = 0;
+    private static final int OP_MARK_AS_READ = 1;
+    @IntDef({OP_DELETE, OP_MARK_AS_READ})
+    @interface SmsOp{}
+
     public SmsCodeHandleService() {
         this(SERVICE_NAME);
     }
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
-     */
     public SmsCodeHandleService(String name) {
         super(name);
     }
@@ -162,12 +164,20 @@ public class SmsCodeHandleService extends IntentService {
         copyMsg.what = MSG_COPY_TO_CLIPBOARD;
         innerHandler.sendMessage(copyMsg);
 
-        // mark sms as read or not.
-        if(SPUtils.markAsReadEnabled(this)){
-            Message markMsg = new Message();
-            markMsg.obj = smsMessageData;
-            markMsg.what = MSG_MARK_AS_READ;
-            innerHandler.sendMessageDelayed(markMsg, 100);
+        if (SPUtils.deleteSmsEnabled(this)) {
+            // delete sms
+            Message deleteMsg = new Message();
+            deleteMsg.obj = smsMessageData;
+            deleteMsg.what = MSG_DELETE_SMS;
+            innerHandler.sendMessageDelayed(deleteMsg, 100);
+        } else {
+            if (SPUtils.markAsReadEnabled(this)) {
+                // mark sms as read
+                Message markMsg = new Message();
+                markMsg.obj = smsMessageData;
+                markMsg.what = MSG_MARK_AS_READ;
+                innerHandler.sendMessageDelayed(markMsg, 100);
+            }
         }
     }
 
@@ -178,12 +188,20 @@ public class SmsCodeHandleService extends IntentService {
                 case MSG_COPY_TO_CLIPBOARD:
                     copyToClipboardOnMainThread((String) msg.obj);
                     break;
-                case MSG_MARK_AS_READ:
+                case MSG_MARK_AS_READ: {
                     SmsMessageData smsMessageData = (SmsMessageData) msg.obj;
                     String sender = smsMessageData.getSender();
                     String body = smsMessageData.getBody();
                     markSmsAsRead(sender, body);
                     break;
+                }
+                case MSG_DELETE_SMS: {
+                    SmsMessageData smsMessageData = (SmsMessageData) msg.obj;
+                    String sender = smsMessageData.getSender();
+                    String body = smsMessageData.getBody();
+                    deleteSms(sender, body);
+                    break;
+                }
             }
         }
     };
@@ -219,11 +237,22 @@ public class SmsCodeHandleService extends IntentService {
     }
 
     private void markSmsAsRead(String sender, String body) {
+        operateSms(sender, body, OP_MARK_AS_READ);
+    }
+
+    private void deleteSms(String sender, String body) {
+        operateSms(sender, body, OP_DELETE);
+    }
+
+    /**
+     * Handle sms according its operation
+     */
+    private void operateSms(String sender, String body, @SmsOp int smsOp) {
         Cursor cursor = null;
         try {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
                     != PackageManager.PERMISSION_GRANTED) {
-                XLog.e("Don't have permission to read sms");
+                XLog.e("Don't have permission to read/write sms");
                 return;
             }
             String[] projection = new String[] {
@@ -245,17 +274,31 @@ public class SmsCodeHandleService extends IntentService {
                 String curBody = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
                 if (curAddress.equals(sender) && curRead == 0 && curBody.startsWith(body)) {
                     String smsMessageId = cursor.getString(cursor.getColumnIndex(Telephony.Sms._ID));
-                    ContentValues values = new ContentValues();
-                    values.put(Telephony.Sms.READ, true);
-                    int rows = this.getContentResolver().update(uri, values, Telephony.Sms._ID + " = ?", new String[]{smsMessageId});
-                    if (rows > 0) {
-                        XLog.i("Mark as read succeed");
-                        break;
+                    String where = Telephony.Sms._ID + " = ?";
+                    String[] selectionArgs = new String[]{smsMessageId};
+                    if (smsOp == OP_DELETE) {
+                        int rows = getContentResolver().delete(uri, where, selectionArgs);
+                        if (rows > 0) {
+                            XLog.i("Delete sms succeed");
+                            break;
+                        }
+                    } else if (smsOp == OP_MARK_AS_READ) {
+                        ContentValues values = new ContentValues();
+                        values.put(Telephony.Sms.READ, true);
+                        int rows = this.getContentResolver().update(uri, values, where, selectionArgs);
+                        if (rows > 0) {
+                            XLog.i("Mark as read succeed");
+                            break;
+                        }
                     }
                 }
             }
         } catch (Exception e) {
-            XLog.e("Mark as read failed: ", e);
+            if (smsOp == OP_MARK_AS_READ) {
+                XLog.e("Mark as read failed: {}", e);
+            } else if (smsOp == OP_DELETE) {
+                XLog.e("Delete sms failed: {}", e);
+            }
         } finally {
             if (cursor != null) {
                 cursor.close();
