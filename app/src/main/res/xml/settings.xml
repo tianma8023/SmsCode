@@ -76,6 +76,16 @@
             android:persistent="false"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/others"
+        android:key="@string/pref_others">
+
+        <SwitchPreference
+            android:key="@string/pref_exclude_from_recents"
+            android:title="@string/pref_exclude_from_recents_title"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/pref_debug_title">
         <SwitchPreference
             android:key="@string/pref_verbose_log_mode"

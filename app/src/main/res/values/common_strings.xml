@@ -31,6 +31,9 @@
     <string name="pref_clear_clipboard">pref_clear_clipboard</string>
 
     <string name="pref_code_rules">pref_code_rules</string>
+
+    <string name="pref_others">pref_others</string>
+    <string name="pref_exclude_from_recents">pref_exclude_from_recents</string>
     <!-- shared preference key end -->
 
     <!-- Focus mode -->

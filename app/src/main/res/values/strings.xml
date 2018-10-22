@@ -192,5 +192,7 @@
     <string name="action_rule_help">Help</string>
     <string name="share">Share</string>
     <string name="import_rules">Import Rules</string>
+    <string name="others">Others</string>
+    <string name="pref_exclude_from_recents_title">Exclude from recent apps</string>
     <!-- sms code rule end -->
 </resources>

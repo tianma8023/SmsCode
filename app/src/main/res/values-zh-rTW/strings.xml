@@ -198,5 +198,7 @@
     <string name="action_rule_help">幫助</string>
     <string name="share">分享</string>
     <string name="import_rules">導入規則</string>
+    <string name="others">其它</string>
+    <string name="pref_exclude_from_recents_title">不在最近任務列表中顯示</string>
     <!-- sms code rule end -->
 </resources>

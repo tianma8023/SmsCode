@@ -38,6 +38,9 @@ public interface PrefConst {
     String KEY_SMSCODE_TEST = "pref_smscode_test";
     String KEY_CODE_RULES = "pref_code_rules";
 
+    String KEY_OTHERS = "pref_others";
+    String KEY_EXCLUDE_FROM_RECENTS = "pref_exclude_from_recents";
+
     String KEY_ABOUT = "pref_about";
     String KEY_VERSION = "pref_version";
     String KEY_SOURCE_CODE = "pref_source_code";

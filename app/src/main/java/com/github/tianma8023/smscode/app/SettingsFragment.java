@@ -2,6 +2,7 @@ package com.github.tianma8023.smscode.app;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,8 +59,10 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALI
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WECHAT;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_OTHERS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
@@ -74,8 +77,11 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     private Activity mActivity;
 
-    private SwitchPreference mEnablePreference;
+    private SwitchPreference mEnablePref;
+    private SwitchPreference mExcludeFromRecentsPref;
+
     private String mCurListenMode;
+
 
 
     public interface OnPreferenceClickCallback {
@@ -101,8 +107,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         addPreferencesFromResource(R.xml.settings);
 
-        mEnablePreference = (SwitchPreference) findPreference(PrefConst.KEY_ENABLE);
-        mEnablePreference.setOnPreferenceChangeListener(this);
+        mEnablePref = (SwitchPreference) findPreference(PrefConst.KEY_ENABLE);
+        mEnablePref.setOnPreferenceChangeListener(this);
         // verbose log preference
         SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
         verboseLogPref.setOnPreferenceChangeListener(this);
@@ -145,6 +151,27 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         // version info preference
         Preference versionPref = findPreference(KEY_VERSION);
         showVersionInfo(versionPref);
+
+        // Hide others group if SDK under L
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // exclude from recents preference
+            mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
+            mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
+        } else {
+            PreferenceGroup othersGroup = (PreferenceGroup) findPreference(KEY_OTHERS);
+            getPreferenceScreen().removePreference(othersGroup);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mActivity = getActivity();
+
+        if (mExcludeFromRecentsPref != null) {
+            boolean excludeFromRecents = mExcludeFromRecentsPref.isChecked();
+            onExcludeFromRecentsSwitched(excludeFromRecents);
+        }
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -165,12 +192,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         } catch (Exception e) {
             //ignore
         }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mActivity = getActivity();
     }
 
     public void setOnPreferenceClickCallback(OnPreferenceClickCallback preferenceClickCallback) {
@@ -274,6 +295,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 break;
             case KEY_VERBOSE_LOG_MODE:
                 refreshVerboseLogPreference(preference, (Boolean) newValue);
+                break;
+            case KEY_EXCLUDE_FROM_RECENTS:
+                onExcludeFromRecentsSwitched((Boolean) newValue);
                 break;
             default:
                 return false;
@@ -408,7 +432,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     @Override
                     public void onAction(List<String> data) {
                         Toast.makeText(mActivity, R.string.prompt_sms_permission_denied, Toast.LENGTH_LONG).show();
-                        mEnablePreference.setChecked(false);
+                        mEnablePref.setChecked(false);
                     }
                 })
                 .start();
@@ -454,7 +478,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 Toast.makeText(mActivity, R.string.prompt_service_sms_permission_denied, Toast.LENGTH_LONG).show();
-                                mEnablePreference.setChecked(false);
+                                mEnablePref.setChecked(false);
                             }
                         })
                         .show();
@@ -510,6 +534,18 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     }).show();
         } else {
             Toast.makeText(mActivity, R.string.relevant_permission_already_granted, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void onExcludeFromRecentsSwitched(boolean on) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityManager am = (ActivityManager) mActivity.getSystemService(Context.ACTIVITY_SERVICE);
+            if (am != null) {
+                List<ActivityManager.AppTask> appTasks = am.getAppTasks();
+                if (appTasks != null && !appTasks.isEmpty()) {
+                    appTasks.get(0).setExcludeFromRecents(on);
+                }
+            }
         }
     }
 }
