@@ -29,6 +29,8 @@ public interface PrefConst {
     String KEY_EXPERIMENTAL = "pref_experimental";
     String KEY_MARK_AS_READ = "pref_mark_as_read";
     boolean MARK_AS_READ_DEFAULT = false;
+    String KEY_COPY_TO_CLIPBOARD = "pref_copy_to_clipboard";
+    boolean COPY_TO_CLIPBOARD_DEFAULT = true;
     String KEY_DELETE_SMS = "pref_delete_sms";
     boolean DELETE_SMS_DEFAULT = false;
 
