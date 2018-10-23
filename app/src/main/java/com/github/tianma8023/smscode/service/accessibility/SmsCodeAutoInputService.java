@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ClipboardUtils;
@@ -21,6 +25,8 @@ import com.github.tianma8023.smscode.utils.XLog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,6 +41,8 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
 
     private static final int AUTO_INPUT_MAX_TRY_TIMES = 3;
 
+    private Handler mInnerHandler;
+
     private class AutoInputControllerReceiver extends BroadcastReceiver {
 
         @Override
@@ -43,7 +51,9 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
             XLog.d("AutoInputControllerReceiver action={}", action);
             if (ACTION_START_AUTO_INPUT.equals(action)) {
                 String smsCode = intent.getStringExtra(EXTRA_KEY_SMS_CODE);
-                autoInputSmsCode(smsCode);
+//                autoInputSmsCode(smsCode);
+                ExecutorService threadPool = Executors.newSingleThreadExecutor();
+                threadPool.execute(new AutoInputTask(smsCode));
             } else if (ACTION_STOP_AUTO_INPUT.equals(action)) {
                 String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
                 // 用root的方式关闭无障碍服务
@@ -69,6 +79,10 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
             intentFilter.addAction(ACTION_STOP_AUTO_INPUT);
             registerReceiver(mControllerReceiver, intentFilter);
         }
+
+        if (mInnerHandler == null) {
+            mInnerHandler = new Handler(Looper.getMainLooper());
+        }
     }
 
     @Override
@@ -84,15 +98,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
     }
 
     private void autoInputSmsCode(String smsCode) {
-        boolean success = false;
-        for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
-            XLog.d("try times {}", i+1);
-            success = tryToAutoInputSMSCode(smsCode);
-            if (success) {
-                break;
-            }
-            sleep(100);
-        }
+        boolean success = tryToAutoInputSMSCode(smsCode);
 
         if (success) {
             XLog.i("Auto input succeed");
@@ -115,14 +121,46 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      * @return 成功输入则返回true，否则返回false
      */
     private boolean tryToAutoInputSMSCode(String smsCode) {
+        boolean success = false;
         String focusMode = SPUtils.getFocusMode(this);
+        boolean isRootAutoInputMode =
+                PrefConst.AUTO_INPUT_MODE_ROOT.equals(SPUtils.getAutoInputMode(this));
         if (PrefConst.FOCUS_MODE_AUTO.equals(focusMode)) {
             // focus mode: auto focus
-            return tryToAutoInputByAutoFocus(smsCode);
+            for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
+                XLog.d("try times {}", i+1);
+                success = tryToAutoInputByAutoFocus(smsCode);
+                if (success) {
+                    break;
+                }
+                sleep(100);
+            }
+
+            if (!success && SPUtils.manualFocusIfFailedEnabled(this)) {
+                XLog.d("auto focus failed, transfer to manual focus");
+                final int secs = 3;
+                mInnerHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String text = getString(R.string.auto_focus_failed_prompt, secs);;
+                        Toast.makeText(SmsCodeAutoInputService.this, text, Toast.LENGTH_LONG).show();
+                    }
+                });
+                sleep(secs * 1000);
+                success = tryToAutoInputByManualFocus(smsCode, isRootAutoInputMode);
+            }
         } else {
             // focus mode: manual focus
-            return tryToAutoInputByManualFocus(smsCode);
+            for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
+                XLog.d("try times {}", i+1);
+                success = tryToAutoInputByManualFocus(smsCode, isRootAutoInputMode);
+                if (success) {
+                    break;
+                }
+                sleep(100);
+            }
         }
+        return success;
     }
 
     /**
@@ -130,13 +168,17 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
      * @param smsCode SMS code
      * @return 成功输入则返回true，否则返回false
      */
-    private boolean tryToAutoInputByManualFocus(String smsCode) {
-        AccessibilityNodeInfo focusedNodeInfo = findFocusNodeInfo();
-        if (focusedNodeInfo != null && focusedNodeInfo.isEditable()) {
-            inputText(focusedNodeInfo, smsCode);
-            return true;
+    private boolean tryToAutoInputByManualFocus(String smsCode, boolean isRootAutoInputMode) {
+        if (isRootAutoInputMode){
+            return ShellUtils.inputText(smsCode);
+        } else {
+            AccessibilityNodeInfo focusedNodeInfo = findFocusNodeInfo();
+            if (focusedNodeInfo != null && focusedNodeInfo.isEditable()) {
+                inputText(focusedNodeInfo, smsCode);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     /**
@@ -337,6 +379,20 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
             TimeUnit.MILLISECONDS.sleep(milliSeconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class AutoInputTask implements Runnable {
+
+        private String mSmsCode;
+
+        AutoInputTask(String smsCode) {
+            mSmsCode = smsCode;
+        }
+
+        @Override
+        public void run() {
+            autoInputSmsCode(mSmsCode);
         }
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,17 +21,22 @@ import com.github.tianma8023.smscode.utils.ShellUtils;
 
 import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ACCESSIBILITY;
 import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ROOT;
+import static com.github.tianma8023.smscode.constant.PrefConst.FOCUS_MODE_AUTO;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_AUTO_INPUT_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_FOCUS_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MANUAL_FOCUS_IF_FAILED;
 
 public class AutoInputSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
     private Context mContext;
 
     private ListPreference mAutoInputModePref;
+    private String mAutoInputMode;
 
-    private String mCurAutoMode;
+    private SwitchPreference mManualFocusIfFailedPref;
+    private String mFocusMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,14 +49,18 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
 
         mAutoInputModePref = (ListPreference) findPreference(KEY_AUTO_INPUT_MODE);
         mAutoInputModePref.setOnPreferenceChangeListener(this);
-        mCurAutoMode = mAutoInputModePref.getValue();
+        mAutoInputMode = mAutoInputModePref.getValue();
 
         ListPreference focusModePref = (ListPreference) findPreference(KEY_FOCUS_MODE);
         focusModePref.setOnPreferenceChangeListener(this);
+        mFocusMode = focusModePref.getValue();
+
+        mManualFocusIfFailedPref = (SwitchPreference) findPreference(KEY_MANUAL_FOCUS_IF_FAILED);
 
         refreshEnableAutoInputPreference(autoInputEnablePref.isChecked());
-        refreshAutoInputModePreference(mCurAutoMode);
+        refreshAutoInputModePreference(mAutoInputMode);
         refreshFocusModePreference(focusModePref, focusModePref.getValue());
+        refreshManualFocusIfFailedPreference();
     }
 
     @Override
@@ -66,20 +76,26 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
             case KEY_ENABLE_AUTO_INPUT_CODE:
                 refreshEnableAutoInputPreference((Boolean) newValue);
                 break;
-            case KEY_AUTO_INPUT_MODE:
-                if (!newValue.equals(mCurAutoMode)) {
-                    mCurAutoMode = (String) newValue;
-                    refreshAutoInputModePreference(mCurAutoMode);
-                    if (AUTO_INPUT_MODE_ROOT.equals(newValue)) {
+            case KEY_AUTO_INPUT_MODE: {
+                if (!newValue.equals(mAutoInputMode)) {
+                    mAutoInputMode = (String) newValue;
+                    refreshAutoInputModePreference(mAutoInputMode);
+                    if (AUTO_INPUT_MODE_ROOT.equals(mAutoInputMode)) {
                         showRootModePrompt();
-                    } else if (AUTO_INPUT_MODE_ACCESSIBILITY.equals(mCurAutoMode)) {
+                    } else if (AUTO_INPUT_MODE_ACCESSIBILITY.equals(mAutoInputMode)) {
                         showAccessibilityModePrompt();
                     }
                 }
                 break;
-            case KEY_FOCUS_MODE:
-                refreshFocusModePreference((ListPreference) preference, (String) newValue);
-                break;
+            }
+            case KEY_FOCUS_MODE: {
+                if (!newValue.equals(mFocusMode)) {
+                    mFocusMode = (String) newValue;
+                    refreshFocusModePreference((ListPreference) preference, mFocusMode);
+                    refreshManualFocusIfFailedPreference();
+                    break;
+                }
+            }
             default:
                 return false;
         }
@@ -148,6 +164,19 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
             focusModePref.setSummary(entries[index]);
         } catch (Exception e) {
             //ignore
+        }
+    }
+
+    private void refreshManualFocusIfFailedPreference() {
+        PreferenceGroup autoInputGroup = (PreferenceGroup) findPreference(KEY_ENTRY_AUTO_INPUT_CODE);
+        if (FOCUS_MODE_AUTO.equals(mFocusMode)) {
+            // auto-focus
+            // show manual focus if failed preference
+            autoInputGroup.addPreference(mManualFocusIfFailedPref);
+        } else {
+            // manual focus
+            // hide manual focus if failed preference
+            autoInputGroup.removePreference(mManualFocusIfFailedPref);
         }
     }
 

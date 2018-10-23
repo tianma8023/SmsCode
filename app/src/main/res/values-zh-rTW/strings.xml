@@ -79,9 +79,13 @@
 
     <!-- Focus Mode -->
     <string name="pref_focus_mode_title">對焦模式</string>
-    <string name="focus_mode_entry_auto">自動尋找驗證碼輸入框</string>
-    <string name="focus_mode_entry_manual">手動指定驗證碼輸入框</string>
+    <string name="focus_mode_entry_auto">自動對焦(自動尋找驗證碼輸入框)</string>
+    <string name="focus_mode_entry_manual">手動對焦(手動指定驗證碼輸入框)</string>
     <!-- Focus Mode end -->
+
+    <string name="pref_manual_focus_if_failed_title">自動對焦轉手動對焦</string>
+    <string name="pref_manual_focus_if_failed_summary">優先自動對焦，自動對焦失敗後轉手動對焦</string>
+    <string name="auto_focus_failed_prompt">自動對焦失敗，請在%d秒內手動對焦</string>
 
     <!-- Listen Mode -->
     <string name="pref_listen_mode_title">簡訊監聽模式</string>
