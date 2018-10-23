@@ -45,8 +45,7 @@
     <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
     <string name="open_auto_input_accessibility">打开无障碍服务</string>
     <string name="close_auto_input_accessibility">关闭无障碍服务</string>
-    <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务</string>
-    <string name="close_auto_input_accessibility_prompt">建议关闭自动输入的无障碍服务</string>
+    <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务。\n\n注意：在一些国产Rom上，无障碍服务会被系统自动关闭，所以此选项可能无效。</string>
     <string name="go_to_open">去打开</string>
     <string name="go_to_close">去关闭</string>
     <string name="smscode_auto_input_service_label">短信验证码自动输入服务</string>

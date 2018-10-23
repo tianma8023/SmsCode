@@ -44,8 +44,7 @@
     <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
     <string name="open_auto_input_accessibility">Open auto-input accessibility</string>
     <string name="close_auto_input_accessibility">Close auto-input accessibility</string>
-    <string name="open_auto_input_accessibility_prompt">Accessibility Service for auto-input codes need be open</string>
-    <string name="close_auto_input_accessibility_prompt">Accessibility Service for auto-input is advised to closed if it\'s off</string>
+    <string name="open_auto_input_accessibility_prompt">Accessibility Service for auto-input codes need be open.\n\nNote that: accessibility service will be auto-closed frequently by system on some 3rd party ROM.</string>
     <string name="go_to_open">Open it</string>
     <string name="go_to_close">Close it</string>
     <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
