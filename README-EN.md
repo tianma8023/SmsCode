@@ -12,6 +12,7 @@ You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.g
 - Custom keywords about verification code message (regular expressions allowed).
 - Custom SMS code match rules.
 - Mark verification code SMS as read.
+- Delete verification SMS when it been extracted successfully.
 - Auto-input SMS code.
 - Various theme color to choose.
 

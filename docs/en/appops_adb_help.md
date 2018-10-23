@@ -14,3 +14,6 @@ AppOpsManager ADB setting help
   ```
   4. Reopen `Mark as read` switch to check whether permission is granted or not.
 
+- Restrictions
+  
+  It may be invlid if the default system SMS app on your phone uses its own SMS database which is different from system SMS database, although the settings above have been applied.

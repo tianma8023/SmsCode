@@ -1,4 +1,11 @@
 # Update Logs
+- 18.10.23 v1.3.2
+  1. Add configurable options: exclude app from recent apps.
+  2. Add configurable options: delete verification sms if it's extracted succeed.
+  3. Add configurable options: copy sms code to clipboard.
+  4. Add configurable options: start manual focus mode if auto focus failed.
+  5. Add more user-friendly tips for settings.
+  6. Bug fixes.
 - 18.10.03 v1.3.1
   1. Optimize the SMS code rule regex auto-generation.
   2. Company and keywords are case insensitive for code rules.
