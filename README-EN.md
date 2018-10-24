@@ -6,6 +6,11 @@ SmsCodeExtractor is non-xposed version of [XposedSmsCode](https://github.com/tia
 
 You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.github.tianma8023.smscode) or [releases](https://github.com/tianma8023/SmsCodeExtractor/releases/).
 
+# Attention
+- **This module is suitable for AOSP ROM, it may not work well on other 3rd-party Rom.**
+- **Compatibility: Requires Android 4.4+ (api level ≥ 19).**
+- **Read the FAQ in app first if you encountered any problems.**
+
 # Features
 - Copy verification code to clipboard when a new message arrives.
 - Show toast when a SMS verification code is copied.
@@ -15,11 +20,6 @@ You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.g
 - Delete verification SMS when it been extracted successfully.
 - Auto-input SMS code.
 - Various theme color to choose.
-
-# Attention
-- **This module is suitable for AOSP ROM, it may not work well on other 3rd-party Rom.**
-- **Compatibility: Requires Android 4.4+ (api level ≥ 19).**
-- **Read the FAQ in app first if you encountered any problems.**
 
 # Update Logs
 [Update logs](/LOG-EN.md)

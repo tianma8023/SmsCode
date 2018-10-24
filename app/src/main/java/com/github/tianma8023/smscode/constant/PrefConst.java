@@ -21,6 +21,8 @@ public interface PrefConst {
 
     String KEY_SHOW_TOAST = "pref_show_toast";
     boolean SHOW_TOAST_DEFAULT = true;
+    String KEY_COPY_TO_CLIPBOARD = "pref_copy_to_clipboard";
+    boolean COPY_TO_CLIPBOARD_DEFAULT = true;
 
     String KEY_CHOOSE_THEME = "pref_choose_theme";
     String KEY_CURRENT_THEME_INDEX = "pref_current_theme_index";
@@ -29,8 +31,6 @@ public interface PrefConst {
     String KEY_EXPERIMENTAL = "pref_experimental";
     String KEY_MARK_AS_READ = "pref_mark_as_read";
     boolean MARK_AS_READ_DEFAULT = false;
-    String KEY_COPY_TO_CLIPBOARD = "pref_copy_to_clipboard";
-    boolean COPY_TO_CLIPBOARD_DEFAULT = true;
     String KEY_DELETE_SMS = "pref_delete_sms";
     boolean DELETE_SMS_DEFAULT = false;
 

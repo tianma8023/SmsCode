@@ -102,7 +102,8 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
 
         if (success) {
             XLog.i("Auto input succeed");
-            if (SPUtils.shouldClearClipboard(this)) {
+            if (SPUtils.copyToClipboardEnabled(this)
+                    && SPUtils.shouldClearClipboard(this)) {
                 ClipboardUtils.clearClipboard(this);
             }
         }

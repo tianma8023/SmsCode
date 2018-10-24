@@ -209,9 +209,7 @@ public class SmsCodeHandleService extends IntentService {
         }
     };
 
-    /**
-     * 在主线程上执行copy操作
-     */
+
     private void onSmsCodeExtracted(final String smsCode) {
         boolean copyToClipboardEnabled = SPUtils.copyToClipboardEnabled(this);
         if (copyToClipboardEnabled) {
@@ -257,7 +255,7 @@ public class SmsCodeHandleService extends IntentService {
     }
 
     /**
-     * Handle sms according its operation
+     * Handle sms according to its operation
      */
     private void operateSms(String sender, String body, @SmsOp int smsOp) {
         Cursor cursor = null;
@@ -276,7 +274,7 @@ public class SmsCodeHandleService extends IntentService {
             };
             // 查看最近5条短信
             String sortOrder = Telephony.Sms.DATE + " desc limit 5";
-            Uri uri = Telephony.Sms.Inbox.CONTENT_URI;
+            Uri uri = Telephony.Sms.CONTENT_URI;
             cursor = this.getContentResolver().query(uri, projection, null, null, sortOrder);
             if (cursor == null)
                 return;
@@ -307,9 +305,9 @@ public class SmsCodeHandleService extends IntentService {
             }
         } catch (Exception e) {
             if (smsOp == OP_MARK_AS_READ) {
-                XLog.e("Mark as read failed: {}", e);
+                XLog.e("Mark as read failed: ", e);
             } else if (smsOp == OP_DELETE) {
-                XLog.e("Delete sms failed: {}", e);
+                XLog.e("Delete sms failed: ", e);
             }
         } finally {
             if (cursor != null) {
