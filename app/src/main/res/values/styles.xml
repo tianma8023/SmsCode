@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="faq_textColor">@color/faq_textColor_black</item>
         <item name="faq_textColorSecondary">@color/faq_textColorSecondary_black</item>
+        <item name="preferenceIconColor">?android:attr/colorAccent</item>
     </style>
 
     <style name="AppTheme.Red">
@@ -27,7 +28,6 @@
     </style>
 
     <style name="AppTheme.Green">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary_green</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_green</item>
         <item name="colorAccent">@color/colorAccent_green</item>
