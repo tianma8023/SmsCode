@@ -17,8 +17,8 @@ android {
         applicationId "com.github.tianma8023.smscode"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 8
-        versionName "1.3.2"
+        versionCode 9
+        versionName "1.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
