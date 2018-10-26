@@ -101,7 +101,6 @@
     <!-- permission requirement end -->
 
     <!-- theme color -->
-    <string name="color_default">Default</string>
     <string name="red">Red</string>
     <string name="pink">Pink</string>
     <string name="yellow">Yellow</string>

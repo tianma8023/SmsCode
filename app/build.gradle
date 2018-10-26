@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply greenDao plugin
-
+apply from: 'and-res-guard.gradle'
 
 def key = file('F:\\Keystore\\tianma.jks')
 
@@ -12,15 +12,14 @@ def static releaseTime() {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.github.tianma8023.smscode"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 8
         versionName "1.3.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
     }
 
     signingConfigs {
@@ -97,12 +96,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1' // material design support
-    implementation 'com.android.support:recyclerview-v7:27.1.1' // recycler view
-    implementation 'com.android.support:cardview-v7:27.1.1' // card view
-    implementation 'com.android.support:customtabs:27.1.1' // custom tabs
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0' // material design support
+    implementation 'com.android.support:recyclerview-v7:28.0.0' // recycler view
+    implementation 'com.android.support:cardview-v7:28.0.0' // card view
+    implementation 'com.android.support:customtabs:28.0.0' // custom tabs
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
