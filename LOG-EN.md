@@ -1,4 +1,9 @@
 # Update Logs
+- 18.10.26 v1.4.0
+  1. Upgrade target to Pie, Upgrade gradle build tools, no looger support kitkat(4.4.x).
+  2. Add icons for every preference.
+  3. Bug fix: cannot delete sms properly.
+  4. Remove 'default blue' and use 'pants blue' for the default theme color.
 - 18.10.23 v1.3.2
   1. Add configurable options: exclude app from recent apps.
   2. Add configurable options: delete verification sms if it's extracted succeed.
