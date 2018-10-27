@@ -12,13 +12,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
-import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceGroup;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -33,6 +35,8 @@ import com.github.tianma8023.smscode.app.rule.CodeRulesActivity;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.Const;
 import com.github.tianma8023.smscode.constant.PrefConst;
+import com.github.tianma8023.smscode.preference.ResetEditPreference;
+import com.github.tianma8023.smscode.preference.ResetEditPreferenceDialogFragCompat;
 import com.github.tianma8023.smscode.utils.AppOpsUtils;
 import com.github.tianma8023.smscode.utils.PackageUtils;
 import com.github.tianma8023.smscode.utils.ResUtils;
@@ -63,7 +67,6 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_IN
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_OTHERS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
@@ -72,7 +75,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERSION;
 /**
  * 首选项Fragment
  */
-public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
     public static final String EXTRA_KEY_CURRENT_THEME = "extra_key_current_theme";
 
@@ -101,8 +104,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreatePreferences(Bundle bundle, String s) {
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -125,14 +127,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-            findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
-            findPreference(KEY_DELETE_SMS).setOnPreferenceChangeListener(this);
-        } else {
-            // Hide experimental group under L.
-            PreferenceGroup experimentalGroup = (PreferenceGroup) findPreference(PrefConst.KEY_EXPERIMENTAL);
-            getPreferenceScreen().removePreference(experimentalGroup);
-        }
+        findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
+        findPreference(KEY_DELETE_SMS).setOnPreferenceChangeListener(this);
 
         // Hide donate by wechat preference item
         Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
@@ -148,15 +144,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         Preference versionPref = findPreference(KEY_VERSION);
         showVersionInfo(versionPref);
 
-        // Hide others group if SDK under L
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // exclude from recents preference
-            mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
-            mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
-        } else {
-            PreferenceGroup othersGroup = (PreferenceGroup) findPreference(KEY_OTHERS);
-            getPreferenceScreen().removePreference(othersGroup);
-        }
+        // exclude from recents preference
+        mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
+        mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -172,6 +162,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     private void initChooseThemePreference(Preference chooseThemePref) {
         Bundle args = getArguments();
+        if (args == null) {
+            return;
+        }
         ThemeItem themeItem = args.getParcelable(EXTRA_KEY_CURRENT_THEME);
         if (themeItem != null) {
             chooseThemePref.setSummary(themeItem.getColorNameRes());
@@ -545,6 +538,25 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     appTasks.get(0).setExcludeFromRecents(on);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(Preference preference) {
+        boolean handled = false;
+        if (preference instanceof ResetEditPreference) {
+            DialogFragment dialogFragment =
+                    ResetEditPreferenceDialogFragCompat.newInstance(preference.getKey());
+
+            FragmentManager fm = this.getFragmentManager();
+            if (fm != null) {
+                dialogFragment.setTargetFragment(this, 0);
+                dialogFragment.show(this.getFragmentManager(), "android.support.v14.preference.PreferenceFragment.DIALOG");
+                handled = true;
+            }
+        }
+        if (!handled) {
+            super.onDisplayPreferenceDialog(preference);
         }
     }
 }

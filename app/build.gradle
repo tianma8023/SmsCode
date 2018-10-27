@@ -103,6 +103,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0' // recycler view
     implementation 'com.android.support:cardview-v7:28.0.0' // card view
     implementation 'com.android.support:customtabs:28.0.0' // custom tabs
+    implementation 'com.android.support:preference-v7:28.0.0' // preference support
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

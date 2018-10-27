@@ -2,13 +2,13 @@ package com.github.tianma8023.smscode.app;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceGroup;
-import android.preference.SwitchPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceGroup;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -28,7 +28,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_IN
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_FOCUS_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MANUAL_FOCUS_IF_FAILED;
 
-public class AutoInputSettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+public class AutoInputSettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
     private Context mContext;
 
@@ -39,9 +39,7 @@ public class AutoInputSettingsFragment extends PreferenceFragment implements Pre
     private String mFocusMode;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings_auto_input_code);
 
         SwitchPreference autoInputEnablePref = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
