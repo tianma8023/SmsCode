@@ -1,4 +1,6 @@
 # Update Logs
+- 18.10.27 v1.4.1
+  1. Use v7 preference support library to fix the UI issues.
 - 18.10.26 v1.4.0
   1. Upgrade target to Pie, Upgrade gradle build tools, no looger support kitkat(4.4.x).
   2. Add icons for every preference.
