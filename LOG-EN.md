@@ -1,4 +1,6 @@
 # Update Logs
+- 19.10.30 v1.4.2
+  1. Bug fix: crash when auto input.
 - 18.10.27 v1.4.1
   1. Use v7 preference support library to fix the UI issues.
 - 18.10.26 v1.4.0
