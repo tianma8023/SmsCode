@@ -8,7 +8,7 @@ import android.provider.Telephony;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsMessage;
 
-import com.github.tianma8023.smscode.entity.SmsMessageData;
+import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.service.SmsCodeHandleService;
 import com.github.tianma8023.smscode.utils.SmsMessageUtils;
 import com.github.tianma8023.smscode.utils.XLog;
@@ -26,22 +26,24 @@ public class SmsReceiver extends BroadcastReceiver {
                 Object[] pdus = (Object[]) bundle.get("pdus");
                 if (pdus == null)
                     return;
+
                 final SmsMessage[] messages = new SmsMessage[pdus.length];
                 for (int i = 0; i < pdus.length; i++) {
                     messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
                 }
+
                 if (messages.length != 0) {
                     String body = SmsMessageUtils.getMessageBody(messages);
                     String sender = messages[0].getOriginatingAddress();
                     long date = System.currentTimeMillis();
 
-                    SmsMessageData smsMessageData = new SmsMessageData();
-                    smsMessageData.setBody(body);
-                    smsMessageData.setSender(sender);
-                    smsMessageData.setDate(date);
+                    SmsMsg smsMsg = new SmsMsg();
+                    smsMsg.setBody(body);
+                    smsMsg.setSender(sender);
+                    smsMsg.setDate(date);
 
                     Intent smsCodeHandleSvc = new Intent(context, SmsCodeHandleService.class);
-                    smsCodeHandleSvc.putExtra(SmsCodeHandleService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMessageData);
+                    smsCodeHandleSvc.putExtra(SmsCodeHandleService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMsg);
                     ContextCompat.startForegroundService(context, smsCodeHandleSvc);
                 }
             }

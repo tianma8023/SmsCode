@@ -84,8 +84,11 @@
 # ==========================
 # greenDAO 3 proguard start
 ### greenDAO 3
+### GreenDaoUpgradeHelper
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
-public static java.lang.String TABLENAME;
+    public static java.lang.String TABLENAME;
+    public static void dropTable(org.greenrobot.greendao.database.Database, boolean);
+    public static void createTable(org.greenrobot.greendao.database.Database, boolean);
 }
 -keep class **$Properties
 

@@ -213,6 +213,10 @@ public class RuleEditFragment extends Fragment {
         }
     }
 
+    private String getText(EditText editText) {
+        return editText.getText().toString();
+    }
+
     private void setError(EditText editText,@StringRes int textId) {
         setError(editText, getString(textId));
     }
@@ -255,9 +259,9 @@ public class RuleEditFragment extends Fragment {
                     mCodeRegexEditText.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
 
-        String company = mCompanyEditText.getText().toString();
-        String keyword = mKeywordEditText.getText().toString();
-        String codeRegex = mCodeRegexEditText.getText().toString();
+        String company = getText(mCompanyEditText);
+        String keyword = getText(mKeywordEditText);
+        String codeRegex = getText(mCodeRegexEditText);
 
         mCodeRule.setCompany(company);
         mCodeRule.setCodeKeyword(keyword);
@@ -265,7 +269,7 @@ public class RuleEditFragment extends Fragment {
 
         DBManager dbManager = DBManager.get(mActivity);
         if (mRuleEditType == EDIT_TYPE_CREATE) {
-            boolean duplicate = dbManager.isExist(mCodeRule);
+            boolean duplicate = dbManager.isSmsCodeRuleExists(mCodeRule);
             if (duplicate) {
                 Toast.makeText(mActivity, R.string.rule_duplicated_prompt, Toast.LENGTH_LONG).show();
             } else {
@@ -337,9 +341,9 @@ public class RuleEditFragment extends Fragment {
         singleThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                String company = mCompanyEditText.getText().toString();
-                String keyword = mKeywordEditText.getText().toString();
-                String codeRegex = mCodeRegexEditText.getText().toString();
+                String company = getText(mCompanyEditText);
+                String keyword = getText(mKeywordEditText);
+                String codeRegex = getText(mCodeRegexEditText);
 
                 SmsCodeRule template = new SmsCodeRule();
 

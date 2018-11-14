@@ -31,6 +31,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.history.CodeRecordsActivity;
 import com.github.tianma8023.smscode.app.rule.CodeRulesActivity;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.Const;
@@ -44,7 +45,7 @@ import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 import com.github.tianma8023.smscode.utils.StorageUtils;
 import com.github.tianma8023.smscode.utils.Utils;
-import com.github.tianma8023.smscode.utils.VerificationUtils;
+import com.github.tianma8023.smscode.utils.SmsCodeUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
 import com.github.tianma8023.smscode.utils.rom.RomUtils;
@@ -53,6 +54,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RequestExecutor;
 
+import java.io.File;
 import java.util.List;
 
 import ch.qos.logback.classic.Level;
@@ -64,6 +66,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALI
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WECHAT;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_CODE_RECORDS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
@@ -123,6 +126,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
         findPreference(KEY_CODE_RULES).setOnPreferenceClickListener(this);
+        findPreference(KEY_ENTRY_CODE_RECORDS).setOnPreferenceClickListener(this);
+
         Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
@@ -203,6 +208,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break;
             case KEY_CODE_RULES:
                 CodeRulesActivity.startToMe(mActivity);
+                break;
+            case KEY_ENTRY_CODE_RECORDS:
+                CodeRecordsActivity.startToMe(mActivity);
                 break;
             case KEY_SMSCODE_TEST:
                 showSmsCodeTestDialog();
@@ -299,7 +307,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     private void refreshVerboseLogPreference(Preference preference, boolean on) {
         if (on) {
-            preference.setSummary(StorageUtils.getLogDir(getActivity()).getAbsolutePath());
+            String logDir = StorageUtils.getLogDir(getActivity()).getPath() + File.separator;
+            preference.setSummary(logDir);
             XLog.setLogLevel(Level.TRACE);
         } else {
             XLog.setLogLevel(Level.INFO);
@@ -337,7 +346,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             if (TextUtils.isEmpty(mMsgBody)) {
                 msg.obj = "";
             } else {
-                msg.obj = VerificationUtils.parseVerificationCodeIfExists(mContext, mMsgBody);
+                msg.obj = SmsCodeUtils.parseSmsCodeIfExists(mContext, mMsgBody);
             }
             mHandler.sendMessage(msg);
         }

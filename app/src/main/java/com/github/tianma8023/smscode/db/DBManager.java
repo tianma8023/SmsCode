@@ -2,12 +2,13 @@ package com.github.tianma8023.smscode.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 
 import com.github.tianma8023.smscode.entity.DaoMaster;
 import com.github.tianma8023.smscode.entity.DaoSession;
 import com.github.tianma8023.smscode.entity.SmsCodeRule;
 import com.github.tianma8023.smscode.entity.SmsCodeRuleDao;
+import com.github.tianma8023.smscode.entity.SmsMsg;
+import com.github.tianma8023.smscode.entity.SmsMsgDao;
 
 import org.greenrobot.greendao.AbstractDao;
 
@@ -25,13 +26,13 @@ public class DBManager {
     private DaoSession mDaoSession;
 
     private DBManager(Context context) {
-        DaoMaster.DevOpenHelper dbOpenHelper =
-                new DaoMaster.DevOpenHelper(context.getApplicationContext(), DB_NAME);
-        SQLiteDatabase database = dbOpenHelper.getWritableDatabase();
+        TSQLiteOpenHelper openHelper =
+                new TSQLiteOpenHelper(context.getApplicationContext(), DB_NAME);
+        SQLiteDatabase database = openHelper.getWritableDatabase();
         mDaoSession = new DaoMaster(database).newSession();
     }
 
-    public static DBManager get(@NonNull Context context) {
+    public static DBManager get(Context context) {
         if (sInstance == null) {
             synchronized (DBManager.class) {
                 if (sInstance == null) {
@@ -75,6 +76,10 @@ public class DBManager {
         abstractDao.deleteAll();
     }
 
+    private <T> List<T> queryAll(Class<T> entityClass) {
+        return mDaoSession.queryBuilder(entityClass).list();
+    }
+
     public long addSmsCodeRule(SmsCodeRule smsCodeRule) {
         return addEntity(SmsCodeRule.class, smsCodeRule);
     }
@@ -88,7 +93,7 @@ public class DBManager {
     }
 
     public List<SmsCodeRule> queryAllSmsCodeRules() {
-        return mDaoSession.queryBuilder(SmsCodeRule.class).list();
+        return queryAll(SmsCodeRule.class);
     }
 
     public List<SmsCodeRule> querySmsCodeRules(SmsCodeRule criteria) {
@@ -101,7 +106,7 @@ public class DBManager {
                 ).list();
     }
 
-    public boolean isExist(SmsCodeRule codeRule) {
+    public boolean isSmsCodeRuleExists(SmsCodeRule codeRule) {
         return !querySmsCodeRules(codeRule).isEmpty();
     }
 
@@ -111,5 +116,15 @@ public class DBManager {
 
     public void removeAllSmsCodeRules() {
         removeAll(SmsCodeRule.class);
+    }
+
+    public void addSmsMsg(SmsMsg smsMsg) {
+        addEntity(SmsMsg.class, smsMsg);
+    }
+
+    public List<SmsMsg> queryAllSmsMsg() {
+        return mDaoSession.queryBuilder(SmsMsg.class)
+                .orderDesc(SmsMsgDao.Properties.Date)
+                .list();
     }
 }

@@ -14,7 +14,7 @@ import android.provider.Telephony;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
-import com.github.tianma8023.smscode.entity.SmsMessageData;
+import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
@@ -134,13 +134,13 @@ public class SmsObserveService extends Service {
                 String body = cursor.getString(cursor.getColumnIndex(Telephony.Sms.BODY));
                 long date = cursor.getLong(cursor.getColumnIndex(Telephony.Sms.DATE));
 
-                SmsMessageData smsMessageData = new SmsMessageData();
-                smsMessageData.setSender(sender);
-                smsMessageData.setBody(body);
-                smsMessageData.setDate(date);
+                SmsMsg smsMsg = new SmsMsg();
+                smsMsg.setSender(sender);
+                smsMsg.setBody(body);
+                smsMsg.setDate(date);
 
                 Intent smsCodeHandleSvc = new Intent(this, SmsCodeHandleService.class);
-                smsCodeHandleSvc.putExtra(SmsCodeHandleService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMessageData);
+                smsCodeHandleSvc.putExtra(SmsCodeHandleService.EXTRA_KEY_SMS_MESSAGE_DATA, smsMsg);
                 ContextCompat.startForegroundService(this, smsCodeHandleSvc);
             }
         }

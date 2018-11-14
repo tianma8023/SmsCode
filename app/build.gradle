@@ -71,7 +71,7 @@ android {
                 def fileName = ""
                 if (variant.buildType.name == 'release') {
                     fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_r.apk"
-                } else if(variant.buildType.name == 'debug'){
+                } else if (variant.buildType.name == 'debug') {
                     fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_d.apk"
                 }
                 outputFileName = fileName
@@ -91,9 +91,14 @@ android {
     }
 
     productFlavors.all { flavor ->
-        flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME:name]
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME: name]
     }
 }
+
+greendao {
+    schemaVersion 3
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -105,6 +110,7 @@ dependencies {
     implementation 'com.android.support:customtabs:28.0.0' // custom tabs
     implementation 'com.android.support:preference-v7:28.0.0' // preference support
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -135,10 +141,13 @@ dependencies {
 
     // EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
-    
+
     // GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
+    // GreenDao Upgrade Helper
+    implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
+
 }

@@ -6,49 +6,49 @@
         android:title="@string/pref_general_title">
 
         <SwitchPreference
+            android:defaultValue="false"
             android:icon="@drawable/ic_lock_open"
             android:key="@string/pref_enable"
-            android:title="@string/pref_enable_title"
-            android:summaryOn="@string/pref_enable_summary_on"
             android:summaryOff="@string/pref_enable_summary_off"
-            android:defaultValue="false"/>
+            android:summaryOn="@string/pref_enable_summary_on"
+            android:title="@string/pref_enable_title"/>
 
         <ListPreference
-            android:icon="@drawable/ic_detect"
-            android:key="@string/pref_listen_mode"
-            android:title="@string/pref_listen_mode_title"
+            android:defaultValue="@string/listen_mode_standard"
+            android:dependency="@string/pref_enable"
             android:entries="@array/pref_listen_mode_entries"
             android:entryValues="@array/pref_listen_mode_entryValues"
-            android:dependency="@string/pref_enable"
-            android:defaultValue="@string/listen_mode_standard" />
+            android:icon="@drawable/ic_detect"
+            android:key="@string/pref_listen_mode"
+            android:title="@string/pref_listen_mode_title"/>
 
         <SwitchPreference
+            android:defaultValue="true"
+            android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_toast"
             android:key="@string/pref_show_toast"
-            android:title="@string/pref_show_toast_title"
             android:summary="@string/pref_show_toast_summary"
-            android:dependency="@string/pref_enable"
-            android:defaultValue="true"/>
+            android:title="@string/pref_show_toast_title"/>
 
         <SwitchPreference
+            android:defaultValue="true"
+            android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_copy"
             android:key="@string/pref_copy_to_clipboard"
-            android:title="@string/pref_copy_to_clipboard_title"
             android:summary="@string/pref_copy_to_clipboard_summary"
-            android:defaultValue="true"
-            android:dependency="@string/pref_enable"/>
+            android:title="@string/pref_copy_to_clipboard_title"/>
 
         <Preference
+            android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_automatic"
             android:key="@string/pref_entry_auto_input_code"
-            android:dependency="@string/pref_enable"
-            android:title="@string/pref_entry_auto_input_code_title"
-            android:summary="@string/pref_entry_auto_input_code_summary" />
+            android:summary="@string/pref_entry_auto_input_code_summary"
+            android:title="@string/pref_entry_auto_input_code_title"/>
 
         <Preference
             android:icon="@drawable/ic_palette"
             android:key="@string/pref_choose_theme"
-            android:title="@string/pref_choose_theme_title" />
+            android:title="@string/pref_choose_theme_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -56,68 +56,75 @@
         android:title="@string/pref_experimental_title">
 
         <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_mark_as_read"
             android:key="@string/pref_mark_as_read"
-            android:title="@string/pref_mark_as_read_title"
             android:summary="@string/pref_mark_as_read_summary"
-            android:dependency="@string/pref_enable"
-            android:defaultValue="false" />
+            android:title="@string/pref_mark_as_read_title"/>
 
         <SwitchPreference
+            android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_delete"
             android:key="@string/pref_delete_sms"
-            android:title="@string/pref_delete_sms_title"
             android:summary="@string/pref_delete_sms_summary"
-            android:dependency="@string/pref_enable"/>
+            android:title="@string/pref_delete_sms_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_smscode_title">
 
         <com.github.tianma8023.smscode.preference.ResetEditPreference
+            android:defaultValue="@string/default_smscode_keywords"
+            android:hint="@string/code_keywords_hint"
             android:icon="@drawable/ic_key_words"
             android:key="@string/pref_smscode_keywords"
-            android:title="@string/pref_smscode_keywords_title"
-            android:summary="@string/pref_smscode_keywords_summary"
-            android:hint="@string/code_keywords_hint"
             android:negativeButtonText="@string/reset"
-            android:defaultValue="@string/default_smscode_keywords"/>
+            android:summary="@string/pref_smscode_keywords_summary"
+            android:title="@string/pref_smscode_keywords_title"/>
 
         <Preference
             android:icon="@drawable/ic_rules"
             android:key="@string/pref_code_rules"
-            android:title="@string/pref_code_rules_title"
             android:persistent="false"
-            android:summary="@string/pref_code_rules_summary"/>
+            android:summary="@string/pref_code_rules_summary"
+            android:title="@string/pref_code_rules_title"/>
 
         <Preference
+            android:hint="@string/sms_content_hint"
             android:icon="@drawable/ic_test"
             android:key="@string/pref_smscode_test"
-            android:title="@string/pref_smscode_test_title"
-            android:summary="@string/pref_smscode_test_summary"
-            android:hint="@string/sms_content_hint"
+            android:persistent="false"
             android:positiveButtonText="@string/test"
-            android:persistent="false"/>
+            android:summary="@string/pref_smscode_test_summary"
+            android:title="@string/pref_smscode_test_title"/>
+
+        <Preference
+            android:icon="@drawable/ic_records"
+            android:key="@string/pref_entry_code_records"
+            android:persistent="false"
+            android:summary="@string/pref_entry_code_records_summary"
+            android:title="@string/pref_entry_code_records_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/pref_others_title"
-        android:key="@string/pref_others">
+        android:key="@string/pref_others"
+        android:title="@string/pref_others_title">
 
         <SwitchPreference
+            android:defaultValue="true"
             android:icon="@drawable/ic_recently"
             android:key="@string/pref_exclude_from_recents"
-            android:title="@string/pref_exclude_from_recents_title"
-            android:defaultValue="true" />
+            android:title="@string/pref_exclude_from_recents_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_debug_title">
         <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_log"
             android:key="@string/pref_verbose_log_mode"
-            android:title="@string/pref_verbose_log_mode_title"
             android:summaryOff="@string/pref_verbose_log_mode_summary_off"
-            android:dependency="@string/pref_enable"
-            android:defaultValue="false"/>
+            android:title="@string/pref_verbose_log_mode_title"/>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -127,14 +134,14 @@
         <Preference
             android:icon="@drawable/ic_info"
             android:key="@string/pref_version"
-            android:title="@string/pref_version_title"
-            android:summary="@string/pref_version_summary"/>
+            android:summary="@string/pref_version_summary"
+            android:title="@string/pref_version_title"/>
 
         <Preference
             android:icon="@drawable/ic_source_code"
             android:key="@string/pref_source_code"
-            android:title="@string/pref_source_code_title"
-            android:summary="@string/pref_source_code_summary" />
+            android:summary="@string/pref_source_code_summary"
+            android:title="@string/pref_source_code_title"/>
 
         <Preference
             android:icon="@drawable/ic_alipay"
