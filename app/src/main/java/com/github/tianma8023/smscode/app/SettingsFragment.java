@@ -74,6 +74,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERSION;
+import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_COUNT_DEFAILT;
 
 /**
  * 首选项Fragment
@@ -126,7 +127,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
         findPreference(KEY_CODE_RULES).setOnPreferenceClickListener(this);
-        findPreference(KEY_ENTRY_CODE_RECORDS).setOnPreferenceClickListener(this);
+
+        Preference recordsEntryPref = findPreference(KEY_ENTRY_CODE_RECORDS);
+        recordsEntryPref.setOnPreferenceClickListener(this);
+        initRecordEntryPreference(recordsEntryPref);
 
         Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
@@ -567,5 +571,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         if (!handled) {
             super.onDisplayPreferenceDialog(preference);
         }
+    }
+
+    private void initRecordEntryPreference(Preference preference) {
+        String summary = getString(R.string.pref_entry_code_records_summary, MAX_SMS_RECORDS_COUNT_DEFAILT);
+        preference.setSummary(summary);
     }
 }

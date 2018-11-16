@@ -32,10 +32,12 @@ import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ClipboardUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
-import com.github.tianma8023.smscode.utils.StringUtils;
 import com.github.tianma8023.smscode.utils.SmsCodeUtils;
+import com.github.tianma8023.smscode.utils.StringUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -192,6 +194,16 @@ public class SmsCodeHandleService extends IntentService {
             DBManager dm = DBManager.get(this);
             dm.addSmsMsg(smsMsg);
             XLog.d("add SMS message record succeed");
+
+            List<SmsMsg> smsMsgList = dm.queryAllSmsMsg();
+            if (smsMsgList.size() > PrefConst.MAX_SMS_RECORDS_COUNT_DEFAILT) {
+                List<SmsMsg> outdatedMsgList = new ArrayList<>();
+                for (int i = PrefConst.MAX_SMS_RECORDS_COUNT_DEFAILT; i < smsMsgList.size(); i++) {
+                    outdatedMsgList.add(smsMsgList.get(i));
+                }
+                dm.removeSmsMsgList(outdatedMsgList);
+                XLog.d("Remove outdated SMS message records succeed");
+            }
         } catch (Exception e) {
             XLog.e("add SMS message record failed", e);
         }

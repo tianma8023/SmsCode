@@ -70,4 +70,6 @@ public interface PrefConst {
 
     String KEY_VERBOSE_LOG_MODE = "pref_verbose_log_mode";
     boolean VERBOSE_LOG_MODE_DEFAULT = false;
+
+    int MAX_SMS_RECORDS_COUNT_DEFAILT = 10;
 }

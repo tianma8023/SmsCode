@@ -66,8 +66,8 @@
     <string name="pref_delete_sms_summary">警告：擷取成功后將簡訊刪除</string>
     <string name="pref_copy_to_clipboard_title">拷貝到剪切板</string>
     <string name="pref_copy_to_clipboard_summary">擷取成功后拷貝驗證碼到系統剪切板</string>
-    <string name="pref_entry_code_records_title">驗證碼記錄</string>
-    <string name="pref_entry_code_records_summary">驗證碼歷史記錄</string>
+    <string name="pref_entry_code_records_title">驗證碼歷史記錄</string>
+    <string name="pref_entry_code_records_summary">最多保留%d條記錄</string>
     <string name="smscode_records">驗證碼記錄</string>
     <string name="edit_smscode_records">編輯驗證碼記錄</string>
     <string name="prompt_sms_code_copied">已複製驗證碼: %s</string>
