@@ -8,6 +8,8 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.util.Objects;
+
 @Entity
 public class SmsMsg implements Parcelable {
 
@@ -144,5 +146,18 @@ public class SmsMsg implements Parcelable {
                 ", company='" + company + '\'' +
                 ", smsCode='" + smsCode + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SmsMsg)) return false;
+        SmsMsg smsMsg = (SmsMsg) o;
+        return Objects.equals(id, smsMsg.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -167,18 +167,24 @@ public class CodeRecordAdapter extends RecyclerView.Adapter<CodeRecordAdapter.VH
     public void addItems(List<SmsMsg> smsMsgList) {
         List<RecordItem> itemsToAdd = new ArrayList<>();
         for (SmsMsg msg : smsMsgList) {
-            itemsToAdd.add(new RecordItem(msg, false));
-        }
-        mRecords.addAll(itemsToAdd);
-        Collections.sort(mRecords, new Comparator<RecordItem>() {
-            @Override
-            public int compare(RecordItem o1, RecordItem o2) {
-                long date1 = o1.getSmsMsg().getDate();
-                long date2 = o2.getSmsMsg().getDate();
-                return Long.compare(date2, date1);
+            RecordItem item = new RecordItem(msg, false);
+            if (!mRecords.contains(item)) {
+                itemsToAdd.add(item);
             }
-        });
-        notifyDataSetChanged();
+        }
+
+        if (!itemsToAdd.isEmpty()) {
+            mRecords.addAll(itemsToAdd);
+            Collections.sort(mRecords, new Comparator<RecordItem>() {
+                @Override
+                public int compare(RecordItem o1, RecordItem o2) {
+                    long date1 = o1.getSmsMsg().getDate();
+                    long date2 = o2.getSmsMsg().getDate();
+                    return Long.compare(date2, date1);
+                }
+            });
+            notifyDataSetChanged();
+        }
     }
 
 }

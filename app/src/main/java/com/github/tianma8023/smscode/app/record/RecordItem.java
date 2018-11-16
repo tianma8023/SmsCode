@@ -2,6 +2,8 @@ package com.github.tianma8023.smscode.app.record;
 
 import com.github.tianma8023.smscode.entity.SmsMsg;
 
+import java.util.Objects;
+
 public class RecordItem {
 
     private SmsMsg smsMsg;
@@ -30,5 +32,18 @@ public class RecordItem {
                 "smsMsg=" + smsMsg +
                 ", selected=" + selected +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RecordItem)) return false;
+        RecordItem item = (RecordItem) o;
+        return Objects.equals(smsMsg, item.smsMsg);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(smsMsg);
     }
 }

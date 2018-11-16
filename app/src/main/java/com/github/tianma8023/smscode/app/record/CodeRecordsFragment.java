@@ -48,6 +48,9 @@ public class CodeRecordsFragment extends BackPressFragment {
     @BindView(R.id.code_records_recycler_view)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.empty_view)
+    View mEmptyView;
+
     private CodeRecordAdapter mCodeRecordAdapter;
 
     private @RecordMode
@@ -77,11 +80,7 @@ public class CodeRecordsFragment extends BackPressFragment {
 
         mActivity = getActivity();
 
-        List<SmsMsg> smsMsgList = DBManager.get(mActivity).queryAllSmsMsg();
         List<RecordItem> records = new ArrayList<>();
-        for (SmsMsg smsMsg : smsMsgList) {
-            records.add(new RecordItem(smsMsg, false));
-        }
 
         mCodeRecordAdapter = new CodeRecordAdapter(mActivity, records);
         mCodeRecordAdapter.setItemCallback(new BaseItemCallback<RecordItem>() {
@@ -95,9 +94,34 @@ public class CodeRecordsFragment extends BackPressFragment {
                 return itemLongClicked(item, position);
             }
         });
+        mCodeRecordAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                refreshEmptyView();
+            }
+        });
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mRecyclerView.setAdapter(mCodeRecordAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshData();
+    }
+
+    private void refreshData() {
+        List<SmsMsg> smsMsgList = DBManager.get(mActivity).queryAllSmsMsg();
+        mCodeRecordAdapter.addItems(smsMsgList);
+    }
+
+    private void refreshEmptyView() {
+        if (mCodeRecordAdapter.getItemCount() > 0) {
+            mEmptyView.setVisibility(View.GONE);
+        } else {
+            mEmptyView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void itemClicked(RecordItem item, int position) {
