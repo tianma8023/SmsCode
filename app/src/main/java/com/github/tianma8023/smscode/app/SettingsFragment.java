@@ -74,7 +74,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERSION;
-import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_COUNT_DEFAILT;
+import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT;
 
 /**
  * 首选项Fragment
@@ -574,7 +574,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void initRecordEntryPreference(Preference preference) {
-        String summary = getString(R.string.pref_entry_code_records_summary, MAX_SMS_RECORDS_COUNT_DEFAILT);
+        String summary = getString(R.string.pref_entry_code_records_summary, MAX_SMS_RECORDS_COUNT_DEFAULT);
         preference.setSummary(summary);
     }
 }

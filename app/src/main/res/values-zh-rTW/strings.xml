@@ -68,12 +68,14 @@
     <string name="pref_copy_to_clipboard_summary">擷取成功后拷貝驗證碼到系統剪切板</string>
     <string name="pref_entry_code_records_title">驗證碼歷史記錄</string>
     <string name="pref_entry_code_records_summary">最多保留%d條記錄</string>
+    <string name="pref_code_records_title">簡訊驗證碼記錄</string>
     <string name="smscode_records">驗證碼記錄</string>
     <string name="edit_smscode_records">編輯驗證碼記錄</string>
     <string name="prompt_sms_code_copied">已複製驗證碼: %s</string>
     <string name="action_delete">刪除</string>
     <string name="action_select_all">全選</string>
     <string name="some_items_removed">已刪除%d項記錄</string>
+    <string name="pref_enable_code_records_title">啟用驗證碼記錄</string>
     <!-- preferences end -->
 
     <!-- Auto input mode -->

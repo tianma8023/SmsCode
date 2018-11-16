@@ -190,15 +190,21 @@ public class SmsCodeHandleService extends IntentService {
         smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
         smsMsg.setSmsCode(smsCode);
 
+        if (SPUtils.recordSmsCodeEnabled(this)) {
+            recordSmsMsg(smsMsg);
+        }
+    }
+
+    private void recordSmsMsg(SmsMsg smsMsg) {
         try {
             DBManager dm = DBManager.get(this);
             dm.addSmsMsg(smsMsg);
             XLog.d("add SMS message record succeed");
 
             List<SmsMsg> smsMsgList = dm.queryAllSmsMsg();
-            if (smsMsgList.size() > PrefConst.MAX_SMS_RECORDS_COUNT_DEFAILT) {
+            if (smsMsgList.size() > PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT) {
                 List<SmsMsg> outdatedMsgList = new ArrayList<>();
-                for (int i = PrefConst.MAX_SMS_RECORDS_COUNT_DEFAILT; i < smsMsgList.size(); i++) {
+                for (int i = PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT; i < smsMsgList.size(); i++) {
                     outdatedMsgList.add(smsMsgList.get(i));
                 }
                 dm.removeSmsMsgList(outdatedMsgList);

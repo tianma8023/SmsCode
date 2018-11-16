@@ -240,4 +240,12 @@ public class SPUtils {
         return PreferenceUtils.getBoolean(context,
                 PrefConst.KEY_MANUAL_FOCUS_IF_FAILED, PrefConst.MANUAL_FOCUS_IF_FAILED_DEFAULT);
     }
+
+    /**
+     * 是否记录短信验证码
+     */
+    public static boolean recordSmsCodeEnabled(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                PrefConst.KEY_ENABLE_CODE_RECORDS, PrefConst.ENABLE_CODE_RECORDS_DEFAULT);
+    }
 }
