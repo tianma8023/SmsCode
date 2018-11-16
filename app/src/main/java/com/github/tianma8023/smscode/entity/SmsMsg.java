@@ -4,19 +4,30 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class SmsMsg implements Parcelable {
 
+    @Id(autoincrement = true)
+    private Long id;
+
     // Sender
+    @Transient
     private String sender;
+
     // Message content
+    @Transient
     private String body;
+
     // Receive date
     private long date;
+
     // Company
     private String company;
+
     // SMS Code
     private String smsCode;
 
@@ -24,6 +35,11 @@ public class SmsMsg implements Parcelable {
     }
 
     private SmsMsg(Parcel source) {
+        if (source.readByte() == 0) {
+            id = null;
+        } else {
+            id = source.readLong();
+        }
         sender = source.readString();
         body = source.readString();
         date = source.readLong();
@@ -31,11 +47,9 @@ public class SmsMsg implements Parcelable {
         smsCode = source.readString();
     }
 
-    @Generated(hash = 1966110634)
-    public SmsMsg(String sender, String body, long date, String company,
-            String smsCode) {
-        this.sender = sender;
-        this.body = body;
+    @Generated(hash = 1194418112)
+    public SmsMsg(Long id, long date, String company, String smsCode) {
+        this.id = id;
         this.date = date;
         this.company = company;
         this.smsCode = smsCode;
@@ -88,11 +102,25 @@ public class SmsMsg implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(id);
+        }
         dest.writeString(sender);
         dest.writeString(body);
         dest.writeLong(date);
         dest.writeString(company);
         dest.writeString(smsCode);
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public static final Creator<SmsMsg> CREATOR = new Creator<SmsMsg>() {
@@ -107,4 +135,14 @@ public class SmsMsg implements Parcelable {
             return new SmsMsg[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "SmsMsg{" +
+                "id=" + id +
+                ", date=" + date +
+                ", company='" + company + '\'' +
+                ", smsCode='" + smsCode + '\'' +
+                '}';
+    }
 }

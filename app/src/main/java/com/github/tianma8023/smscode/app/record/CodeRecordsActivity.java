@@ -1,4 +1,4 @@
-package com.github.tianma8023.smscode.app.history;
+package com.github.tianma8023.smscode.app.record;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.BaseActivity;
+import com.github.tianma8023.smscode.app.base.BackPressEventDispatchHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,5 +60,12 @@ public class CodeRecordsActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!BackPressEventDispatchHelper.dispatchBackPressedEvent(this)) {
+            super.onBackPressed();
+        }
     }
 }

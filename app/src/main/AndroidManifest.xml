@@ -74,7 +74,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".app.history.CodeRecordsActivity"
+            android:name=".app.record.CodeRecordsActivity"
             android:label="@string/smscode_records"/>
 
         <service

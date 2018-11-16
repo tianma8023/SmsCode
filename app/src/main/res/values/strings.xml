@@ -67,6 +67,11 @@
     <string name="pref_entry_code_records_title">SMS code list</string>
     <string name="pref_entry_code_records_summary">Records of SMS code</string>
     <string name="smscode_records">Code Records</string>
+    <string name="edit_smscode_records">Edit Code Records</string>
+    <string name="prompt_sms_code_copied">Sms Code copied: %s</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_select_all">Select All</string>
+    <string name="some_items_removed">Removed %d record(s)</string>
     <!-- preferences end -->
 
     <!-- Auto input mode -->

@@ -71,6 +71,12 @@ public class DBManager {
         abstractDao.delete(entity);
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> void removeEntities(Class<T> entityClass, List<T> entities) {
+        AbstractDao abstractDao = getAbstractDao(entityClass);
+        abstractDao.deleteInTx(entities);
+    }
+
     private <T> void removeAll(Class<T> entityClass) {
         AbstractDao abstractDao = getAbstractDao(entityClass);
         abstractDao.deleteAll();
@@ -122,9 +128,17 @@ public class DBManager {
         addEntity(SmsMsg.class, smsMsg);
     }
 
+    public void addSmsMsgList(List<SmsMsg> smsMsgList) {
+        addEntities(SmsMsg.class, smsMsgList);
+    }
+
     public List<SmsMsg> queryAllSmsMsg() {
         return mDaoSession.queryBuilder(SmsMsg.class)
                 .orderDesc(SmsMsgDao.Properties.Date)
                 .list();
+    }
+
+    public void removeSmsMsgList(List<SmsMsg> smsMsgList) {
+        removeEntities(SmsMsg.class, smsMsgList);
     }
 }

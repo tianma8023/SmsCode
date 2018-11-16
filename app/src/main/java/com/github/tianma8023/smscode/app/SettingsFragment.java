@@ -31,7 +31,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.app.history.CodeRecordsActivity;
+import com.github.tianma8023.smscode.app.record.CodeRecordsActivity;
 import com.github.tianma8023.smscode.app.rule.CodeRulesActivity;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.constant.Const;
