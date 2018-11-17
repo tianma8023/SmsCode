@@ -237,7 +237,7 @@ public class SmsCodeUtils {
      * @return company info if it exists, otherwise return empty string
      */
     public static String parseCompany(String content) {
-        String regex = "((?<=【)(.*)(?=】))|((?<=[)(.*)(?=]))";
+        String regex = "((?<=【)(.*)(?=】))|((?<=\\[)(.*)(?=\\]))";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(content);
         List<String> possibleCompanies = new ArrayList<>();
