@@ -1,4 +1,7 @@
 # Update Logs
+- 19.11.17 v1.5.0
+  1. Add configurable options: retain SMS code records.
+  2. Add App shortcuts
 - 19.10.30 v1.4.2
   1. Bug fix: crash when auto input.
 - 18.10.27 v1.4.1
