@@ -165,7 +165,7 @@
     <string name="rule_keyword_empty_hint">请输入验证码关键字</string>
     <string name="rule_code_regex_empty_hint">请输入验证码正则表达式</string>
     <string name="rule_duplicated_prompt">此规则已存在,请重新编辑或退出编辑</string>
-    <string name="rule_list">规则列表</string>
+    <string name="rule_list">验证码规则</string>
     <string name="create_rule">新建规则</string>
     <string name="edit_rule">编辑规则</string>
     <string name="import_succeed">导入成功</string>

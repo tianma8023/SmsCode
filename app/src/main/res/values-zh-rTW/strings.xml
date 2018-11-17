@@ -190,7 +190,7 @@
     <string name="rule_keyword_empty_hint">請輸入驗證碼關鍵字</string>
     <string name="rule_code_regex_empty_hint">請輸入驗證碼正則表達式</string>
     <string name="rule_duplicated_prompt">此規則已存在，請重新編輯或退出</string>
-    <string name="rule_list">規則列表</string>
+    <string name="rule_list">驗證碼規則</string>
     <string name="create_rule">新建規則</string>
     <string name="edit_rule">編輯規則</string>
     <string name="import_succeed">導入成功</string>
