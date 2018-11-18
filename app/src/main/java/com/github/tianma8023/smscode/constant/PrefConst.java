@@ -40,7 +40,6 @@ public interface PrefConst {
     String SMSCODE_KEYWORDS_DEFAULT = SmsCodeConst.VERIFICATION_KEYWORDS_REGEX;
     String KEY_SMSCODE_TEST = "pref_smscode_test";
     String KEY_CODE_RULES = "pref_code_rules";
-    String KEY_ENTRY_CODE_RECORDS = "pref_entry_code_records";
 
     String KEY_OTHERS = "pref_others";
     String KEY_EXCLUDE_FROM_RECENTS = "pref_exclude_from_recents";
@@ -74,4 +73,5 @@ public interface PrefConst {
     String KEY_ENABLE_CODE_RECORDS = "pref_enable_code_records";
     boolean ENABLE_CODE_RECORDS_DEFAULT = true;
     int MAX_SMS_RECORDS_COUNT_DEFAULT = 10;
+    String KEY_ENTRY_CODE_RECORDS = "pref_entry_code_records";
 }

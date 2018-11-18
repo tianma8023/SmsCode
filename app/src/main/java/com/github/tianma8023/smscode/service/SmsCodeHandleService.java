@@ -187,10 +187,10 @@ public class SmsCodeHandleService extends IntentService {
             }
         }
 
-        smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
-        smsMsg.setSmsCode(smsCode);
-
         if (SPUtils.recordSmsCodeEnabled(this)) {
+            smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
+            smsMsg.setSmsCode(smsCode);
+
             recordSmsMsg(smsMsg);
         }
     }
