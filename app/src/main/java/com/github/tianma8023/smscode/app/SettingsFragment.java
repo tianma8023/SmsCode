@@ -42,10 +42,11 @@ import com.github.tianma8023.smscode.utils.AppOpsUtils;
 import com.github.tianma8023.smscode.utils.PackageUtils;
 import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
+import com.github.tianma8023.smscode.utils.SettingsUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
+import com.github.tianma8023.smscode.utils.SmsCodeUtils;
 import com.github.tianma8023.smscode.utils.StorageUtils;
 import com.github.tianma8023.smscode.utils.Utils;
-import com.github.tianma8023.smscode.utils.SmsCodeUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
 import com.github.tianma8023.smscode.utils.rom.RomUtils;
@@ -59,6 +60,7 @@ import java.util.List;
 
 import ch.qos.logback.classic.Level;
 
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_BLOCK_NOTIFICATION;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CODE_RULES;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DELETE_SMS;
@@ -112,50 +114,72 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         addPreferencesFromResource(R.xml.settings);
 
+        // general groups
         mEnablePref = (SwitchPreference) findPreference(PrefConst.KEY_ENABLE);
         mEnablePref.setOnPreferenceChangeListener(this);
-        // verbose log preference
-        SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
-        verboseLogPref.setOnPreferenceChangeListener(this);
+
         // listen mode preference
         ListPreference listenModePref = (ListPreference) findPreference(KEY_LISTEN_MODE);
         listenModePref.setOnPreferenceChangeListener(this);
+        mCurListenMode = listenModePref.getValue();
+        refreshListenModePreference(listenModePref, mCurListenMode);
 
-        findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
-        findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
-        // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
-        findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
+        findPreference(KEY_BLOCK_NOTIFICATION).setOnPreferenceChangeListener(this);
+
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
-        findPreference(KEY_CODE_RULES).setOnPreferenceClickListener(this);
-
-        Preference recordsEntryPref = findPreference(KEY_ENTRY_CODE_RECORDS);
-        recordsEntryPref.setOnPreferenceClickListener(this);
-        initRecordEntryPreference(recordsEntryPref);
 
         Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
+        // general groups end
 
+
+        // experimental groups
         findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
         findPreference(KEY_DELETE_SMS).setOnPreferenceChangeListener(this);
+        // experimental groups end
 
+
+        // code message group
+        findPreference(KEY_CODE_RULES).setOnPreferenceClickListener(this);
+        findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
+        // code message group end
+
+
+        // code records group
+        Preference recordsEntryPref = findPreference(KEY_ENTRY_CODE_RECORDS);
+        recordsEntryPref.setOnPreferenceClickListener(this);
+        initRecordEntryPreference(recordsEntryPref);
+        // code records group end
+
+
+        // others group
+        // exclude from recent apps preference
+        mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
+        mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
+
+
+        // verbose log preference
+        SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
+        verboseLogPref.setOnPreferenceChangeListener(this);
+        refreshVerboseLogPreference(verboseLogPref, verboseLogPref.isChecked());
+        // others group end
+
+
+        // about group
+        Preference versionPref = findPreference(KEY_VERSION);
+        refreshVersionInfoPreference(versionPref);
+
+        findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
+
+        findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
+
+        // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
         // Hide donate by wechat preference item
         Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
         PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(PrefConst.KEY_ABOUT);
         aboutGroup.removePreference(donateByWechat);
-
-        mCurListenMode = listenModePref.getValue();
-        refreshListenModePreference(listenModePref, mCurListenMode);
-
-        refreshVerboseLogPreference(verboseLogPref, verboseLogPref.isChecked());
-
-        // version info preference
-        Preference versionPref = findPreference(KEY_VERSION);
-        showVersionInfo(versionPref);
-
-        // exclude from recents preference
-        mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
-        mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
+        // about group end
     }
 
     @Override
@@ -234,7 +258,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         return true;
     }
 
-    private void showVersionInfo(Preference preference) {
+    private void refreshVersionInfoPreference(Preference preference) {
         String summary = getString(R.string.pref_version_summary,
                 BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
         preference.setSummary(summary);
@@ -292,7 +316,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break;
             }
             case KEY_MARK_AS_READ:
-                showAppOpsPrompt((SwitchPreference) preference, (Boolean)newValue);
+                showAppOpsPrompt((SwitchPreference) preference, (Boolean) newValue);
                 break;
             case KEY_DELETE_SMS:
                 showAppOpsPrompt((SwitchPreference) preference, (Boolean) newValue);
@@ -302,6 +326,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break;
             case KEY_EXCLUDE_FROM_RECENTS:
                 onExcludeFromRecentsSwitched((Boolean) newValue);
+                break;
+            case KEY_BLOCK_NOTIFICATION:
+                onBlockNotificationSwitched((SwitchPreference) preference, (Boolean) newValue);
                 break;
             default:
                 return false;
@@ -576,5 +603,31 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     private void initRecordEntryPreference(Preference preference) {
         String summary = getString(R.string.pref_entry_code_records_summary, MAX_SMS_RECORDS_COUNT_DEFAULT);
         preference.setSummary(summary);
+    }
+
+    private void onBlockNotificationSwitched(final SwitchPreference switchPref, boolean on) {
+        if (!on)
+            return;
+        if (!SettingsUtils.checkNotificationListenerEnabled(mActivity)) {
+            MaterialDialog dialog = new MaterialDialog.Builder(mActivity)
+                    .title(R.string.permission_requirement)
+                    .content(R.string.notification_access_prompt_content)
+                    .positiveText(R.string.go_to_open)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            SettingsUtils.gotoNotificationListenerSettings(mActivity);
+                        }
+                    })
+                    .negativeText(R.string.cancel)
+                    .cancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            switchPref.setChecked(false);
+                        }
+                    })
+                    .build();
+            dialog.show();
+        }
     }
 }

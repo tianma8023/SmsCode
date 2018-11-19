@@ -24,6 +24,9 @@ public interface PrefConst {
     String KEY_COPY_TO_CLIPBOARD = "pref_copy_to_clipboard";
     boolean COPY_TO_CLIPBOARD_DEFAULT = true;
 
+    String KEY_BLOCK_NOTIFICATION = "pref_block_notification";
+    boolean BLOCK_NOTIFICATION_DEFAULT = false;
+
     String KEY_CHOOSE_THEME = "pref_choose_theme";
     String KEY_CURRENT_THEME_INDEX = "pref_current_theme_index";
     int CURRENT_THEME_INDEX_DEFAULT = 0;

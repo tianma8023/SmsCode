@@ -154,6 +154,10 @@ public class ShellUtils {
         return cmdResult.isSuccessful();
     }
 
+    /**
+     * Grant AppOpsManager WRITE_SMS permissions.
+     * @return
+     */
     public static boolean allowOpWriteSMS() {
         String cmd = "appops set " + BuildConfig.APPLICATION_ID + " WRITE_SMS allow";
         CommandResult cmdResult = Shell.SU.run(cmd);

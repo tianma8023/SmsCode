@@ -143,6 +143,8 @@ public class SmsCodeHandleService extends IntentService {
             return;
         }
 
+        smsMsg.setSmsCode(smsCode);
+
         mAutoInputEnabled = SPUtils.autoInputCodeEnabled(this);
         XLog.d("AutoInputEnabled: {}", mAutoInputEnabled);
 
@@ -189,9 +191,15 @@ public class SmsCodeHandleService extends IntentService {
 
         if (SPUtils.recordSmsCodeEnabled(this)) {
             smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
-            smsMsg.setSmsCode(smsCode);
 
             recordSmsMsg(smsMsg);
+        }
+
+        if (SPUtils.blockNotificationEnabled(this)) {
+            // cancel notification
+            Intent intent = new Intent(NotificationMonitorService.ACTION_CANCEL_NOTIFICATION);
+            intent.putExtra(NotificationMonitorService.EXTRA_KEY_SMS_MSG, smsMsg);
+            sendBroadcast(intent);
         }
     }
 
