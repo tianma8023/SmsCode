@@ -80,7 +80,12 @@ public class CodeRecordAdapter extends RecyclerView.Adapter<CodeRecordAdapter.VH
 
         void bindData(RecordItem data, int position) {
             SmsMsg smsMsg = data.getSmsMsg();
-            mCompanyTv.setText(smsMsg.getCompany());
+            String company = smsMsg.getCompany();
+            if (company != null && company.trim().length() != 0) {
+                mCompanyTv.setText(smsMsg.getCompany());
+            } else {
+                mCompanyTv.setText(smsMsg.getSender());
+            }
             mSmsCodeTv.setText(smsMsg.getSmsCode());
             mDateTv.setText(mFormat.format(new Date(smsMsg.getDate())));
             itemView.setSelected(data.isSelected());
