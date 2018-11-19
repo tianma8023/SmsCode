@@ -18,8 +18,9 @@ You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.g
 - Show toast when a SMS verification code is copied.
 - Custom keywords about verification code message (regular expressions allowed).
 - Custom SMS code match rules.
-- Mark verification code SMS as read.
-- Delete verification SMS when it been extracted successfully.
+- Mark verification code SMS as read (experimental).
+- Delete verification SMS when it been extracted successfully (experimental).
+- Block code SMS message notification (experimental).
 - Auto-input SMS code.
 - Various theme color to choose.
 

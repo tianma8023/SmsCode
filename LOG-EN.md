@@ -1,4 +1,7 @@
 # Update Logs
+- 18.11.19 v1.6.0
+  1. New experimental options: block code message notification
+  2. New theme color: teal.
 - 18.11.17 v1.5.0
   1. Add configurable options: retain SMS code records.
   2. Add App shortcuts.
