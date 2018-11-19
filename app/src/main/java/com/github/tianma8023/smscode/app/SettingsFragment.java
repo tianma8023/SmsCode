@@ -124,8 +124,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         mCurListenMode = listenModePref.getValue();
         refreshListenModePreference(listenModePref, mCurListenMode);
 
-        findPreference(KEY_BLOCK_NOTIFICATION).setOnPreferenceChangeListener(this);
-
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
 
         Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
@@ -136,6 +134,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         // experimental groups
         findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
+
+        findPreference(KEY_BLOCK_NOTIFICATION).setOnPreferenceChangeListener(this);
+
         findPreference(KEY_DELETE_SMS).setOnPreferenceChangeListener(this);
         // experimental groups end
 
