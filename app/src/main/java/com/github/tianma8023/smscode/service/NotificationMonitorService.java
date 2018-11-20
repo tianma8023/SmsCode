@@ -91,15 +91,16 @@ public class NotificationMonitorService extends NotificationListenerService {
             if (defaultSmsPkg.equals(sbn.getPackageName())) {
                 Notification notification = sbn.getNotification();
 
-                String title = notification.extras.getString(Notification.EXTRA_TITLE);
-                String text = notification.extras.getString(Notification.EXTRA_TEXT);
+                CharSequence title = notification.extras.getCharSequence(Notification.EXTRA_TITLE);
+                CharSequence text = notification.extras.getCharSequence(Notification.EXTRA_TEXT);
+
 
                 XLog.d("title = {}, text = {}", title, text);
                 boolean hit = false;
 
-                if (title != null && title.contains(sender)) {
+                if (title != null && title.toString().contains(sender)) {
                     hit = true;
-                } else if (text != null && (text.equals(smsBody) || text.contains(smsCode))) {
+                } else if (text != null && (text.equals(smsBody) || text.toString().contains(smsCode))) {
                     hit = true;
                 }
 

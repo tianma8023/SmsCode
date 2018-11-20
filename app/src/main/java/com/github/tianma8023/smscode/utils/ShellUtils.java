@@ -163,4 +163,15 @@ public class ShellUtils {
         CommandResult cmdResult = Shell.SU.run(cmd);
         return cmdResult.isSuccessful();
     }
+
+    /**
+     * cancel all notifications of given package
+     * @param packageName package name
+     * @return
+     */
+    public static boolean cancelAllNotifications(String packageName) {
+        String cmd = String.format("service call notification 1 s16 '%s'", packageName);
+        CommandResult cmdResult = Shell.SU.run(cmd);
+        return cmdResult.isSuccessful();
+    }
 }

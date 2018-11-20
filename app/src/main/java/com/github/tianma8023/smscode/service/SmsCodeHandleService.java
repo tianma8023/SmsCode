@@ -147,7 +147,6 @@ public class SmsCodeHandleService extends IntentService {
 
         mAutoInputEnabled = SPUtils.autoInputCodeEnabled(this);
         XLog.d("AutoInputEnabled: {}", mAutoInputEnabled);
-
         if (mAutoInputEnabled) {
             mFocusMode = SPUtils.getFocusMode(this);
             mIsAutoInputModeRoot = PrefConst.AUTO_INPUT_MODE_ROOT.equals(SPUtils.getAutoInputMode(this));
@@ -171,27 +170,26 @@ public class SmsCodeHandleService extends IntentService {
         Message copyMsg = new Message();
         copyMsg.obj = smsCode;
         copyMsg.what = MSG_SMSCODE_EXTRACTED;
-        innerHandler.sendMessage(copyMsg);
+        mMainHandler.sendMessage(copyMsg);
 
         if (SPUtils.deleteSmsEnabled(this)) {
             // delete sms
             Message deleteMsg = new Message();
             deleteMsg.obj = smsMsg;
             deleteMsg.what = MSG_DELETE_SMS;
-            innerHandler.sendMessageDelayed(deleteMsg, 100);
+            mMainHandler.sendMessageDelayed(deleteMsg, 100);
         } else {
             if (SPUtils.markAsReadEnabled(this)) {
                 // mark sms as read
                 Message markMsg = new Message();
                 markMsg.obj = smsMsg;
                 markMsg.what = MSG_MARK_AS_READ;
-                innerHandler.sendMessageDelayed(markMsg, 100);
+                mMainHandler.sendMessageDelayed(markMsg, 100);
             }
         }
 
         if (SPUtils.recordSmsCodeEnabled(this)) {
             smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
-
             recordSmsMsg(smsMsg);
         }
 
@@ -200,6 +198,14 @@ public class SmsCodeHandleService extends IntentService {
             Intent intent = new Intent(NotificationMonitorService.ACTION_CANCEL_NOTIFICATION);
             intent.putExtra(NotificationMonitorService.EXTRA_KEY_SMS_MSG, smsMsg);
             sendBroadcast(intent);
+//            final String defaultSmsPkg = SettingsUtils.getDefaultSmsAppPackage(this);
+//            mMainHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    boolean success = ShellUtils.cancelAllNotifications(defaultSmsPkg);
+//                    XLog.d("cancel notification by root: {}", success);
+//                }
+//            }, 1000);
         }
     }
 
@@ -223,7 +229,7 @@ public class SmsCodeHandleService extends IntentService {
         }
     }
 
-    private Handler innerHandler = new Handler(Looper.getMainLooper()) {
+    private Handler mMainHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
