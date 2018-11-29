@@ -1,4 +1,6 @@
 # Update Logs
+- 18.11.29 v1.6.1
+  1. Bug fix：code record company parse issue.
 - 18.11.21 v1.6.0
   1. New experimental options: block code message notification
   2. New theme color: teal.
