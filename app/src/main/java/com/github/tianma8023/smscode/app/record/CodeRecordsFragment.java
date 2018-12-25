@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.adapter.BaseItemCallback;
 import com.github.tianma8023.smscode.app.base.BackPressFragment;
@@ -128,8 +130,25 @@ public class CodeRecordsFragment extends BackPressFragment {
         if (mCurrentMode == RECORD_MODE_EDIT) {
             itemLongClicked(item, position);
         } else {
-            copySmsCode(item);
+//            copySmsCode(item);
+            showSmsDetails(item);
         }
+    }
+
+    private void showSmsDetails(final RecordItem recordItem) {
+        SmsMsg smsMsg = recordItem.getSmsMsg();
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.message_details)
+                .content(smsMsg.getBody())
+                .positiveText(R.string.copy_smscode)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        copySmsCode(recordItem);
+                    }
+                })
+                .negativeText(R.string.cancel)
+                .show();
     }
 
     private void copySmsCode(RecordItem item) {
