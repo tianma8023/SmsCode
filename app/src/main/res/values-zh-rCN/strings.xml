@@ -40,8 +40,8 @@
     <string name="cannot_parse_smscode">未能解析出验证码</string>
     <string name="auto_input_accessibility_service_description">自动输入短信验证码的无障碍服务。\n\n如果不需要自动输入验证码，则建议关闭此无障碍服务。</string>
     <string name="pref_experimental_title">试验性功能</string>
-    <string name="pref_entry_auto_input_code_title">自动输入验证码</string>
-    <string name="pref_entry_auto_input_code_summary">验证码自动输入设定</string>
+    <string name="pref_entry_auto_input_code_title">自动输入设置</string>
+    <string name="pref_entry_auto_input_code_summary">验证码自动输入设置</string>
     <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
     <string name="open_auto_input_accessibility">打开无障碍服务</string>
     <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务。\n\n注意：在一些国产Rom上，无障碍服务会被系统自动关闭，所以此选项可能无效。</string>

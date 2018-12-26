@@ -41,7 +41,7 @@
     <string name="cannot_parse_smscode">無法正確辨識驗證碼</string>
     <string name="auto_input_accessibility_service_description">利用無障礙服務啟用自動輸入。\n\n如果不需要此項功能，則建議關閉。</string>
     <string name="pref_experimental_title">實驗性功能</string>
-    <string name="pref_entry_auto_input_code_title">自動輸入驗證碼</string>
+    <string name="pref_entry_auto_input_code_title">自動輸入設定</string>
     <string name="pref_entry_auto_input_code_summary">驗證碼自動輸入設定</string>
     <string name="pref_enable_auto_input_code_summary">嘗試自動輸入驗證碼</string>
     <string name="open_auto_input_accessibility">打開無障礙服務</string>
