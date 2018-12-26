@@ -130,7 +130,7 @@
         android:title="@string/pref_others_title">
 
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:icon="@drawable/ic_recently"
             android:key="@string/pref_exclude_from_recents"
             android:title="@string/pref_exclude_from_recents_title"/>
