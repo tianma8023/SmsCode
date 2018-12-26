@@ -32,8 +32,9 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDButton;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.adapter.BaseItemCallback;
+import com.github.tianma8023.smscode.adapter.OnCreateItemContextMenuListener;
 import com.github.tianma8023.smscode.backup.BackupManager;
 import com.github.tianma8023.smscode.backup.ExportResult;
 import com.github.tianma8023.smscode.backup.ImportResult;
@@ -126,27 +127,27 @@ public class RuleListFragment extends Fragment {
 
         List<SmsCodeRule> rules = DBManager.get(mActivity).queryAllSmsCodeRules();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        mRuleAdapter = new RuleAdapter(mActivity, rules);
+        mRuleAdapter = new RuleAdapter(rules);
         mRecyclerView.setAdapter(mRuleAdapter);
 
         // swipe to remove
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mSwipeToRemoveCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        mRuleAdapter.setItemCallback(new BaseItemCallback<SmsCodeRule>() {
+        mRuleAdapter.setContextMenuListener(new OnCreateItemContextMenuListener() {
             @Override
-            public void onItemClicked(SmsCodeRule item, int position) {
-                mSelectedPosition = position;
-                XEventBus.post(new Event.StartRuleEditEvent(
-                        RuleEditFragment.EDIT_TYPE_UPDATE, item));
-            }
-
-            @Override
-            public void onCreateItemContextMenu(ContextMenu menu, View v,
-                                                ContextMenu.ContextMenuInfo menuInfo,
-                                                SmsCodeRule item, int position) {
+            public void onCreateItemContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo, int position) {
                 mSelectedPosition = position;
                 onCreateContextMenu(menu, v, menuInfo);
+            }
+        });
+
+        mRuleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mSelectedPosition = position;
+                XEventBus.post(new Event.StartRuleEditEvent(
+                        RuleEditFragment.EDIT_TYPE_UPDATE, mRuleAdapter.getItem(position)));
             }
         });
 
@@ -246,7 +247,7 @@ public class RuleListFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        SmsCodeRule smsCodeRule = mRuleAdapter.getItemAt(mSelectedPosition);
+        SmsCodeRule smsCodeRule = mRuleAdapter.getItem(mSelectedPosition);
         switch (item.getItemId()) {
             case R.id.action_edit_rule:
                 XEventBus.post(new Event.StartRuleEditEvent(
@@ -276,7 +277,10 @@ public class RuleListFragment extends Fragment {
             };
 
     private void removeItemAt(final int position) {
-        final SmsCodeRule itemToRemove = mRuleAdapter.getItemAt(position);
+        final SmsCodeRule itemToRemove = mRuleAdapter.getItem(position);
+        if (itemToRemove == null) {
+            return;
+        }
         mRuleAdapter.removeItemAt(position);
 
         Snackbar snackbar = Snackbar.make(mRecyclerView, R.string.removed, Snackbar.LENGTH_LONG);
@@ -326,13 +330,13 @@ public class RuleListFragment extends Fragment {
     }
 
     private void requestPermission(final @BackupType int type, final Uri importUri) {
-        String[] permission ;
+        String[] permission;
         if (type == TYPE_EXPORT) {
-            permission = new String[] {
+            permission = new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
             };
         } else {
-            permission = new String[] {
+            permission = new String[]{
                     Manifest.permission.READ_EXTERNAL_STORAGE,
             };
         }

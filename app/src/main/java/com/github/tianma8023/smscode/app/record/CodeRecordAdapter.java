@@ -1,15 +1,11 @@
 package com.github.tianma8023.smscode.app.record;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.adapter.ItemCallback;
 import com.github.tianma8023.smscode.entity.SmsMsg;
 
 import java.text.SimpleDateFormat;
@@ -20,113 +16,47 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHolder> {
 
-public class CodeRecordAdapter extends RecyclerView.Adapter<CodeRecordAdapter.VH> {
+    private SimpleDateFormat mDateFormat;
 
-    private Context mContext;
-    private List<RecordItem> mRecords;
+    public CodeRecordAdapter(@Nullable List<RecordItem> data) {
+        super(R.layout.code_record_item, data);
 
-    private SimpleDateFormat mFormat;
-
-    private ItemCallback<RecordItem> mItemCallback;
-
-    CodeRecordAdapter(Context context, List<RecordItem> records) {
-        mContext = context;
-        mRecords = records;
-
-        mFormat = new SimpleDateFormat("MM.dd HH:mm", Locale.getDefault());
-    }
-
-    public void setItemCallback(ItemCallback<RecordItem> itemCallback) {
-        mItemCallback = itemCallback;
-    }
-
-    @NonNull
-    @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View rootView = LayoutInflater.from(mContext).inflate(R.layout.code_record_item, parent, false);
-        return new VH(rootView);
+        mDateFormat = new SimpleDateFormat("MM.dd HH:mm", Locale.getDefault());
     }
 
     @Override
-    public int getItemCount() {
-        return mRecords == null ? 0 : mRecords.size();
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull VH holder, int position) {
-        final RecordItem data = getItemAt(position);
-        holder.bindData(data, position);
-        holder.bindListener(data, position);
-    }
-
-    class VH extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.company_text_view)
-        TextView mCompanyTv;
-
-        @BindView(R.id.smscode_text_view)
-        TextView mSmsCodeTv;
-
-        @BindView(R.id.date_text_view)
-        TextView mDateTv;
-
-        VH(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+    protected void convert(BaseViewHolder helper, RecordItem item) {
+        SmsMsg smsMsg = item.getSmsMsg();
+        String company = smsMsg.getCompany();
+        if (company == null || company.trim().length() == 0) {
+            company = smsMsg.getSender();
         }
-
-        void bindData(RecordItem data, int position) {
-            SmsMsg smsMsg = data.getSmsMsg();
-            String company = smsMsg.getCompany();
-            if (company != null && company.trim().length() != 0) {
-                mCompanyTv.setText(smsMsg.getCompany());
-            } else {
-                mCompanyTv.setText(smsMsg.getSender());
-            }
-            mSmsCodeTv.setText(smsMsg.getSmsCode());
-            mDateTv.setText(mFormat.format(new Date(smsMsg.getDate())));
-            itemView.setSelected(data.isSelected());
-        }
-
-        void bindListener(final RecordItem data, final int position) {
-            if (mItemCallback != null) {
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mItemCallback.onItemClicked(itemView, data, position);
-                    }
-                });
-
-                itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        return mItemCallback.onItemLongClicked(itemView, data, position);
-                    }
-                });
-            }
-        }
-    }
-
-    private RecordItem getItemAt(int position) {
-        return mRecords.get(position);
+        helper.setText(R.id.company_text_view, company)
+                .setText(R.id.smscode_text_view, smsMsg.getSmsCode())
+                .setText(R.id.date_text_view, mDateFormat.format(new Date(smsMsg.getDate())))
+                .setGone(R.id.record_details_view, !TextUtils.isEmpty(smsMsg.getBody()))
+                .addOnClickListener(R.id.record_details_view);
+        helper.itemView.setSelected(item.isSelected());
     }
 
     public void setItemSelected(int position, boolean selected) {
-        RecordItem recordItem = getItemAt(position);
-        recordItem.setSelected(selected);
-        notifyDataSetChanged();
+        RecordItem recordItem = getItem(position);
+        if (recordItem != null) {
+            recordItem.setSelected(selected);
+            notifyItemChanged(position);
+        }
     }
 
     public boolean isItemSelected(int position) {
-        return getItemAt(position).isSelected();
+        RecordItem recordItem = getItem(position);
+        return recordItem != null && recordItem.isSelected();
     }
 
     public void setAllSelected(boolean selected) {
         for (int i = 0; i < getItemCount(); i++) {
-            getItemAt(i).setSelected(selected);
+            getItem(i).setSelected(selected);
         }
         notifyDataSetChanged();
     }
@@ -158,14 +88,15 @@ public class CodeRecordAdapter extends RecyclerView.Adapter<CodeRecordAdapter.VH
         List<RecordItem> recordsToRemove = new ArrayList<>();
         List<SmsMsg> messagesToRemove = new ArrayList<>();
         for (int i = 0; i < getItemCount(); i++) {
-            RecordItem item = getItemAt(i);
-            if (item.isSelected()) {
+            RecordItem item = getItem(i);
+            if (item != null && item.isSelected()) {
                 recordsToRemove.add(item);
                 messagesToRemove.add(item.getSmsMsg());
             }
         }
-        mRecords.removeAll(recordsToRemove);
+        getData().removeAll(recordsToRemove);
         notifyDataSetChanged();
+
         return messagesToRemove;
     }
 
@@ -173,14 +104,14 @@ public class CodeRecordAdapter extends RecyclerView.Adapter<CodeRecordAdapter.VH
         List<RecordItem> itemsToAdd = new ArrayList<>();
         for (SmsMsg msg : smsMsgList) {
             RecordItem item = new RecordItem(msg, false);
-            if (!mRecords.contains(item)) {
+            if (!getData().contains(item)) {
                 itemsToAdd.add(item);
             }
         }
 
         if (!itemsToAdd.isEmpty()) {
-            mRecords.addAll(itemsToAdd);
-            Collections.sort(mRecords, new Comparator<RecordItem>() {
+            getData().addAll(itemsToAdd);
+            Collections.sort(getData(), new Comparator<RecordItem>() {
                 @Override
                 public int compare(RecordItem o1, RecordItem o2) {
                     long date1 = o1.getSmsMsg().getDate();
@@ -191,5 +122,4 @@ public class CodeRecordAdapter extends RecyclerView.Adapter<CodeRecordAdapter.VH
             notifyDataSetChanged();
         }
     }
-
 }

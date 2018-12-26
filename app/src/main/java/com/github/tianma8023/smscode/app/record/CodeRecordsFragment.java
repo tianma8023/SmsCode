@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.adapter.BaseItemCallback;
 import com.github.tianma8023.smscode.app.base.BackPressFragment;
 import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.entity.SmsMsg;
@@ -84,22 +84,39 @@ public class CodeRecordsFragment extends BackPressFragment {
 
         List<RecordItem> records = new ArrayList<>();
 
-        mCodeRecordAdapter = new CodeRecordAdapter(mActivity, records);
-        mCodeRecordAdapter.setItemCallback(new BaseItemCallback<RecordItem>() {
+        mCodeRecordAdapter = new CodeRecordAdapter(records);
+        mCodeRecordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClicked(View itemView, RecordItem item, int position) {
-                itemClicked(item, position);
-            }
-
-            @Override
-            public boolean onItemLongClicked(View itemView, RecordItem item, int position) {
-                return itemLongClicked(item, position);
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                RecordItem recordItem = mCodeRecordAdapter.getItem(position);
+                itemClicked(recordItem, position);
             }
         });
+
         mCodeRecordAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 refreshEmptyView();
+            }
+        });
+
+        mCodeRecordAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                int viewId = view.getId();
+                if (viewId == R.id.record_details_view) {
+                    RecordItem item = mCodeRecordAdapter.getItem(position);
+                    showSmsDetails(item);
+                }
+            }
+        });
+
+        mCodeRecordAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                RecordItem recordItem = mCodeRecordAdapter.getItem(position);
+                itemLongClicked(recordItem, position);
+                return true;
             }
         });
 
@@ -130,8 +147,7 @@ public class CodeRecordsFragment extends BackPressFragment {
         if (mCurrentMode == RECORD_MODE_EDIT) {
             itemLongClicked(item, position);
         } else {
-//            copySmsCode(item);
-            showSmsDetails(item);
+            copySmsCode(item);
         }
     }
 

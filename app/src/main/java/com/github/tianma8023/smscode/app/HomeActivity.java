@@ -15,9 +15,8 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.adapter.BaseItemCallback;
-import com.github.tianma8023.smscode.adapter.ItemCallback;
 import com.github.tianma8023.smscode.app.faq.FaqFragment;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
@@ -142,9 +141,9 @@ public class HomeActivity extends BaseActivity implements
         invalidateOptionsMenu();
     }
 
-    private ItemCallback<ThemeItem> mThemeItemCallback = new BaseItemCallback<ThemeItem>() {
+    private BaseQuickAdapter.OnItemClickListener mItemClickListener = new BaseQuickAdapter.OnItemClickListener() {
         @Override
-        public void onItemClicked(ThemeItem item, int position) {
+        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             if (mThemeChooseDialog != null && mThemeChooseDialog.isShowing()) {
                 mThemeChooseDialog.dismiss();
             }
@@ -161,7 +160,7 @@ public class HomeActivity extends BaseActivity implements
         if (mThemeChooseDialog == null) {
             ThemeItemAdapter adapter = new ThemeItemAdapter(this,
                     ThemeItemContainer.get().getThemeItemList());
-            adapter.setItemCallback(mThemeItemCallback);
+            adapter.setOnItemClickListener(mItemClickListener);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
             mThemeChooseDialog = new MaterialDialog.Builder(this)
