@@ -1,4 +1,8 @@
 # Update Logs
+- 18.12.26 v1.6.2 the delayed Merry X'mas
+  1. Optimization: SMS message details can be shown in code records.
+  2. Changment: don't exclude the App from recent-apps as default.
+  3. Other bugs fix.
 - 18.11.29 v1.6.1
   1. Bug fix：code record company parse issue.
 - 18.11.21 v1.6.0
