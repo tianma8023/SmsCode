@@ -10,7 +10,7 @@
     <string name="pref_enable_summary_off">Needs Receive and Read SMS permission</string>
     <string name="pref_enable_summary_on">Switch off to disable it</string>
     <string name="pref_show_toast_title">Show Toast</string>
-    <string name="pref_show_toast_summary">Show Toast when the SMS Code is extracted</string>
+    <string name="pref_show_toast_summary">Show Toast when the SMS code is extracted</string>
     <string name="pref_about_title">About</string>
     <string name="pref_version_title">Version</string>
     <string name="pref_version_summary">Current version: %1$s (%2$d)</string>
@@ -23,21 +23,21 @@
     <string name="alipay_enable_prompt">Please enable Alipay</string>
     <string name="wechat_install_prompt">Please install Wechat first</string>
     <string name="wechat_enable_prompt">Please enable Wechat</string>
-    <string name="cur_verification_code">Current verification code is %s</string>
+    <string name="cur_verification_code">Current SMS code is %s</string>
     <string name="pref_mark_as_read_title">Mark as read</string>
-    <string name="pref_mark_as_read_summary">Mark verification sms as read if succeed</string>
+    <string name="pref_mark_as_read_summary">Mark code SMS as read if succeed</string>
     <string name="pref_smscode_keywords_title">Keywords</string>
     <string name="pref_smscode_keywords_summary">Keywords that SMS code contains(Regular Expressions)</string>
-    <string name="pref_smscode_title">Sms Code</string>
+    <string name="pref_smscode_title">SMS Code</string>
     <string name="reset">Reset</string>
     <string name="code_keywords_hint">Keywords(Regular Expressions)</string>
-    <string name="pref_smscode_test_title">Sms code test</string>
-    <string name="pref_smscode_test_summary">Test whether sms code can be recognized or not</string>
-    <string name="sms_content_hint">Sms question</string>
+    <string name="pref_smscode_test_title">SMS code test</string>
+    <string name="pref_smscode_test_summary">Test whether SMS code can be recognized or not</string>
+    <string name="sms_content_hint">SMS content</string>
     <string name="test">Test</string>
     <string name="cancel">Cancel</string>
-    <string name="cannot_parse_smscode">Cannot parse verification code.</string>
-    <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS Code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
+    <string name="cannot_parse_smscode">Cannot parse SMS code</string>
+    <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
     <string name="pref_experimental_title">Experimental</string>
     <string name="pref_entry_auto_input_code_title">Auto-input SMS code settings</string>
     <string name="pref_entry_auto_input_code_summary">SMS code auto-input settings</string>
@@ -60,8 +60,8 @@
     <string name="pref_clear_clipboard_summary">Clear clipboard if auto input succeed</string>
     <string name="pref_others_title">Others</string>
     <string name="pref_exclude_from_recents_title">Exclude from recent apps</string>
-    <string name="pref_delete_sms_title">Delete sms</string>
-    <string name="pref_delete_sms_summary">Warning! Delete verification sms if succeed</string>
+    <string name="pref_delete_sms_title">Delete SMS</string>
+    <string name="pref_delete_sms_summary">Warning! Delete code SMS if succeed</string>
     <string name="pref_copy_to_clipboard_title">Copy to clipboard</string>
     <string name="pref_copy_to_clipboard_summary">Copy code to clipboard if it\'s extracted</string>
     <string name="pref_entry_code_records_title">Records of SMS code</string>
@@ -69,7 +69,7 @@
     <string name="pref_code_records_title">SMS code records</string>
     <string name="smscode_records">Code Records</string>
     <string name="edit_smscode_records">Edit Code Records</string>
-    <string name="prompt_sms_code_copied">Sms Code copied: %s</string>
+    <string name="prompt_sms_code_copied">SMS Code copied: %s</string>
     <string name="action_delete">Delete</string>
     <string name="action_select_all">Select All</string>
     <string name="some_items_removed">Removed %d record(s)</string>
@@ -167,7 +167,7 @@
 
     <!-- sms code rule -->
     <string name="rule_company_hint">Institution or Company</string>
-    <string name="rule_keyword_hint">SMS Code Keyword</string>
+    <string name="rule_keyword_hint">SMS code Keyword</string>
     <string name="rule_code_length">SMS code length</string>
     <string name="rule_code_regex_hint">SMS code regular expression</string>
     <string name="pref_code_rules_title">SMS code match rules</string>
