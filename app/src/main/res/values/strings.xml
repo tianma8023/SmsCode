@@ -39,14 +39,14 @@
     <string name="cannot_parse_smscode">Cannot parse SMS code</string>
     <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
     <string name="pref_experimental_title">Experimental</string>
-    <string name="pref_entry_auto_input_code_title">Auto-input SMS code settings</string>
-    <string name="pref_entry_auto_input_code_summary">SMS code auto-input settings</string>
-    <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
+    <string name="pref_entry_auto_input_code_title">Auto-input Settings</string>
+    <string name="pref_entry_auto_input_code_summary">Auto-input SMS code settings</string>
     <string name="open_auto_input_accessibility">Open auto-input accessibility</string>
     <string name="open_auto_input_accessibility_prompt">Accessibility Service for auto-input codes need be open.\n\nNote that: accessibility service will be auto-closed frequently by system on some 3rd party ROM.</string>
     <string name="go_to_open">Open it</string>
-    <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
     <string name="pref_enable_auto_input_code_title">Enable auto-input SMS code</string>
+    <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
+    <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
     <string name="acquire_root_permission">ROOT permission required</string>
     <string name="acquire_root_permission_prompt">Root permission for auto-input code is required</string>
     <string name="channel_name_foreground_service">Notifications for parsing SMS message</string>
@@ -219,4 +219,9 @@
     <string name="share">Share</string>
     <string name="import_rules">Import Rules</string>
     <!-- sms code rule end -->
+
+    <string name="pref_get_alipay_packet_title">Get Alipay red packet</string>
+    <string name="pref_get_alipay_packet_summary">Get free alipay red packet everyday</string>
+    <string name="pref_get_alipay_packet_content">Open alipay and search %s, you can receive red packet everyday.</string>
+    <string name="copy_packet_code_open_alipay"><![CDATA[Copy code & Open alipay]]></string>
 </resources>

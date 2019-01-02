@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.preference.ResetEditPreference;
 import com.github.tianma8023.smscode.preference.ResetEditPreferenceDialogFragCompat;
 import com.github.tianma8023.smscode.utils.AppOpsUtils;
+import com.github.tianma8023.smscode.utils.ClipboardUtils;
 import com.github.tianma8023.smscode.utils.PackageUtils;
 import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
@@ -70,6 +72,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_CODE_RECORDS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GET_ALIPAY_PACKET;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
@@ -173,6 +176,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
 
+        findPreference(KEY_GET_ALIPAY_PACKET).setOnPreferenceClickListener(this);
+
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
 
         // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
@@ -244,6 +249,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             case KEY_SMSCODE_TEST:
                 showSmsCodeTestDialog();
                 break;
+            case KEY_GET_ALIPAY_PACKET:
+                getAlipayPacket();
+                break;
             case KEY_SOURCE_CODE:
                 aboutProject();
                 break;
@@ -285,19 +293,45 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void donateByAlipay() {
+        if (checkAlipayExists()) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
+            startActivity(intent);
+        }
+    }
+
+    private void getAlipayPacket() {
+        final String packetCode = Const.ALIPAY_RED_PACKET_CODE;
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.pref_get_alipay_packet_title)
+                .content(getString(R.string.pref_get_alipay_packet_content, packetCode))
+                .positiveText(R.string.copy_packet_code_open_alipay)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        ClipboardUtils.copyToClipboard(mActivity, packetCode);
+
+                        if (checkAlipayExists()) {
+                            PackageManager pm = mActivity.getPackageManager();
+                            Intent intent = pm.getLaunchIntentForPackage(Const.ALIPAY_PACKAGE_NAME);
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private boolean checkAlipayExists() {
         if (!PackageUtils.isAlipayInstalled(mActivity)) { // uninstalled
             Toast.makeText(mActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         if (!PackageUtils.isAlipayEnabled(mActivity)) { // installed but disabled
             Toast.makeText(mActivity, R.string.alipay_enable_prompt, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
-        startActivity(intent);
+        return true;
     }
-
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {

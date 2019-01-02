@@ -42,12 +42,12 @@
     <string name="pref_experimental_title">试验性功能</string>
     <string name="pref_entry_auto_input_code_title">自动输入设置</string>
     <string name="pref_entry_auto_input_code_summary">验证码自动输入设置</string>
-    <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
     <string name="open_auto_input_accessibility">打开无障碍服务</string>
     <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务。\n\n注意：在一些国产Rom上，无障碍服务会被系统自动关闭，所以此选项可能无效。</string>
     <string name="go_to_open">去打开</string>
     <string name="smscode_auto_input_service_label">短信验证码自动输入服务</string>
     <string name="pref_enable_auto_input_code_title">启用自动输入</string>
+    <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
     <string name="acquire_root_permission">获取Root权限</string>
     <string name="acquire_root_permission_prompt">需要获取Root权限来自动输入验证码</string>
     <string name="channel_name_foreground_service">解析短信时的通知</string>
@@ -199,4 +199,9 @@
     <string name="share">分享</string>
     <string name="import_rules">导入规则</string>
     <!-- sms code rule end -->
+
+    <string name="pref_get_alipay_packet_title">领取支付宝红包</string>
+    <string name="pref_get_alipay_packet_summary">每天可领取支付宝红包</string>
+    <string name="pref_get_alipay_packet_content">打开支付宝首页搜索 %s 可每天领取红包~</string>
+    <string name="copy_packet_code_open_alipay">复制红包码并打开支付宝</string>
 </resources>
