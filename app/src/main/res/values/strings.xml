@@ -126,9 +126,6 @@
     <string name="black">Dark</string>
     <!-- theme color end -->
 
-    <!-- Q&A -->
-    <string name="simplified_question">Q:\u00A0</string>
-    <string name="simplified_answer">A:\u00A0</string>
     <string name="write_sms_appops_prompt_content">
         Writing SMS for Non-default SMS app has been limited since Android 4.4. Except for granting write SMS runtime permission, WRITE_SMS permission in AppOpsManager also should be granted.\n\nThere are two ways to handle it:\n
         1. Granting by root, you can just click the \"GRANT BY ROOT\" button if you have ROOT access.\n\n
@@ -142,6 +139,9 @@
     <string name="granted_appops_by_root_succeed">Grant AppOps WRITE_SMS by root succeed</string>
     <string name="relevant_permission_already_granted">Relevant permissions already have been granted</string>
 
+    <!-- Q&A -->
+    <string name="simplified_question">Q:\u00A0</string>
+    <string name="simplified_answer">A:\u00A0</string>
     <string-array name="question_list">
         <item>本产品理念是什么？</item>
         <item>自动输入的原理是什么？无障碍模式和ROOT模式的区别在哪里？</item>
@@ -219,6 +219,22 @@
     <string name="share">Share</string>
     <string name="import_rules">Import Rules</string>
     <!-- sms code rule end -->
+
+    <!-- permission statement start -->
+    <string-array name="perm_title_list">
+        <item>Receive SMS permission</item>
+        <item>Read SMS permission</item>
+        <item>Write SMS permission</item>
+        <item>Internet and WiFi permission</item>
+    </string-array>
+
+    <string-array name="perm_content_list">
+        <item>Receive SMS permission should be granted for parsing SMS.</item>
+        <item>Read SMS permission should be granted for parsing SMS.</item>
+        <item>Write SMS permission should be granted for marking SMS as read.</item>
+        <item>Only used for collecting crash log, it won\'t collect any private data(SMS data etc.). You can also deny this permission manually if you don\'t want.</item>
+    </string-array>
+    <!-- permission statement end -->
 
     <string name="pref_get_alipay_packet_title">Get Alipay red packet</string>
     <string name="pref_get_alipay_packet_summary">Get free alipay red packet everyday</string>

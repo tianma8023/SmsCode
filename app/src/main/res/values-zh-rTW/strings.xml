@@ -225,6 +225,22 @@
     <string name="import_rules">導入規則</string>
     <!-- sms code rule end -->
 
+    <!-- permission statement start -->
+    <string-array name="perm_title_list">
+        <item>接收簡訊(RECEIVE_SMS)</item>
+        <item>讀簡訊(READ_SMS)</item>
+        <item>寫簡訊(WRITE_SMS)</item>
+        <item>網路權限(INTERNET,WIFI)</item>
+    </string-array>
+
+    <string-array name="perm_content_list">
+        <item>解析簡訊中的驗證碼需要接收簡訊</item>
+        <item>解析簡訊中的驗證碼需要讀取簡訊內容</item>
+        <item>驗證碼簡訊標記為已讀需要寫簡訊權限</item>
+        <item>僅用於收集崩潰日誌，承諾不會收集任何簡訊數據；不想這樣也可以手動關閉該權限</item>
+    </string-array>
+    <!-- permission statement end -->
+
     <string name="pref_get_alipay_packet_title">領取支付寶紅包</string>
     <string name="pref_get_alipay_packet_summary">每天可領取支付寶紅包</string>
     <string name="pref_get_alipay_packet_content">打開支付寶首頁搜索 %s 可每天領取紅包~</string>

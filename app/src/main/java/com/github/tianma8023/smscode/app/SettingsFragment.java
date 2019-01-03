@@ -22,16 +22,18 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceGroup;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.permissions.PermItemAdapter;
+import com.github.tianma8023.smscode.app.permissions.PermItemContainer;
 import com.github.tianma8023.smscode.app.record.CodeRecordsActivity;
 import com.github.tianma8023.smscode.app.rule.CodeRulesActivity;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
@@ -42,7 +44,6 @@ import com.github.tianma8023.smscode.preference.ResetEditPreferenceDialogFragCom
 import com.github.tianma8023.smscode.utils.AppOpsUtils;
 import com.github.tianma8023.smscode.utils.ClipboardUtils;
 import com.github.tianma8023.smscode.utils.PackageUtils;
-import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.SettingsUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
@@ -507,14 +508,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     // 展示权限声明
     private void showPermissionStatement() {
-        View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
-        WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
-        String data = ResUtils.loadRawRes(mActivity, R.raw.perm_state);
-        permStateWebView.loadDataWithBaseURL("file:///android_asset/",
-                data, "text/html", "utf-8", null);
+        PermItemAdapter adapter = new PermItemAdapter(new PermItemContainer(mActivity).getItems());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mActivity);
+
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.permission_statement)
-                .customView(permStateWebView, false)
+                .adapter(adapter, layoutManager)
                 .positiveText(R.string.okay)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
