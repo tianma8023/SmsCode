@@ -311,6 +311,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         ClipboardUtils.copyToClipboard(mActivity, packetCode);
+                        Toast.makeText(mActivity, R.string.alipay_red_packet_code_copied, Toast.LENGTH_SHORT).show();
 
                         if (checkAlipayExists()) {
                             PackageManager pm = mActivity.getPackageManager();

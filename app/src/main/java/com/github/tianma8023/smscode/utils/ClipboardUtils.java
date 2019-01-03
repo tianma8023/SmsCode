@@ -21,7 +21,7 @@ public class ClipboardUtils {
         }
         ClipData clipData = ClipData.newPlainText("Copy text", text);
         cm.setPrimaryClip(clipData);
-        XLog.i("Copy to clipboard succeed");
+        XLog.d("Copy to clipboard succeed");
     }
 
     public static void clearClipboard(Context context) {
