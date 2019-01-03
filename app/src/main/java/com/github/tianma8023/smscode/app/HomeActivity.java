@@ -1,5 +1,6 @@
 package com.github.tianma8023.smscode.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,19 +53,10 @@ public class HomeActivity extends BaseActivity implements
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        // init main fragment
-        int index = SPUtils.getCurrentThemeIndex(this);
-        ThemeItem curThemeItem = ThemeItemContainer.get().getItemAt(index);
-        SettingsFragment settingsFragment = SettingsFragment.newInstance(curThemeItem);
-        settingsFragment.setOnPreferenceClickCallback(this);
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentManager.beginTransaction()
-                .replace(R.id.home_content, settingsFragment)
-                .commit();
-        mCurrentFragment = settingsFragment;
-
         // setup toolbar
         setupToolbar();
+
+        handleIntent(getIntent());
     }
 
     @Override
@@ -81,11 +73,35 @@ public class HomeActivity extends BaseActivity implements
         }
     }
 
-
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
 
         refreshActionBar(getString(R.string.app_name));
+    }
+
+    private void handleIntent(Intent intent) {
+        int themeIdx = SPUtils.getCurrentThemeIndex(this);
+        ThemeItem themeItem = ThemeItemContainer.get().getItemAt(themeIdx);
+
+        String action = intent.getAction();
+        SettingsFragment settingsFragment = null;
+        if (Intent.ACTION_VIEW.equals(action)) {
+            String extraAction = intent.getStringExtra(SettingsFragment.EXTRA_ACTION);
+            if (SettingsFragment.ACTION_GET_RED_PACKET.equals(extraAction)) {
+                settingsFragment = SettingsFragment.newInstance(themeItem, extraAction);
+            }
+        }
+
+        if (settingsFragment == null) {
+            settingsFragment = SettingsFragment.newInstance(themeItem);
+        }
+
+        settingsFragment.setOnPreferenceClickCallback(this);
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.beginTransaction()
+                .replace(R.id.home_content, settingsFragment)
+                .commit();
+        mCurrentFragment = settingsFragment;
     }
 
     @Override

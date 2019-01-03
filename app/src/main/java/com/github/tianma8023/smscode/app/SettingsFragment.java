@@ -87,7 +87,9 @@ import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_C
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
-    public static final String EXTRA_KEY_CURRENT_THEME = "extra_key_current_theme";
+    public static final String EXTRA_CURRENT_THEME = "extra_current_theme";
+    public static final String EXTRA_ACTION = "extra_action";
+    public static final String ACTION_GET_RED_PACKET = "get_red_packet";
 
     private Activity mActivity;
 
@@ -106,9 +108,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     public static SettingsFragment newInstance(ThemeItem curThemeItem) {
+        return newInstance(curThemeItem, null);
+    }
+
+    public static SettingsFragment newInstance(ThemeItem curThemeItem, String extraAction) {
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_KEY_CURRENT_THEME, curThemeItem);
+        args.putParcelable(EXTRA_CURRENT_THEME, curThemeItem);
+        args.putString(EXTRA_ACTION, extraAction);
         fragment.setArguments(args);
         return fragment;
     }
@@ -198,6 +205,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             boolean excludeFromRecents = mExcludeFromRecentsPref.isChecked();
             onExcludeFromRecentsSwitched(excludeFromRecents);
         }
+
+        onHandleArguments(getArguments());
+    }
+
+    private void onHandleArguments(Bundle args) {
+        if (args == null) {
+            return;
+        }
+        String extraAction = args.getString(EXTRA_ACTION);
+        if (ACTION_GET_RED_PACKET.equals(extraAction)) {
+            args.remove(EXTRA_ACTION);
+            scrollToPreference(PrefConst.KEY_GET_ALIPAY_PACKET);
+            getAlipayPacket();
+        }
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -205,7 +226,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         if (args == null) {
             return;
         }
-        ThemeItem themeItem = args.getParcelable(EXTRA_KEY_CURRENT_THEME);
+        ThemeItem themeItem = args.getParcelable(EXTRA_CURRENT_THEME);
         if (themeItem != null) {
             chooseThemePref.setSummary(themeItem.getColorNameRes());
         }

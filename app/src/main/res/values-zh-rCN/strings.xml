@@ -220,5 +220,6 @@
     <string name="pref_get_alipay_packet_content">打开支付宝首页搜索 %s 可每天领取红包~</string>
     <string name="copy_packet_code_open_alipay">复制红包码并打开支付宝</string>
     <string name="alipay_red_packet_code_copied">红包码已复制</string>
+    <string name="get_red_packet">领取红包</string>
     <!-- alipay packet end -->
 </resources>
