@@ -94,8 +94,4 @@ public class ResetEditPreferenceDialogFragCompat extends PreferenceDialogFragmen
             resetEditPreference.setText(value);
         }
     }
-
-
-
-
 }
