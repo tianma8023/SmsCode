@@ -1,7 +1,12 @@
 # Update Logs
+- 19.01.04 v1.6.3
+  1. Adapt dark theme.
+  2. Add entry: get alipay red packet
+  3. Optimize the Auto-input mode selection and donation process.
+  4. Correct the English Copywriting.
 - 18.12.26 v1.6.2 the delayed Merry X'mas
   1. Optimization: SMS message details can be shown in code records.
-  2. Changment: don't exclude the App from recent-apps as default.
+  2. Change: don't exclude the App from recent-apps as default.
   3. Other bugs fix.
 - 18.11.29 v1.6.1
   1. Bug fix：code record company parse issue.
@@ -38,7 +43,7 @@
   1. New feature: mark sms as read.
 - 18.09.16 v1.1.1
   1. Let "manual focus" to be the default focus mode.
-  2. Enhance the ablity of auto-input in webview since Android Oreo.
+  2. Enhance the ability of auto-input in webview since Android Oreo.
   3. Add the "动态口令" to SMS code keywords.
 - 18.09.13 v1.1.0
   1. Merge "auto-input root mode" and "auto-input accessibility mode" into "auto-input mode".
