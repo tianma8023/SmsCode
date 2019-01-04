@@ -10,7 +10,7 @@
     <string name="pref_enable_summary_off">Needs Receive and Read SMS permission</string>
     <string name="pref_enable_summary_on">Switch off to disable it</string>
     <string name="pref_show_toast_title">Show Toast</string>
-    <string name="pref_show_toast_summary">Show Toast when the SMS Code is extracted</string>
+    <string name="pref_show_toast_summary">Show Toast when the SMS code is extracted</string>
     <string name="pref_about_title">About</string>
     <string name="pref_version_title">Version</string>
     <string name="pref_version_summary">Current version: %1$s (%2$d)</string>
@@ -23,30 +23,30 @@
     <string name="alipay_enable_prompt">Please enable Alipay</string>
     <string name="wechat_install_prompt">Please install Wechat first</string>
     <string name="wechat_enable_prompt">Please enable Wechat</string>
-    <string name="cur_verification_code">Current verification code is %s</string>
+    <string name="cur_verification_code">Current SMS code is %s</string>
     <string name="pref_mark_as_read_title">Mark as read</string>
-    <string name="pref_mark_as_read_summary">Mark verification sms as read if succeed</string>
+    <string name="pref_mark_as_read_summary">Mark code SMS as read if succeed</string>
     <string name="pref_smscode_keywords_title">Keywords</string>
     <string name="pref_smscode_keywords_summary">Keywords that SMS code contains(Regular Expressions)</string>
-    <string name="pref_smscode_title">Sms Code</string>
+    <string name="pref_smscode_title">SMS Code</string>
     <string name="reset">Reset</string>
     <string name="code_keywords_hint">Keywords(Regular Expressions)</string>
-    <string name="pref_smscode_test_title">Sms code test</string>
-    <string name="pref_smscode_test_summary">Test whether sms code can be recognized or not</string>
-    <string name="sms_content_hint">Sms question</string>
+    <string name="pref_smscode_test_title">SMS code test</string>
+    <string name="pref_smscode_test_summary">Test whether SMS code can be recognized or not</string>
+    <string name="sms_content_hint">SMS content</string>
     <string name="test">Test</string>
     <string name="cancel">Cancel</string>
-    <string name="cannot_parse_smscode">Cannot parse verification code.</string>
-    <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS Code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
+    <string name="cannot_parse_smscode">Cannot parse SMS code</string>
+    <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
     <string name="pref_experimental_title">Experimental</string>
-    <string name="pref_entry_auto_input_code_title">Auto-input SMS code settings</string>
-    <string name="pref_entry_auto_input_code_summary">SMS code auto-input settings</string>
-    <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
+    <string name="pref_entry_auto_input_code_title">Auto-input Settings</string>
+    <string name="pref_entry_auto_input_code_summary">Auto-input SMS code settings</string>
     <string name="open_auto_input_accessibility">Open auto-input accessibility</string>
     <string name="open_auto_input_accessibility_prompt">Accessibility Service for auto-input codes need be open.\n\nNote that: accessibility service will be auto-closed frequently by system on some 3rd party ROM.</string>
     <string name="go_to_open">Open it</string>
-    <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
     <string name="pref_enable_auto_input_code_title">Enable auto-input SMS code</string>
+    <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
+    <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
     <string name="acquire_root_permission">ROOT permission required</string>
     <string name="acquire_root_permission_prompt">Root permission for auto-input code is required</string>
     <string name="channel_name_foreground_service">Notifications for parsing SMS message</string>
@@ -60,8 +60,8 @@
     <string name="pref_clear_clipboard_summary">Clear clipboard if auto input succeed</string>
     <string name="pref_others_title">Others</string>
     <string name="pref_exclude_from_recents_title">Exclude from recent apps</string>
-    <string name="pref_delete_sms_title">Delete sms</string>
-    <string name="pref_delete_sms_summary">Warning! Delete verification sms if succeed</string>
+    <string name="pref_delete_sms_title">Delete SMS</string>
+    <string name="pref_delete_sms_summary">Warning! Delete code SMS if succeed</string>
     <string name="pref_copy_to_clipboard_title">Copy to clipboard</string>
     <string name="pref_copy_to_clipboard_summary">Copy code to clipboard if it\'s extracted</string>
     <string name="pref_entry_code_records_title">Records of SMS code</string>
@@ -69,7 +69,7 @@
     <string name="pref_code_records_title">SMS code records</string>
     <string name="smscode_records">Code Records</string>
     <string name="edit_smscode_records">Edit Code Records</string>
-    <string name="prompt_sms_code_copied">Sms Code copied: %s</string>
+    <string name="prompt_sms_code_copied">SMS Code copied: %s</string>
     <string name="action_delete">Delete</string>
     <string name="action_select_all">Select All</string>
     <string name="some_items_removed">Removed %d record(s)</string>
@@ -126,9 +126,6 @@
     <string name="black">Dark</string>
     <!-- theme color end -->
 
-    <!-- Q&A -->
-    <string name="simplified_question">Q:\u00A0</string>
-    <string name="simplified_answer">A:\u00A0</string>
     <string name="write_sms_appops_prompt_content">
         Writing SMS for Non-default SMS app has been limited since Android 4.4. Except for granting write SMS runtime permission, WRITE_SMS permission in AppOpsManager also should be granted.\n\nThere are two ways to handle it:\n
         1. Granting by root, you can just click the \"GRANT BY ROOT\" button if you have ROOT access.\n\n
@@ -142,6 +139,9 @@
     <string name="granted_appops_by_root_succeed">Grant AppOps WRITE_SMS by root succeed</string>
     <string name="relevant_permission_already_granted">Relevant permissions already have been granted</string>
 
+    <!-- Q&A -->
+    <string name="simplified_question">Q:\u00A0</string>
+    <string name="simplified_answer">A:\u00A0</string>
     <string-array name="question_list">
         <item>本产品理念是什么？</item>
         <item>自动输入的原理是什么？无障碍模式和ROOT模式的区别在哪里？</item>
@@ -167,7 +167,7 @@
 
     <!-- sms code rule -->
     <string name="rule_company_hint">Institution or Company</string>
-    <string name="rule_keyword_hint">SMS Code Keyword</string>
+    <string name="rule_keyword_hint">SMS code Keyword</string>
     <string name="rule_code_length">SMS code length</string>
     <string name="rule_code_regex_hint">SMS code regular expression</string>
     <string name="pref_code_rules_title">SMS code match rules</string>
@@ -219,4 +219,32 @@
     <string name="share">Share</string>
     <string name="import_rules">Import Rules</string>
     <!-- sms code rule end -->
+
+    <!-- permission statement start -->
+    <string-array name="perm_title_list">
+        <item>Receive SMS permission</item>
+        <item>Read SMS permission</item>
+        <item>Write SMS permission</item>
+        <item>Internet and WiFi permission</item>
+    </string-array>
+
+    <string-array name="perm_content_list">
+        <item>Receive SMS permission should be granted for parsing SMS.</item>
+        <item>Read SMS permission should be granted for parsing SMS.</item>
+        <item>Write SMS permission should be granted for marking SMS as read.</item>
+        <item>Only used for collecting crash log, it won\'t collect any private data(SMS data etc.). You can also deny this permission manually if you don\'t want.</item>
+    </string-array>
+    <!-- permission statement end -->
+
+    <!-- alipay packet start -->
+    <string name="pref_get_alipay_packet_title">Get Alipay red packet</string>
+    <string name="pref_get_alipay_packet_summary">Get free alipay red packet everyday</string>
+    <string name="pref_get_alipay_packet_content">Open alipay and search %s, you can receive red packet everyday.</string>
+    <string name="copy_packet_code_open_alipay"><![CDATA[Copy code & Open alipay]]></string>
+    <string name="alipay_red_packet_code_copied">Alipay red packet code is copied</string>
+    <string name="get_red_packet">Get red packet</string>
+    <string name="donation_tips_title">Donation Tips</string>
+    <string name="donation_tips_content">Before donation, you can go to receive alipay red packet first.</string>
+    <string name="donate_directly">Donate directly</string>
+    <!-- alipay packet end -->
 </resources>

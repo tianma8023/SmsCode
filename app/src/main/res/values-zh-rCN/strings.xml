@@ -42,12 +42,12 @@
     <string name="pref_experimental_title">试验性功能</string>
     <string name="pref_entry_auto_input_code_title">自动输入设置</string>
     <string name="pref_entry_auto_input_code_summary">验证码自动输入设置</string>
-    <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
     <string name="open_auto_input_accessibility">打开无障碍服务</string>
     <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务。\n\n注意：在一些国产Rom上，无障碍服务会被系统自动关闭，所以此选项可能无效。</string>
     <string name="go_to_open">去打开</string>
     <string name="smscode_auto_input_service_label">短信验证码自动输入服务</string>
     <string name="pref_enable_auto_input_code_title">启用自动输入</string>
+    <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
     <string name="acquire_root_permission">获取Root权限</string>
     <string name="acquire_root_permission_prompt">需要获取Root权限来自动输入验证码</string>
     <string name="channel_name_foreground_service">解析短信时的通知</string>
@@ -106,15 +106,6 @@
     <string name="compatible_mode_prompt_title">兼容模式</string>
     <string name="compatible_mode_prompt_content">兼容模式需要常驻后台，如果需要开机自启动则请授予权限。\n\n如果标准模式能正常运行，则不推荐兼容模式。</string>
     <!-- Listen Mode end -->
-
-    <!-- permission requirement -->
-    <string name="permission_statement">权限声明</string>
-    <string name="permission_requirement">权限获取</string>
-    <string name="receive_sms_permission_requirement">需要获得读取短信权限</string>
-    <string name="prompt_sms_permission_denied">读取短信权限获取失败，本应用将无法正常工作。</string>
-    <string name="service_sms_permission_requirement">MIUI中需要获得通知类短信权限</string>
-    <string name="prompt_service_sms_permission_denied">通知类短信权限获取失败，本应用将无法正常工作。</string>
-    <!-- permission requirement end -->
 
     <!-- theme color -->
     <string name="red">姨妈红</string>
@@ -199,4 +190,39 @@
     <string name="share">分享</string>
     <string name="import_rules">导入规则</string>
     <!-- sms code rule end -->
+
+    <!-- permission requirement start -->
+    <string name="permission_statement">权限声明</string>
+    <string name="permission_requirement">权限获取</string>
+    <string name="receive_sms_permission_requirement">需要获得读取短信权限</string>
+    <string name="prompt_sms_permission_denied">读取短信权限获取失败，本应用将无法正常工作。</string>
+    <string name="service_sms_permission_requirement">MIUI中需要获得通知类短信权限</string>
+    <string name="prompt_service_sms_permission_denied">通知类短信权限获取失败，本应用将无法正常工作。</string>
+
+    <string-array name="perm_title_list">
+        <item>接收短信(RECEIVE_SMS)</item>
+        <item>读短信(READ_SMS)</item>
+        <item>写短信(WRITE_SMS)</item>
+        <item>网络权限(INTERNET,WIFI)</item>
+    </string-array>
+
+    <string-array name="perm_content_list">
+        <item>解析短信中的验证码需要接收短信</item>
+        <item>解析短信中的验证码需要读取短信内容</item>
+        <item>验证码短信标记为已读需要写短信权限</item>
+        <item>仅用于收集崩溃日志，承诺不会收集任何短信数据；不想这样也可以手动关闭该权限</item>
+    </string-array>
+    <!-- permission requirement end -->
+
+    <!-- alipay packet start -->
+    <string name="pref_get_alipay_packet_title">领取支付宝红包</string>
+    <string name="pref_get_alipay_packet_summary">每天可领取支付宝红包</string>
+    <string name="pref_get_alipay_packet_content">打开支付宝首页搜索 %s 可每天领取红包~</string>
+    <string name="copy_packet_code_open_alipay">复制红包码并打开支付宝</string>
+    <string name="alipay_red_packet_code_copied">红包码已复制</string>
+    <string name="get_red_packet">领取红包</string>
+    <string name="donation_tips_title">捐赠提示</string>
+    <string name="donation_tips_content">捐赠前您可以先领取支付宝红包哦~</string>
+    <string name="donate_directly">直接捐赠</string>
+    <!-- alipay packet end -->
 </resources>

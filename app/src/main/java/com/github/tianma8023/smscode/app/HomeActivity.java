@@ -1,5 +1,6 @@
 package com.github.tianma8023.smscode.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,19 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.faq.FaqFragment;
+import com.github.tianma8023.smscode.app.permissions.PermItemAdapter;
+import com.github.tianma8023.smscode.app.permissions.PermItemContainer;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
 import com.github.tianma8023.smscode.app.theme.ThemeItemAdapter;
 import com.github.tianma8023.smscode.app.theme.ThemeItemContainer;
 import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.service.SmsObserveService;
-import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 
 import butterknife.BindView;
@@ -52,19 +53,10 @@ public class HomeActivity extends BaseActivity implements
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        // init main fragment
-        int index = SPUtils.getCurrentThemeIndex(this);
-        ThemeItem curThemeItem = ThemeItemContainer.get().getItemAt(index);
-        SettingsFragment settingsFragment = SettingsFragment.newInstance(curThemeItem);
-        settingsFragment.setOnPreferenceClickCallback(this);
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentManager.beginTransaction()
-                .replace(R.id.home_content, settingsFragment)
-                .commit();
-        mCurrentFragment = settingsFragment;
-
         // setup toolbar
         setupToolbar();
+
+        handleIntent(getIntent());
     }
 
     @Override
@@ -81,11 +73,35 @@ public class HomeActivity extends BaseActivity implements
         }
     }
 
-
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
 
         refreshActionBar(getString(R.string.app_name));
+    }
+
+    private void handleIntent(Intent intent) {
+        int themeIdx = SPUtils.getCurrentThemeIndex(this);
+        ThemeItem themeItem = ThemeItemContainer.get().getItemAt(themeIdx);
+
+        String action = intent.getAction();
+        SettingsFragment settingsFragment = null;
+        if (Intent.ACTION_VIEW.equals(action)) {
+            String extraAction = intent.getStringExtra(SettingsFragment.EXTRA_ACTION);
+            if (SettingsFragment.ACTION_GET_RED_PACKET.equals(extraAction)) {
+                settingsFragment = SettingsFragment.newInstance(themeItem, extraAction);
+            }
+        }
+
+        if (settingsFragment == null) {
+            settingsFragment = SettingsFragment.newInstance(themeItem);
+        }
+
+        settingsFragment.setOnPreferenceClickCallback(this);
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager.beginTransaction()
+                .replace(R.id.home_content, settingsFragment)
+                .commit();
+        mCurrentFragment = settingsFragment;
     }
 
     @Override
@@ -216,14 +232,12 @@ public class HomeActivity extends BaseActivity implements
     }
 
     private void onPermStateSelected() {
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
-        WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
-        String data = ResUtils.loadRawRes(this, R.raw.perm_state);
-        permStateWebView.loadDataWithBaseURL("file:///android_asset/",
-                data, "text/html", "utf-8", null);
+        PermItemAdapter adapter = new PermItemAdapter(new PermItemContainer(this).getItems());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
         new MaterialDialog.Builder(this)
                 .title(R.string.permission_statement)
-                .customView(permStateWebView, false)
+                .adapter(adapter, layoutManager)
                 .positiveText(R.string.confirm)
                 .show();
     }

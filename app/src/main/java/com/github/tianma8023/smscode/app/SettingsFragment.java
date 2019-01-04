@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,16 +22,18 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceGroup;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.permissions.PermItemAdapter;
+import com.github.tianma8023.smscode.app.permissions.PermItemContainer;
 import com.github.tianma8023.smscode.app.record.CodeRecordsActivity;
 import com.github.tianma8023.smscode.app.rule.CodeRulesActivity;
 import com.github.tianma8023.smscode.app.theme.ThemeItem;
@@ -39,8 +42,8 @@ import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.preference.ResetEditPreference;
 import com.github.tianma8023.smscode.preference.ResetEditPreferenceDialogFragCompat;
 import com.github.tianma8023.smscode.utils.AppOpsUtils;
+import com.github.tianma8023.smscode.utils.ClipboardUtils;
 import com.github.tianma8023.smscode.utils.PackageUtils;
-import com.github.tianma8023.smscode.utils.ResUtils;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.SettingsUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
@@ -70,6 +73,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_CODE_RECORDS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GET_ALIPAY_PACKET;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
@@ -83,7 +87,9 @@ import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_C
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
-    public static final String EXTRA_KEY_CURRENT_THEME = "extra_key_current_theme";
+    public static final String EXTRA_CURRENT_THEME = "extra_current_theme";
+    public static final String EXTRA_ACTION = "extra_action";
+    public static final String ACTION_GET_RED_PACKET = "get_red_packet";
 
     private Activity mActivity;
 
@@ -102,9 +108,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     public static SettingsFragment newInstance(ThemeItem curThemeItem) {
+        return newInstance(curThemeItem, null);
+    }
+
+    public static SettingsFragment newInstance(ThemeItem curThemeItem, String extraAction) {
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EXTRA_KEY_CURRENT_THEME, curThemeItem);
+        args.putParcelable(EXTRA_CURRENT_THEME, curThemeItem);
+        args.putString(EXTRA_ACTION, extraAction);
         fragment.setArguments(args);
         return fragment;
     }
@@ -173,6 +184,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
 
+        findPreference(KEY_GET_ALIPAY_PACKET).setOnPreferenceClickListener(this);
+
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
 
         // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
@@ -192,6 +205,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             boolean excludeFromRecents = mExcludeFromRecentsPref.isChecked();
             onExcludeFromRecentsSwitched(excludeFromRecents);
         }
+
+        onHandleArguments(getArguments());
+    }
+
+    private void onHandleArguments(Bundle args) {
+        if (args == null) {
+            return;
+        }
+        String extraAction = args.getString(EXTRA_ACTION);
+        if (ACTION_GET_RED_PACKET.equals(extraAction)) {
+            args.remove(EXTRA_ACTION);
+            scrollToPreference(PrefConst.KEY_GET_ALIPAY_PACKET);
+            getAlipayPacket();
+        }
     }
 
     private void initChooseThemePreference(Preference chooseThemePref) {
@@ -199,7 +226,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         if (args == null) {
             return;
         }
-        ThemeItem themeItem = args.getParcelable(EXTRA_KEY_CURRENT_THEME);
+        ThemeItem themeItem = args.getParcelable(EXTRA_CURRENT_THEME);
         if (themeItem != null) {
             chooseThemePref.setSummary(themeItem.getColorNameRes());
         }
@@ -244,6 +271,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             case KEY_SMSCODE_TEST:
                 showSmsCodeTestDialog();
                 break;
+            case KEY_GET_ALIPAY_PACKET:
+                getAlipayPacket();
+                break;
             case KEY_SOURCE_CODE:
                 aboutProject();
                 break;
@@ -285,19 +315,63 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void donateByAlipay() {
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.donation_tips_title)
+                .content(R.string.donation_tips_content)
+                .positiveText(R.string.donate_directly)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (checkAlipayExists()) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .negativeText(R.string.get_red_packet)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        getAlipayPacket();
+                    }
+                })
+                .show();
+    }
+
+    private void getAlipayPacket() {
+        final String packetCode = Const.ALIPAY_RED_PACKET_CODE;
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.pref_get_alipay_packet_title)
+                .content(getString(R.string.pref_get_alipay_packet_content, packetCode))
+                .positiveText(R.string.copy_packet_code_open_alipay)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        ClipboardUtils.copyToClipboard(mActivity, packetCode);
+                        Toast.makeText(mActivity, R.string.alipay_red_packet_code_copied, Toast.LENGTH_SHORT).show();
+
+                        if (checkAlipayExists()) {
+                            PackageManager pm = mActivity.getPackageManager();
+                            Intent intent = pm.getLaunchIntentForPackage(Const.ALIPAY_PACKAGE_NAME);
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private boolean checkAlipayExists() {
         if (!PackageUtils.isAlipayInstalled(mActivity)) { // uninstalled
             Toast.makeText(mActivity, R.string.alipay_install_prompt, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         if (!PackageUtils.isAlipayEnabled(mActivity)) { // installed but disabled
             Toast.makeText(mActivity, R.string.alipay_enable_prompt, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
-        startActivity(intent);
+        return true;
     }
-
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -473,14 +547,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     // 展示权限声明
     private void showPermissionStatement() {
-        View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_perm_state, null);
-        WebView permStateWebView = dialogView.findViewById(R.id.perm_state_webview);
-        String data = ResUtils.loadRawRes(mActivity, R.raw.perm_state);
-        permStateWebView.loadDataWithBaseURL("file:///android_asset/",
-                data, "text/html", "utf-8", null);
+        PermItemAdapter adapter = new PermItemAdapter(new PermItemContainer(mActivity).getItems());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mActivity);
+
         new MaterialDialog.Builder(mActivity)
                 .title(R.string.permission_statement)
-                .customView(permStateWebView, false)
+                .adapter(adapter, layoutManager)
                 .positiveText(R.string.okay)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
