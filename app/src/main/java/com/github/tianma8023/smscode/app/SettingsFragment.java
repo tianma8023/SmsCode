@@ -663,7 +663,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             FragmentManager fm = this.getFragmentManager();
             if (fm != null) {
                 dialogFragment.setTargetFragment(this, 0);
-                dialogFragment.show(this.getFragmentManager(), "android.support.v14.preference.PreferenceFragment.DIALOG");
+                dialogFragment.show(fm, "android.support.v14.preference.PreferenceFragment.DIALOG");
                 handled = true;
             }
         }

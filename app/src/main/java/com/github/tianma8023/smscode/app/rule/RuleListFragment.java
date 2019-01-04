@@ -365,7 +365,6 @@ public class RuleListFragment extends Fragment {
     }
 
     private void attemptExportRuleList() {
-
         if (mRuleAdapter.getItemCount() == 0) {
             Snackbar.make(mRecyclerView, R.string.rule_list_empty_snack_prompt, Snackbar.LENGTH_LONG)
                     .show();

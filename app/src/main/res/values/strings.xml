@@ -198,8 +198,8 @@
     <string name="import_failed_version_unknown">Import failed, version unknown</string>
     <string name="import_failed_backup_invalid">Import failed, backup invalid</string>
     <string name="import_failed_read_error">Import failed, read file error</string>
-    <string name="export_succeed">Export succeed, try again please</string>
-    <string name="export_failed">Export failed</string>
+    <string name="export_succeed">Export succeed</string>
+    <string name="export_failed">Export failed, try again please</string>
     <string name="import_confirmation_title">Import confirmation</string>
     <string name="import_confirmation_message">Retain current rules when import new rules?</string>
     <string name="yes">Yes</string>
