@@ -170,7 +170,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
         mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
 
-
         // verbose log preference
         SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
         verboseLogPref.setOnPreferenceChangeListener(this);

@@ -134,9 +134,7 @@
             android:icon="@drawable/ic_recently"
             android:key="@string/pref_exclude_from_recents"
             android:title="@string/pref_exclude_from_recents_title"/>
-    </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_debug_title">
         <SwitchPreference
             android:defaultValue="false"
             android:dependency="@string/pref_enable"

@@ -53,7 +53,6 @@
     <string name="channel_name_foreground_service">解析短信时的通知</string>
     <string name="sms_code_notification_title">短信解析中……</string>
     <string name="action_home_faq_title">常见问题</string>
-    <string name="pref_debug_title">调试</string>
     <string name="pref_verbose_log_mode_title">输出详细日志</string>
     <string name="pref_verbose_log_mode_summary_off">输出详细的日志(仅用于调试)</string>
     <string name="pref_choose_theme_title">主题</string>
