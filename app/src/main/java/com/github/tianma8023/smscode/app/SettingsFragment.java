@@ -315,11 +315,28 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     }
 
     private void donateByAlipay() {
-        if (checkAlipayExists()) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
-            startActivity(intent);
-        }
+        new MaterialDialog.Builder(mActivity)
+                .title(R.string.donation_tips_title)
+                .content(R.string.donation_tips_content)
+                .positiveText(R.string.donate_directly)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (checkAlipayExists()) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .negativeText(R.string.get_red_packet)
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        getAlipayPacket();
+                    }
+                })
+                .show();
     }
 
     private void getAlipayPacket() {
