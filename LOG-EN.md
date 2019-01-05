@@ -1,4 +1,7 @@
 # Update Logs
+- 19.01.05 v1.6.4
+  1. Beautify parts of UI
+  2. Backup code rule files under /sdcard/Documents/
 - 19.01.04 v1.6.3
   1. Adapt dark theme.
   2. Add entry: get alipay red packet
