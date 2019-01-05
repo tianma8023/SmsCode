@@ -8,13 +8,13 @@
     android:layout_marginTop="@dimen/text_margin_dp_8"
     android:layout_marginEnd="@dimen/text_margin_dp_16"
     android:layout_marginBottom="@dimen/text_margin_dp_8"
-    android:foreground="?android:attr/selectableItemBackground"
     app:cardCornerRadius="@dimen/text_margin_dp_6"
     app:cardElevation="@dimen/text_margin_dp_6">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingTop="@dimen/text_margin_dp_16"

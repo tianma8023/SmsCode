@@ -65,7 +65,7 @@
         android:layout_below="@id/rule_keyword_input_layout"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="@dimen/text_margin_dp_4"
-        android:background="@drawable/rule_code_regex_quick_choose_selector"
+        android:background="@drawable/code_rule_quick_choose_bg"
         android:padding="@dimen/text_margin_dp_6"
         android:text="@string/quick_choose"
         android:textColor="@color/faq_textColor_white"/>
