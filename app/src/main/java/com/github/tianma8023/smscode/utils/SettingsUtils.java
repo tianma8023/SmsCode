@@ -64,7 +64,7 @@ public class SettingsUtils {
             String[] enabledServices = notifyStr.split(":");
             for(String enabledService : enabledServices) {
                 ComponentName curCN = ComponentName.unflattenFromString(enabledService);
-                if (curCN.equals(monitorService)) {
+                if (monitorService.equals(curCN)) {
                     enabled = true;
                     break;
                 }
