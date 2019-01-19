@@ -86,7 +86,15 @@ public class NotificationMonitorService extends NotificationListenerService {
         String smsCode = mSmsMsg.getSmsCode();
         String smsBody = mSmsMsg.getBody();
 
-        StatusBarNotification[] sbnArr = getActiveNotifications();
+        StatusBarNotification[] sbnArr;
+        try {
+            sbnArr = getActiveNotifications();
+        } catch (Exception e) {
+            // fix bug:
+            // RuntimeException Failed to unparcel Bitmap.
+            XLog.e("Failed to get active notifications", e);
+            return;
+        }
         for (StatusBarNotification sbn : sbnArr) {
             if (defaultSmsPkg.equals(sbn.getPackageName())) {
                 Notification notification = sbn.getNotification();
