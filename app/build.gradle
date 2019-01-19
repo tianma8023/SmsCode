@@ -126,8 +126,8 @@ dependencies {
     implementation 'com.jaredrummler:android-shell:1.0.0'
 
     // umeng analyze
-    implementation 'com.umeng.sdk:common:latest.integration'
-    implementation 'com.umeng.sdk:analytics:latest.integration'
+//    implementation 'com.umeng.sdk:common:latest.integration'
+//    implementation 'com.umeng.sdk:analytics:latest.integration'
 
     // AndPermission
     implementation 'com.yanzhenjie:permission:2.0.0-rc12'

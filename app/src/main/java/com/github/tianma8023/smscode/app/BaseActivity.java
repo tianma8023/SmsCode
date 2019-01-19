@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.github.tianma8023.smscode.app.theme.ThemeItemContainer;
 import com.github.tianma8023.smscode.utils.SPUtils;
-import com.umeng.analytics.MobclickAgent;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -24,13 +23,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
+//        MobclickAgent.onResume(this);
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
+//        MobclickAgent.onPause(this);
     }
 }
