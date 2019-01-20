@@ -12,4 +12,9 @@
         android:id="@+id/action_perm_state"
         android:title="@string/permission_statement"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_ignore_battery_optimization"
+        android:title="@string/ignore_battery_optimization"
+        app:showAsAction="never"/>
 </menu>

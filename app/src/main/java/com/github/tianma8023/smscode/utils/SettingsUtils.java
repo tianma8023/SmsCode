@@ -1,14 +1,17 @@
 package com.github.tianma8023.smscode.utils;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
+import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.service.NotificationMonitorService;
 
 /**
@@ -75,6 +78,26 @@ public class SettingsUtils {
 
     public static void gotoNotificationListenerSettings(Context context) {
         Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+        context.startActivity(intent);
+    }
+
+    /**
+     * Request ignore battery optimization
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint("BatteryLife")
+    public static void requestIgnoreBatteryOptimization(Context context) {
+        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+        intent.setData(Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+        context.startActivity(intent);
+    }
+
+    /**
+     * Go to ignore battery optimization settings.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void gotoIgnoreBatteryOptimizationSettings(Context context) {
+        Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
         context.startActivity(intent);
     }
 

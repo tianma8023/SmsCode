@@ -147,7 +147,7 @@
         <item>收到驗證碼後，尋找當前介面的驗證碼輸入框，然後自動輸入。\n\n無障礙模式打開後，系統會在背景持續運行這項服務。\n\nRoot模式是透過Root的方式動態開啟/關閉無障礙服務，在分析驗證碼時打開，自動輸入完畢後關閉。\n\n個人推薦使用Root模式。</item>
         <item>標準模式：僅透過廣播監聽的方式來監聽簡訊。\n\n兼容模式：即透過廣播監聽，又透過簡訊數據庫監聽的方式來監聽簡訊。兼容模式需要常駐背景，如果需要開機自啟動則請授予權限。\n\n如果標準模式能正常運作，則不推薦兼容模式。</item>
         <item>此App使用了三項服務。\n\n一項用來解析簡訊中的驗證碼，在接收到簡訊時開啟，並在分析完畢後關閉，基本上不占用資源。\n\n一項用來自動輸入(無障礙服務)。\n\n一項用來監聽簡訊數據庫變化，在兼容模式下用到，需要常駐背景。</item>
-        <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此App加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 檢查App的組件（廣播接收器、服務、內容提供者）是否被組件控制類軟體（Blocker、寫輪眼等）禁用。\m\m4.檢查本App是否在電池優化名單中，如果在請移至白名單（原理已說明，其實不耗電）。\n\n5. 檢查是否已經打開驗證碼保護開關（華為，OPPO等ROM存在此機制），或者是否已授予"通知類簡訊"權限（如MIUI）。\n\n 6. 請聯繫開發者，並回報相關問題。</item>
+        <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此App加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 檢查App的組件（廣播接收器、服務、內容提供者）是否被組件控制類軟體（Blocker、寫輪眼等）禁用。\m\m4.檢查本App是否已套用電池效能最佳化設定，如果在請取消套用（原理已說明，其實不耗電）。\n\n5. 檢查是否已經打開驗證碼保護開關（華為，OPPO等ROM存在此機制），或者是否已授予"通知類簡訊"權限（如MIUI）。\n\n 6. 請聯繫開發者，並回報相關問題。</item>
         <item>屬於正常現象，因為有些應用的驗證碼輸入框是自定義的控件，可能沒有遵循Android設計規範，故而不能被正確識別。</item>
         <item>自動尋找模式：App程式自動尋找識別出驗證碼輸入框之後，再自動粘貼進去。\n優勢：全自動化。\n劣勢：在極少數界面中因識別不了驗證碼輸入框而失效。\n\n手動對焦模式：用戶手動指定驗證碼輸入框，即光標在哪裏就在那裏自動輸入。\n優勢：準確率高。\n劣勢：非全自動化，需要多點一下屏幕。</item>
         <item>如果您設備上默認的簡訊 App 使用的是它自己的簡訊數據庫，而不是系統的簡訊數據庫，那麼標記為已讀或者刪除驗證碼簡訊都可能不會生效。如果發生這樣的事情，就說明在您的設備上可能不會生效。</item>
@@ -251,4 +251,13 @@
     <string name="donation_tips_content">捐贈前您可以先領取支付寶紅包哦~</string>
     <string name="donate_directly">直接捐贈</string>
     <!-- alipay packet end -->
+
+    <!-- ignore battery optimization -->
+    <string name="ignore_battery_optimization">忽略電池效能最佳化</string>
+    <string name="ignore_battery_optimization_statement">忽略電池效能最佳化聲明</string>
+    <string name="ignore_battery_optimization_content">如果您的App能正常運作，則無需忽略電池效能最佳化。\n\n承諾忽略電池效能最佳化后不會很耗電。\n\n確認忽略電池效能最佳化嗎？</string>
+    <string name="battery_optimization_ignored">已忽略此程式的電池效能最佳化</string>
+    <string name="ignore_battery_optimization_manually">請手動設定忽略電池效能最佳化</string>
+    <string name="ignore_battery_optimization_settings_failed">跳轉至電池效能最佳化設定失敗，請手動設定</string>
+    <!-- ignore battery optimization end -->
 </resources>

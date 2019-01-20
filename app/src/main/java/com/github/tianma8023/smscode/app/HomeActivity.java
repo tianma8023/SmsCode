@@ -1,7 +1,11 @@
 package com.github.tianma8023.smscode.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -13,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.faq.FaqFragment;
 import com.github.tianma8023.smscode.app.permissions.PermItemAdapter;
@@ -26,6 +33,7 @@ import com.github.tianma8023.smscode.app.theme.ThemeItemContainer;
 import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.service.SmsObserveService;
 import com.github.tianma8023.smscode.utils.SPUtils;
+import com.github.tianma8023.smscode.utils.SettingsUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -203,6 +211,10 @@ public class HomeActivity extends BaseActivity implements
             case R.id.action_perm_state:
                 onPermStateSelected();
                 return true;
+            case R.id.action_ignore_battery_optimization:
+                onIgnoreBatteryOptimizationSelected();
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -215,6 +227,13 @@ public class HomeActivity extends BaseActivity implements
             faqItem.setVisible(false);
         } else {
             faqItem.setVisible(true);
+        }
+
+        MenuItem ignoreOptimizeItem = menu.findItem(R.id.action_ignore_battery_optimization);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            ignoreOptimizeItem.setVisible(false);
+        } else {
+            ignoreOptimizeItem.setVisible(true);
         }
         return true;
     }
@@ -240,5 +259,49 @@ public class HomeActivity extends BaseActivity implements
                 .adapter(adapter, layoutManager)
                 .positiveText(R.string.confirm)
                 .show();
+    }
+
+    private void onIgnoreBatteryOptimizationSelected() {
+        new MaterialDialog.Builder(this)
+                .title(R.string.ignore_battery_optimization_statement)
+                .content(R.string.ignore_battery_optimization_content)
+                .positiveText(R.string.yes)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        ignoreBatteryOptimization();
+                    }
+                })
+                .negativeText(R.string.no)
+                .show();
+    }
+
+    @SuppressLint("BatteryLife")
+    private void ignoreBatteryOptimization() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
+        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+        if (pm == null) {
+            return;
+        }
+
+        if (pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) {
+            Toast.makeText(this, R.string.battery_optimization_ignored, Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                // 申请忽略电源优化
+                SettingsUtils.requestIgnoreBatteryOptimization(this);
+            } catch (Exception e) {
+                try {
+                    // 跳转至电源优化界面
+                    SettingsUtils.gotoIgnoreBatteryOptimizationSettings(this);
+                    Toast.makeText(this, R.string.ignore_battery_optimization_manually, Toast.LENGTH_LONG).show();
+                } catch (Exception e1) {
+                    Toast.makeText(this, R.string.ignore_battery_optimization_settings_failed, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }
