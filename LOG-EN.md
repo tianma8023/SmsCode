@@ -1,4 +1,9 @@
 # Update Logs
+- 19.01.21 v1.6.5
+  1. New: entry for ignoring battery optimization
+  2. Remove UMeng analyze
+  3. Optimize: adapt navigation bar color
+  4. Other bugs fix
 - 19.01.05 v1.6.4
   1. Beautify parts of UI
   2. Backup code rule files under /sdcard/Documents/
