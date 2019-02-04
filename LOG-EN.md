@@ -1,4 +1,6 @@
 # Update Logs
+- 19.02.04 v1.7.0 Happy Chinese New Year
+  1. Optimization: optimize the algorithm of parsing SMS code.
 - 19.01.21 v1.6.5
   1. New: entry for ignoring battery optimization
   2. Remove UMeng analyze
