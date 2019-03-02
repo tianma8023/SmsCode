@@ -21,7 +21,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.support.v7.preference.PreferenceGroup;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -68,7 +67,6 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CODE_RULES;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DELETE_SMS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALIPAY;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_WECHAT;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_CODE_RECORDS;
@@ -185,12 +183,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         findPreference(KEY_RATING).setOnPreferenceClickListener(this);
         findPreference(KEY_GET_ALIPAY_PACKET).setOnPreferenceClickListener(this);
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
-
-        // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
-        // Hide donate by wechat preference item
-        Preference donateByWechat = findPreference(KEY_DONATE_BY_WECHAT);
-        PreferenceGroup aboutGroup = (PreferenceGroup) findPreference(PrefConst.KEY_ABOUT);
-        aboutGroup.removePreference(donateByWechat);
         // about group end
     }
 
@@ -278,9 +270,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             case KEY_DONATE_BY_ALIPAY:
                 donateByAlipay();
                 break;
-            case KEY_DONATE_BY_WECHAT:
-                donateByWechat();
-                break;
             case KEY_RATING:
                 ratingOnCoolMarket();
                 break;
@@ -298,21 +287,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     private void aboutProject() {
         Utils.showWebPage(mActivity, Const.PROJECT_SOURCE_CODE_URL);
-    }
-
-    private void donateByWechat() {
-        if (!PackageUtils.isWeChatInstalled(mActivity)) { // uninstalled
-            Toast.makeText(mActivity, R.string.wechat_install_prompt, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!PackageUtils.isWeChatEnabled(mActivity)) { // installed but disabled
-            Toast.makeText(mActivity, R.string.wechat_enable_prompt, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Intent intent = new Intent();
-        intent.setClassName(Const.WECHAT_PACKAGE_NAME, Const.WECHAT_LAUNCHER_UI);
-        intent.putExtra(Const.WECHAT_KEY_EXTRA_DONATE, true);
-        startActivity(intent);
     }
 
     private void donateByAlipay() {

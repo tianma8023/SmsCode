@@ -16,14 +16,6 @@ public class PackageUtils {
     private PackageUtils() {
     }
 
-    public static boolean isWeChatInstalled(Context context) {
-        return isPackageInstalled(context, Const.WECHAT_PACKAGE_NAME);
-    }
-
-    public static boolean isWeChatEnabled(Context context) {
-        return isPackageEnabled(context, Const.WECHAT_PACKAGE_NAME);
-    }
-
     public static boolean isAlipayInstalled(Context context) {
         return isPackageInstalled(context, Const.ALIPAY_PACKAGE_NAME);
     }

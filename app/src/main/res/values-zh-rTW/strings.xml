@@ -80,7 +80,6 @@
     <string name="pref_donate_by_alipay_title">支付寶捐贈</string>
     <string name="alipay_install_prompt">請先安裝支付寶</string>
     <string name="alipay_enable_prompt">請先啟用支付寶</string>
-    <string name="pref_donate_by_wechat_title">微信捐贈</string>
     <string name="wechat_install_prompt">請先安裝微信</string>
     <string name="wechat_enable_prompt">請先啟用微信</string>
     <!-- preferences about end -->
