@@ -1,72 +1,54 @@
 <resources>
     <string name="app_name">验证码提取器</string>
 
-    <!-- General -->
+    <!-- general -->
     <string name="okay">好的</string>
     <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <!-- general end -->
 
-    <!-- preferences -->
+    <!-- preferences general -->
     <string name="pref_general_title">通用</string>
     <string name="pref_enable_title">启用</string>
     <string name="pref_enable_summary_off">需要接收和读取短信权限</string>
     <string name="pref_enable_summary_on">不再需要时可关闭此开关</string>
     <string name="pref_show_toast_title">显示Toast</string>
     <string name="pref_show_toast_summary">接收到验证码时显示Toast</string>
-    <string name="pref_donate_by_alipay_title">支付宝捐赠</string>
-    <string name="pref_donate_by_wechat_title">微信捐赠</string>
-    <string name="pref_about_title">关于</string>
-    <string name="pref_version_title">版本</string>
-    <string name="pref_version_summary">当前版本：%1$s (%2$d)</string>
-    <string name="pref_source_code_title">项目源码</string>
-    <string name="pref_source_code_summary">欢迎Star ♪(＾∀＾)ﾉ</string>
-    <string name="browser_install_or_enable_prompt">请安装或启用浏览器</string>
-    <string name="alipay_install_prompt">请先安装支付宝</string>
-    <string name="alipay_enable_prompt">请先启用支付宝</string>
-    <string name="wechat_install_prompt">请先安装微信</string>
-    <string name="wechat_enable_prompt">请先启用微信</string>
-    <string name="cur_verification_code">当前验证码：%s</string>
-    <string name="pref_mark_as_read_title">标记为已读</string>
+    <string name="pref_copy_to_clipboard_title">复制到剪切板</string>
+    <string name="pref_copy_to_clipboard_summary">提取成功后复制验证码到系统剪切板</string>
+    <string name="pref_choose_theme_title">主题</string>
+    <!-- preferences general end -->
+
+    <!-- preferences experimental -->
+    <string name="pref_experimental_title">试验性功能</string>
+    <string name="pref_mark_as_read_title">验证码短信标记为已读</string>
     <string name="pref_mark_as_read_summary">将验证码短信标记为已读</string>
+    <string name="pref_delete_sms_title">短信删除</string>
+    <string name="pref_delete_sms_summary">警告：提取成功后将验证码短信删除</string>
+    <string name="pref_block_notify_title">拦截短信通知</string>
+    <string name="pref_block_notify_summary">拦截验证码短信通知</string>
+    <string name="notification_access_prompt_content">拦截验证码短信通知需要手动授予通知使用权。</string>
+    <!-- preferences experimental end -->
+
+    <!-- preferences code SMS -->
+    <string name="pref_smscode_title">验证码短信</string>
     <string name="pref_smscode_keywords_title">验证码短信关键字</string>
     <string name="pref_smscode_keywords_summary">短信包含关键字(正则表达式)</string>
-    <string name="pref_smscode_title">验证码短信</string>
     <string name="reset">重置</string>
     <string name="code_keywords_hint">关键字(正则表达式)</string>
     <string name="pref_smscode_test_title">验证码短信测试</string>
     <string name="pref_smscode_test_summary">测试短信中的验证码是否能被识别</string>
     <string name="sms_content_hint">短信内容</string>
     <string name="test">测试</string>
-    <string name="cancel">取消</string>
+    <string name="cur_verification_code">当前验证码：%s</string>
     <string name="cannot_parse_smscode">未能解析出验证码</string>
-    <string name="auto_input_accessibility_service_description">自动输入短信验证码的无障碍服务。\n\n如果不需要自动输入验证码，则建议关闭此无障碍服务。</string>
-    <string name="pref_experimental_title">试验性功能</string>
-    <string name="pref_entry_auto_input_code_title">自动输入设置</string>
-    <string name="pref_entry_auto_input_code_summary">验证码自动输入设置</string>
-    <string name="open_auto_input_accessibility">打开无障碍服务</string>
-    <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务。\n\n注意：在一些国产Rom上，无障碍服务会被系统自动关闭，所以此选项可能无效。</string>
-    <string name="go_to_open">去打开</string>
-    <string name="smscode_auto_input_service_label">短信验证码自动输入服务</string>
-    <string name="pref_enable_auto_input_code_title">启用自动输入</string>
-    <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
-    <string name="acquire_root_permission">获取Root权限</string>
-    <string name="acquire_root_permission_prompt">需要获取Root权限来自动输入验证码</string>
-    <string name="channel_name_foreground_service">解析短信时的通知</string>
-    <string name="sms_code_notification_title">短信解析中……</string>
-    <string name="action_home_faq_title">常见问题</string>
-    <string name="pref_verbose_log_mode_title">输出详细日志</string>
-    <string name="pref_verbose_log_mode_summary_off">输出详细的日志(仅用于调试)</string>
-    <string name="pref_choose_theme_title">主题</string>
-    <string name="pref_clear_clipboard_title">清除剪切板</string>
-    <string name="pref_clear_clipboard_summary">自动输入成功后清除剪切板</string>
-    <string name="pref_others_title">其它</string>
-    <string name="pref_exclude_from_recents_title">不在最近任务列表中显示</string>
-    <string name="pref_delete_sms_title">短信删除</string>
-    <string name="pref_delete_sms_summary">警告：提取成功后将验证码短信删除</string>
-    <string name="pref_copy_to_clipboard_title">复制到剪切板</string>
-    <string name="pref_copy_to_clipboard_summary">提取成功后复制验证码到系统剪切板</string>
+    <!-- preferences code SMS end -->
+
+    <!-- preferences code records -->
+    <string name="pref_code_records_title">短信验证码记录</string>
+    <string name="pref_enable_code_records_title">启用验证码记录</string>
     <string name="pref_entry_code_records_title">验证码历史记录</string>
     <string name="pref_entry_code_records_summary">最多保留%d条记录</string>
-    <string name="pref_code_records_title">短信验证码记录</string>
     <string name="smscode_records">验证码记录</string>
     <string name="edit_smscode_records">编辑验证码记录</string>
     <string name="prompt_sms_code_copied">已复制验证码: %s</string>
@@ -75,11 +57,69 @@
     <string name="some_items_removed">已删除%d项记录</string>
     <string name="message_details">短信详情</string>
     <string name="copy_smscode">复制验证码</string>
-    <string name="pref_enable_code_records_title">启用验证码记录</string>
-    <string name="pref_block_notify_title">拦截短信通知</string>
-    <string name="pref_block_notify_summary">拦截验证码短信通知</string>
-    <string name="notification_access_prompt_content">拦截验证码短信通知需要手动授予通知使用权。</string>
-    <!-- preferences -->
+    <!-- preferences code records end -->
+
+    <!-- preferences others -->
+    <string name="pref_others_title">其它</string>
+    <string name="pref_exclude_from_recents_title">不在最近任务列表中显示</string>
+    <string name="pref_verbose_log_mode_title">输出详细日志</string>
+    <string name="pref_verbose_log_mode_summary_off">输出详细的日志(仅用于调试)</string>
+    <!-- preferences others end -->
+
+    <!-- preferences about -->
+    <string name="pref_about_title">关于</string>
+    <string name="pref_version_title">版本</string>
+    <string name="pref_version_summary">当前版本：%1$s (%2$d)</string>
+    <string name="pref_source_code_title">项目源码</string>
+    <string name="pref_source_code_summary">欢迎Star ♪(＾∀＾)ﾉ</string>
+    <string name="browser_install_or_enable_prompt">请安装或启用浏览器</string>
+    <string name="pref_rating_title">给个评分</string>
+    <string name="pref_rating_summary">在酷安上给个评分</string>
+    <string name="cool_market_enable_prompt">请启用酷安</string>
+    <string name="cool_market_install_prompt">请安装酷安</string>
+    <string name="pref_donate_by_alipay_title">支付宝捐赠</string>
+    <string name="alipay_install_prompt">请先安装支付宝</string>
+    <string name="alipay_enable_prompt">请先启用支付宝</string>
+    <string name="pref_donate_by_wechat_title">微信捐赠</string>
+    <string name="wechat_install_prompt">请先安装微信</string>
+    <string name="wechat_enable_prompt">请先启用微信</string>
+    <!-- preferences about end -->
+
+    <!-- preferences auto-input SMS code -->
+    <string name="pref_entry_auto_input_code_title">自动输入设置</string>
+    <string name="pref_entry_auto_input_code_summary">验证码自动输入设置</string>
+    <string name="pref_enable_auto_input_code_title">启用自动输入</string>
+    <string name="pref_enable_auto_input_code_summary">尝试自动输入验证码</string>
+    <string name="smscode_auto_input_service_label">短信验证码自动输入服务</string>
+    <string name="auto_input_accessibility_service_description">自动输入短信验证码的无障碍服务。\n\n如果不需要自动输入验证码，则建议关闭此无障碍服务。</string>
+    <string name="open_auto_input_accessibility">打开无障碍服务</string>
+    <string name="open_auto_input_accessibility_prompt">需要打开自动输入的无障碍服务。\n\n注意：在一些国产Rom上，无障碍服务会被系统自动关闭，所以此选项可能无效。</string>
+    <string name="go_to_open">去打开</string>
+    <string name="acquire_root_permission">获取Root权限</string>
+    <string name="acquire_root_permission_prompt">需要获取Root权限来自动输入验证码</string>
+    <string name="pref_clear_clipboard_title">清除剪切板</string>
+    <string name="pref_clear_clipboard_summary">自动输入成功后清除剪切板</string>
+    <!-- preferences auto-input SMS code end -->
+
+    <!-- listen mode -->
+    <string name="pref_listen_mode_title">短信监听模式</string>
+    <string name="listen_mode_entry_standard">标准模式(广播监听)</string>
+    <string name="listen_mode_entry_compatible">兼容模式(广播监听+数据库监听)</string>
+    <string name="compatible_mode_prompt_title">兼容模式</string>
+    <string name="compatible_mode_prompt_content">兼容模式需要常驻后台，如果需要开机自启动则请授予权限。\n\n如果标准模式能正常运行，则不推荐兼容模式。</string>
+    <!-- listen mode end -->
+
+    <!-- alipay packet start -->
+    <string name="pref_get_alipay_packet_title">领取支付宝红包</string>
+    <string name="pref_get_alipay_packet_summary">每天可领取支付宝红包</string>
+    <string name="pref_get_alipay_packet_content">打开支付宝首页搜索 %s 可每天领取红包~</string>
+    <string name="copy_packet_code_open_alipay">复制红包码并打开支付宝</string>
+    <string name="alipay_red_packet_code_copied">已复制红包码：%s</string>
+    <string name="get_red_packet">领取红包</string>
+    <string name="donation_tips_title">捐赠提示</string>
+    <string name="donation_tips_content">捐赠前您可以先领取支付宝红包哦~</string>
+    <string name="donate_directly">直接捐赠</string>
+    <!-- alipay packet end -->
 
     <!-- Auto input mode -->
     <string name="pref_auto_input_mode_title">自动输入模式</string>
@@ -98,14 +138,6 @@
     <string name="pref_manual_focus_if_failed_summary">优先自动对焦，自动对焦失败后转手动对焦</string>
     <string name="auto_focus_failed_prompt">自动对焦失败，请在%d秒内手动对焦</string>
 
-    <!-- Listen Mode -->
-    <string name="pref_listen_mode_title">短信监听模式</string>
-    <string name="listen_mode_entry_standard">标准模式(广播监听)</string>
-    <string name="listen_mode_entry_compatible">兼容模式(广播监听+数据库监听)</string>
-    <string name="compatible_mode_prompt_title">兼容模式</string>
-    <string name="compatible_mode_prompt_content">兼容模式需要常驻后台，如果需要开机自启动则请授予权限。\n\n如果标准模式能正常运行，则不推荐兼容模式。</string>
-    <!-- Listen Mode end -->
-
     <!-- theme color -->
     <string name="red">姨妈红</string>
     <string name="pink">哔哩粉</string>
@@ -117,16 +149,19 @@
     <string name="black">Dark♂黑</string>
     <!-- theme color end -->
 
+    <!-- SMS parsing notification -->
+    <string name="channel_name_foreground_service">解析短信时的通知</string>
+    <string name="sms_code_notification_title">短信解析中……</string>
+    <!-- SMS parsing notification end -->
+
+    <!-- FAQ -->
+    <string name="action_home_faq_title">常见问题</string>
     <string name="simplified_question">问：</string>
     <string name="simplified_answer">答：</string>
+    <!-- FAQ end -->
 
     <!-- app ops write sms -->
-    <string name="write_sms_appops_prompt_content">
-        自Android 4.4起，非默认短信应用修改短信的权限得到限制。除了授予写短信的权限外，还需要修改AppOps的设置给予 WRITE_SMS 权限。\n\n有两种设置方式：\n
-        1. 通过 ROOT 方式授予，具体点击下方的\"ROOT授予\"即可。\n\n
-        2. 通过 ADB 命令方式修改，具体点击下方的\"查看ADB设置帮助\"，设置完毕后需重新打开该开关选项。\n\n
-        如果应用此开关后并不生效，则此选项并不适用于您当前的ROM。
-    </string>
+    <string name="write_sms_appops_prompt_content">自Android 4.4起，非默认短信应用修改短信的权限得到限制。除了授予写短信的权限外，还需要修改AppOps的设置给予 WRITE_SMS 权限。\n\n有两种设置方式：\n1. 通过 ROOT 方式授予，具体点击下方的\"ROOT授予\"即可。\n\n2. 通过 ADB 命令方式修改，具体点击下方的\"查看ADB设置帮助\"，设置完毕后需重新打开该开关选项。\n\n如果应用此开关后并不生效，则此选项并不适用于您当前的ROM。</string>
     <string name="extra_permission_request_prompt_title">额外权限请求声明</string>
     <string name="view_adb_setting_help">查看ADB设置帮助</string>
     <string name="granted_by_root">Root授予</string>
@@ -213,18 +248,6 @@
     </string-array>
     <!-- permission requirement end -->
 
-    <!-- alipay packet start -->
-    <string name="pref_get_alipay_packet_title">领取支付宝红包</string>
-    <string name="pref_get_alipay_packet_summary">每天可领取支付宝红包</string>
-    <string name="pref_get_alipay_packet_content">打开支付宝首页搜索 %s 可每天领取红包~</string>
-    <string name="copy_packet_code_open_alipay">复制红包码并打开支付宝</string>
-    <string name="alipay_red_packet_code_copied">已复制红包码：%s</string>
-    <string name="get_red_packet">领取红包</string>
-    <string name="donation_tips_title">捐赠提示</string>
-    <string name="donation_tips_content">捐赠前您可以先领取支付宝红包哦~</string>
-    <string name="donate_directly">直接捐赠</string>
-    <!-- alipay packet end -->
-
     <!-- ignore battery optimization -->
     <string name="ignore_battery_optimization">忽略电池优化</string>
     <string name="ignore_battery_optimization_statement">忽略电池优化声明</string>
@@ -233,9 +256,4 @@
     <string name="ignore_battery_optimization_manually">请手动设置忽略电源优化</string>
     <string name="ignore_battery_optimization_settings_failed">跳转到电池优化失败，请手动设置</string>
     <!-- ignore battery optimization end -->
-
-    <string name="pref_rating_title">给个评分</string>
-    <string name="pref_rating_summary">在酷安上给个评分</string>
-    <string name="cool_market_enable_prompt">请启用酷安</string>
-    <string name="cool_market_install_prompt">请安装酷安</string>
 </resources>

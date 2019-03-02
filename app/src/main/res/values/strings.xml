@@ -1,84 +1,125 @@
 <resources>
     <string name="app_name">SMS Code Extractor</string>
 
+    <!-- general -->
     <string name="okay">OK</string>
     <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <!-- general end -->
 
-    <!-- preferences -->
+    <!-- preferences general -->
     <string name="pref_general_title">General</string>
     <string name="pref_enable_title">Enable SMS code</string>
     <string name="pref_enable_summary_off">Needs Receive and Read SMS permission</string>
     <string name="pref_enable_summary_on">Switch off to disable it</string>
     <string name="pref_show_toast_title">Show Toast</string>
     <string name="pref_show_toast_summary">Show Toast when the SMS code is extracted</string>
-    <string name="pref_about_title">About</string>
-    <string name="pref_version_title">Version</string>
-    <string name="pref_version_summary">Current version: %1$s (%2$d)</string>
-    <string name="pref_source_code_summary">Welcome to star ♪(＾∀＾●)ﾉ</string>
-    <string name="pref_source_code_title">Source code</string>
-    <string name="pref_donate_by_alipay_title">Donate by Alipay</string>
-    <string name="pref_donate_by_wechat_title">Donate by Wechat</string>
-    <string name="browser_install_or_enable_prompt">Please install or enable browser first</string>
-    <string name="alipay_install_prompt">Please install Alipay first</string>
-    <string name="alipay_enable_prompt">Please enable Alipay</string>
-    <string name="wechat_install_prompt">Please install Wechat first</string>
-    <string name="wechat_enable_prompt">Please enable Wechat</string>
-    <string name="cur_verification_code">Current SMS code is %s</string>
+    <string name="pref_copy_to_clipboard_title">Copy to clipboard</string>
+    <string name="pref_copy_to_clipboard_summary">Copy code to clipboard if it\'s extracted</string>
+    <string name="pref_choose_theme_title">Theme</string>
+    <!-- preferences general end -->
+
+    <!-- preferences experimental -->
+    <string name="pref_experimental_title">Experimental</string>
     <string name="pref_mark_as_read_title">Mark as read</string>
     <string name="pref_mark_as_read_summary">Mark code SMS as read if succeed</string>
+    <string name="pref_delete_sms_title">Delete SMS</string>
+    <string name="pref_delete_sms_summary">Warning! Delete code SMS if succeed</string>
+    <string name="pref_block_notify_title">Block notification</string>
+    <string name="pref_block_notify_summary">Block code SMS notification</string>
+    <string name="notification_access_prompt_content">Notification access for blocking code message notification should be granted.</string>
+    <!-- preferences experimental end -->
+
+    <!-- preferences code SMS -->
+    <string name="pref_smscode_title">SMS Code</string>
     <string name="pref_smscode_keywords_title">Keywords</string>
     <string name="pref_smscode_keywords_summary">Keywords that SMS code contains(Regular Expressions)</string>
-    <string name="pref_smscode_title">SMS Code</string>
     <string name="reset">Reset</string>
     <string name="code_keywords_hint">Keywords(Regular Expressions)</string>
     <string name="pref_smscode_test_title">SMS code test</string>
     <string name="pref_smscode_test_summary">Test whether SMS code can be recognized or not</string>
     <string name="sms_content_hint">SMS content</string>
     <string name="test">Test</string>
-    <string name="cancel">Cancel</string>
+    <string name="cur_verification_code">Current SMS code is %s</string>
     <string name="cannot_parse_smscode">Cannot parse SMS code</string>
-    <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
-    <string name="pref_experimental_title">Experimental</string>
-    <string name="pref_entry_auto_input_code_title">Auto-input Settings</string>
-    <string name="pref_entry_auto_input_code_summary">Auto-input SMS code settings</string>
-    <string name="open_auto_input_accessibility">Open auto-input accessibility</string>
-    <string name="open_auto_input_accessibility_prompt">Accessibility Service for auto-input codes need be open.\n\nNote that: accessibility service will be auto-closed frequently by system on some 3rd party ROM.</string>
-    <string name="go_to_open">Open it</string>
-    <string name="pref_enable_auto_input_code_title">Enable auto-input SMS code</string>
-    <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
-    <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
-    <string name="acquire_root_permission">ROOT permission required</string>
-    <string name="acquire_root_permission_prompt">Root permission for auto-input code is required</string>
-    <string name="channel_name_foreground_service">Notifications for parsing SMS message</string>
-    <string name="sms_code_notification_title">Parsing SMS message……</string>
-    <string name="action_home_faq_title">FAQs</string>
-    <string name="pref_verbose_log_mode_title">Detailed log</string>
-    <string name="pref_verbose_log_mode_summary_off">Print detailed log(only for debug)</string>
-    <string name="pref_choose_theme_title">Theme</string>
-    <string name="pref_clear_clipboard_title">Clear clipboard</string>
-    <string name="pref_clear_clipboard_summary">Clear clipboard if auto input succeed</string>
-    <string name="pref_others_title">Others</string>
-    <string name="pref_exclude_from_recents_title">Exclude from recent apps</string>
-    <string name="pref_delete_sms_title">Delete SMS</string>
-    <string name="pref_delete_sms_summary">Warning! Delete code SMS if succeed</string>
-    <string name="pref_copy_to_clipboard_title">Copy to clipboard</string>
-    <string name="pref_copy_to_clipboard_summary">Copy code to clipboard if it\'s extracted</string>
+    <!-- preferences code SMS end -->
+
+    <!-- preferences code records -->
+    <string name="pref_code_records_title">SMS code records</string>
+    <string name="pref_enable_code_records_title">Reserve SMS code records</string>
     <string name="pref_entry_code_records_title">Records of SMS code</string>
     <string name="pref_entry_code_records_summary">Reserve %d recent records at most</string>
-    <string name="pref_code_records_title">SMS code records</string>
     <string name="smscode_records">Code Records</string>
     <string name="edit_smscode_records">Edit Code Records</string>
     <string name="prompt_sms_code_copied">SMS Code copied: %s</string>
     <string name="action_delete">Delete</string>
     <string name="action_select_all">Select All</string>
     <string name="some_items_removed">Removed %d record(s)</string>
-    <string name="copy_smscode">Copy Code</string>
     <string name="message_details">Message Details</string>
-    <string name="pref_enable_code_records_title">Reserve SMS code records</string>
-    <string name="pref_block_notify_title">Block notification</string>
-    <string name="pref_block_notify_summary">Block code SMS notification</string>
-    <string name="notification_access_prompt_content">Notification access for blocking code message notification should be granted.</string>
-    <!-- preferences end -->
+    <string name="copy_smscode">Copy Code</string>
+    <!-- preferences code records end -->
+
+    <!-- preferences others -->
+    <string name="pref_others_title">Others</string>
+    <string name="pref_exclude_from_recents_title">Exclude from recent apps</string>
+    <string name="pref_verbose_log_mode_title">Detailed log</string>
+    <string name="pref_verbose_log_mode_summary_off">Print detailed log(only for debug)</string>
+    <!-- preferences others end -->
+
+    <!-- preferences about -->
+    <string name="pref_about_title">About</string>
+    <string name="pref_version_title">Version</string>
+    <string name="pref_version_summary">Current version: %1$s (%2$d)</string>
+    <string name="pref_source_code_title">Source code</string>
+    <string name="pref_source_code_summary">Welcome to star ♪(＾∀＾●)ﾉ</string>
+    <string name="browser_install_or_enable_prompt">Please install or enable browser first</string>
+    <string name="pref_rating_title">Rating Me</string>
+    <string name="pref_rating_summary">Rating me on Cool Market</string>
+    <string name="cool_market_enable_prompt">Please enable cool market</string>
+    <string name="cool_market_install_prompt">Please install cool market</string>
+    <string name="pref_donate_by_alipay_title">Donate by Alipay</string>
+    <string name="alipay_install_prompt">Please install Alipay first</string>
+    <string name="alipay_enable_prompt">Please enable Alipay</string>
+    <string name="pref_donate_by_wechat_title">Donate by Wechat</string>
+    <string name="wechat_install_prompt">Please install Wechat first</string>
+    <string name="wechat_enable_prompt">Please enable Wechat</string>
+    <!-- preferences about end -->
+
+    <!-- preferences auto-input SMS code -->
+    <string name="pref_entry_auto_input_code_title">Auto-input Settings</string>
+    <string name="pref_entry_auto_input_code_summary">Auto-input SMS code settings</string>
+    <string name="pref_enable_auto_input_code_title">Enable auto-input SMS code</string>
+    <string name="pref_enable_auto_input_code_summary">Try to input SMS code automatically</string>
+    <string name="smscode_auto_input_service_label">Auto-input SMS codes</string>
+    <string name="auto_input_accessibility_service_description">Accessibility for auto input SMS code.\n\nIf you don\'t need auto-input codes service, this accessibility service is advised to be closed.</string>
+    <string name="open_auto_input_accessibility">Open auto-input accessibility</string>
+    <string name="open_auto_input_accessibility_prompt">Accessibility Service for auto-input codes need be open.\n\nNote that: accessibility service will be auto-closed frequently by system on some 3rd party ROM.</string>
+    <string name="go_to_open">Open it</string>
+    <string name="acquire_root_permission">ROOT permission required</string>
+    <string name="acquire_root_permission_prompt">Root permission for auto-input code is required</string>
+    <string name="pref_clear_clipboard_title">Clear clipboard</string>
+    <string name="pref_clear_clipboard_summary">Clear clipboard if auto input succeed</string>
+    <!-- preferences auto-input SMS code end -->
+
+    <!-- listen mode -->
+    <string name="pref_listen_mode_title">SMS listen mode</string>
+    <string name="listen_mode_entry_standard">Standard Mode(Broadcast Listen)</string>
+    <string name="listen_mode_entry_compatible">Compatible Mode(Broadcast Listen + Database Listen)</string>
+    <string name="compatible_mode_prompt_title">Compatible Mode</string>
+    <string name="compatible_mode_prompt_content">Compatible Mode will run service in background.AutoStart permission should be granted to work well after Boot completed.\n\nCompatible Mode isn\'t recommended if Standard Mode works well.</string>
+    <!-- listen mode end -->
+
+    <!-- alipay packet start -->
+    <string name="pref_get_alipay_packet_title">Get Alipay red packet</string>
+    <string name="pref_get_alipay_packet_summary">Get free alipay red packet everyday</string>
+    <string name="pref_get_alipay_packet_content">Open alipay and search %s, you can receive red packet everyday.</string>
+    <string name="copy_packet_code_open_alipay"><![CDATA[Copy code & Open alipay]]></string>
+    <string name="alipay_red_packet_code_copied">Alipay red packet code copied: %s</string>
+    <string name="get_red_packet">Get red packet</string>
+    <string name="donation_tips_title">Donation Tips</string>
+    <string name="donation_tips_content">Before donation, you can go to receive alipay red packet first.</string>
+    <string name="donate_directly">Donate directly</string>
+    <!-- alipay packet end -->
 
     <!-- Auto input mode -->
     <string name="pref_auto_input_mode_title">Auto Input Mode</string>
@@ -97,23 +138,6 @@
     <string name="pref_manual_focus_if_failed_summary">Manual focus if auto focus failed</string>
     <string name="auto_focus_failed_prompt">Auto focus failed, please manual focus in %ds</string>
 
-    <!-- Listen Mode -->
-    <string name="pref_listen_mode_title">SMS listen mode</string>
-    <string name="listen_mode_entry_standard">Standard Mode(Broadcast Listen)</string>
-    <string name="listen_mode_entry_compatible">Compatible Mode(Broadcast Listen + Database Listen)</string>
-    <string name="compatible_mode_prompt_content">Compatible Mode will run service in background.AutoStart permission should be granted to work well after Boot completed.\n\nCompatible Mode isn\'t recommended if Standard Mode works well.</string>
-    <string name="compatible_mode_prompt_title">Compatible Mode</string>
-    <!-- Listen Mode end -->
-
-    <!-- permission requirement -->
-    <string name="permission_statement">Permission Statement</string>
-    <string name="permission_requirement">Permission Requirement</string>
-    <string name="receive_sms_permission_requirement">Read SMS permission needs to be granted.</string>
-    <string name="prompt_sms_permission_denied">Read SMS permission is denied, this app will not work properly.</string>
-    <string name="service_sms_permission_requirement">Service SMS permission needs to be granted for MIUI users.</string>
-    <string name="prompt_service_sms_permission_denied">Service SMS permission is denied, this app will not work properly.</string>
-    <!-- permission requirement end -->
-
     <!-- theme color -->
     <string name="red">Red</string>
     <string name="pink">Pink</string>
@@ -125,44 +149,26 @@
     <string name="black">Dark</string>
     <!-- theme color end -->
 
-    <string name="write_sms_appops_prompt_content">
-        Writing SMS for Non-default SMS app has been limited since Android 4.4. Except for granting write SMS runtime permission, WRITE_SMS permission in AppOpsManager also should be granted.\n\nThere are two ways to handle it:\n
-        1. Granting by root, you can just click the \"GRANT BY ROOT\" button if you have ROOT access.\n\n
-        2. Granting by ADB, you can click the "VIEW ADB SETTING HELP" for more information. Note that you should reopen this switch after setting it.\n\n
-        If it\'s invalid after been applied, it may not be suitable for your ROM.
-    </string>
+    <!-- SMS parsing notification -->
+    <string name="channel_name_foreground_service">Notifications for parsing SMS message</string>
+    <string name="sms_code_notification_title">Parsing SMS message……</string>
+    <!-- SMS parsing notification end -->
+
+    <!-- FAQ -->
+    <string name="action_home_faq_title">FAQs</string>
+    <string name="simplified_question">Q:\u00A0</string>
+    <string name="simplified_answer">A:\u00A0</string>
+    <!-- FAQ end -->
+
+    <!-- app ops write sms -->
+    <string name="write_sms_appops_prompt_content">Writing SMS for Non-default SMS app has been limited since Android 4.4. Except for granting write SMS runtime permission, WRITE_SMS permission in AppOpsManager also should be granted.\n\nThere are two ways to handle it:\n1. Granting by root, you can just click the \"GRANT BY ROOT\" button if you have ROOT access.\n\n2. Granting by ADB, you can click the "VIEW ADB SETTING HELP" for more information. Note that you should reopen this switch after setting it.\n\nIf it\'s invalid after been applied, it may not be suitable for your ROM.</string>
     <string name="extra_permission_request_prompt_title">Extra Permission Requirement</string>
     <string name="view_adb_setting_help">VIEW ADB SETTING HELP</string>
     <string name="granted_by_root">GRANT BY ROOT</string>
     <string name="granted_appops_by_root_failed">Grant AppOps WRITE_SMS by root failed</string>
     <string name="granted_appops_by_root_succeed">Grant AppOps WRITE_SMS by root succeed</string>
     <string name="relevant_permission_already_granted">Relevant permissions already have been granted</string>
-
-    <!-- Q&A -->
-    <string name="simplified_question">Q:\u00A0</string>
-    <string name="simplified_answer">A:\u00A0</string>
-    <string-array name="question_list">
-        <item>本产品理念是什么？</item>
-        <item>自动输入的原理是什么？无障碍模式和ROOT模式的区别在哪里？</item>
-        <item>短信监听的标准模式和兼容模式有什么区别？如何选取？</item>
-        <item>这个App开服务了吗？占用后台资源吗？</item>
-        <item>App无效该怎么办？</item>
-        <item>为什么自动输入在大部分App上能成功，在部分App上却失败？</item>
-        <item>对焦模式中的自动寻找和手动指定有什么区别，各有什么优劣？</item>
-        <item>短信标记为已读或者删除短信，为什么不生效？</item>
-    </string-array>
-
-    <string-array name="answer_list">
-        <item>便捷生活，不做毒瘤，绿色Android，不忘初心。</item>
-        <item>收到验证码后，通过无障碍服务查找当前界面的验证码输入框，然后将验证码自动输入。\n\n无障碍模式下需要手动开启自动输入的无障碍服务(系统后台就会一直跑着这个服务)。\n\nROOT模式则是通过ROOT的方式动态地启用/关闭无障碍服务，即在解析到验证码时打开，在自动输入完毕时关闭。\n\n个人推荐采用ROOT方式。</item>
-        <item>标准模式：仅通过广播监听的方式来监听短信。\n\n兼容模式：既通过广播监听，又通过短信数据库监听的方式来监听短信。兼容模式需要常驻后台，如果需要开机自启动则请授予权限。\n\n如果标准模式能正常运行，则不推荐兼容模式。</item>
-        <item>有三个服务。\n\n一个用来解析短信中的验证码，在接收到验证码短信时开启，在解析完毕之后关闭，不占用什么资源。\n\n一个用来自动输入(即前面的无障碍服务)。\n\n一个用来监听短信数据库变化，在兼容模式下用到，需要后台常驻。</item>
-        <item>1. 在验证码短信测试中先测试短信内容能否被正确解析。\n\n2. 因为用到了服务和广播，所以检查是否在应用控制类软件（黑域、应用管理、绿色守护等）的黑名单中。\n\n3. 检查App的组件（广播接收器、服务、内容提供者等）是否被组件控制类软件（Blocker、写轮眼等）禁用。\n\n4. 检查是否在电池优化名单中，如果在请移到白名单（原理已说明，其实不耗电）。\n\n5. 检查是否已打开验证码保护开关（华为，OPPO等国内Rom存在此机制），或者是否已授予"通知类短信"权限（如MIUI）。\n\n6. 联系开发者，反馈问题。</item>
-        <item>属于正常现象，因为有些应用的验证码输入框是自定义的控件，可能没有遵循Android设计规范，故而不能被正确识别。</item>
-        <item>自动寻找模式：App程序自动寻找识别到验证码输入框之后，再自动粘贴进去。\n优势：全自动化。\n劣势：在极少数界面中因识别不了验证码输入框而失效。\n\n手动对焦模式：用户手动指定验证码输入框，即光标在哪里就在那里自动输入。\n优势：准确率高。\n劣势：非全自动化，需要多点一下屏幕。</item>
-        <item>如果您设备上默认的短信 App 使用的是它自己的短信数据库，而不是系统的短信数据库，那么标记为已读或者删除验证码短信都可能不会生效。如果发生这样的事情，就说明在您的设备上可能不会生效。</item>
-    </string-array>
-    <!-- Q&A end -->
+    <!-- app ops write sms end -->
 
     <!-- sms code rule -->
     <string name="rule_company_hint">Institution or Company</string>
@@ -219,7 +225,14 @@
     <string name="import_rules">Import Rules</string>
     <!-- sms code rule end -->
 
-    <!-- permission statement start -->
+    <!-- permission requirement start -->
+    <string name="permission_statement">Permission Statement</string>
+    <string name="permission_requirement">Permission Requirement</string>
+    <string name="receive_sms_permission_requirement">Read SMS permission needs to be granted.</string>
+    <string name="prompt_sms_permission_denied">Read SMS permission is denied, this app will not work properly.</string>
+    <string name="service_sms_permission_requirement">Service SMS permission needs to be granted for MIUI users.</string>
+    <string name="prompt_service_sms_permission_denied">Service SMS permission is denied, this app will not work properly.</string>
+
     <string-array name="perm_title_list">
         <item>Receive SMS permission</item>
         <item>Read SMS permission</item>
@@ -233,19 +246,7 @@
         <item>Write SMS permission should be granted for marking SMS as read.</item>
         <item>Only used for collecting crash log, it won\'t collect any private data(SMS data etc.). You can also deny this permission manually if you don\'t want.</item>
     </string-array>
-    <!-- permission statement end -->
-
-    <!-- alipay packet start -->
-    <string name="pref_get_alipay_packet_title">Get Alipay red packet</string>
-    <string name="pref_get_alipay_packet_summary">Get free alipay red packet everyday</string>
-    <string name="pref_get_alipay_packet_content">Open alipay and search %s, you can receive red packet everyday.</string>
-    <string name="copy_packet_code_open_alipay"><![CDATA[Copy code & Open alipay]]></string>
-    <string name="alipay_red_packet_code_copied">Alipay red packet code copied: %s</string>
-    <string name="get_red_packet">Get red packet</string>
-    <string name="donation_tips_title">Donation Tips</string>
-    <string name="donation_tips_content">Before donation, you can go to receive alipay red packet first.</string>
-    <string name="donate_directly">Donate directly</string>
-    <!-- alipay packet end -->
+    <!-- permission requirement end -->
 
     <!-- ignore battery optimization -->
     <string name="ignore_battery_optimization">Ignore Battery Optimization</string>
@@ -254,9 +255,28 @@
     <string name="battery_optimization_ignored">Battery optimization has been ignored</string>
     <string name="ignore_battery_optimization_manually">Please ignore battery optimization manually</string>
     <string name="ignore_battery_optimization_settings_failed">Go to battery optimization settings failed, please setting it manually</string>
-    <string name="pref_rating_title">Rating Me</string>
-    <string name="pref_rating_summary">Rating me on Cool Market</string>
-    <string name="cool_market_enable_prompt">Please enable cool market</string>
-    <string name="cool_market_install_prompt">Please install cool market</string>
     <!-- ignore battery optimization end -->
+
+    <!-- faq -->
+    <string-array name="question_list">
+        <item>本产品理念是什么？</item>
+        <item>自动输入的原理是什么？无障碍模式和ROOT模式的区别在哪里？</item>
+        <item>短信监听的标准模式和兼容模式有什么区别？如何选取？</item>
+        <item>这个App开服务了吗？占用后台资源吗？</item>
+        <item>App无效该怎么办？</item>
+        <item>为什么自动输入在大部分App上能成功，在部分App上却失败？</item>
+        <item>对焦模式中的自动寻找和手动指定有什么区别，各有什么优劣？</item>
+        <item>短信标记为已读或者删除短信，为什么不生效？</item>
+    </string-array>
+    <string-array name="answer_list">
+        <item>便捷生活，不做毒瘤，绿色Android，不忘初心。</item>
+        <item>收到验证码后，通过无障碍服务查找当前界面的验证码输入框，然后将验证码自动输入。\n\n无障碍模式下需要手动开启自动输入的无障碍服务(系统后台就会一直跑着这个服务)。\n\nROOT模式则是通过ROOT的方式动态地启用/关闭无障碍服务，即在解析到验证码时打开，在自动输入完毕时关闭。\n\n个人推荐采用ROOT方式。</item>
+        <item>标准模式：仅通过广播监听的方式来监听短信。\n\n兼容模式：既通过广播监听，又通过短信数据库监听的方式来监听短信。兼容模式需要常驻后台，如果需要开机自启动则请授予权限。\n\n如果标准模式能正常运行，则不推荐兼容模式。</item>
+        <item>有三个服务。\n\n一个用来解析短信中的验证码，在接收到验证码短信时开启，在解析完毕之后关闭，不占用什么资源。\n\n一个用来自动输入(即前面的无障碍服务)。\n\n一个用来监听短信数据库变化，在兼容模式下用到，需要后台常驻。</item>
+        <item>1. 在验证码短信测试中先测试短信内容能否被正确解析。\n\n2. 因为用到了服务和广播，所以检查是否在应用控制类软件（黑域、应用管理、绿色守护等）的黑名单中。\n\n3. 检查App的组件（广播接收器、服务、内容提供者等）是否被组件控制类软件（Blocker、写轮眼等）禁用。\n\n4. 检查是否在电池优化名单中，如果在请移到白名单（原理已说明，其实不耗电）。\n\n5. 检查是否已打开验证码保护开关（华为，OPPO等国内Rom存在此机制），或者是否已授予"通知类短信"权限（如MIUI）。\n\n6. 联系开发者，反馈问题。</item>
+        <item>属于正常现象，因为有些应用的验证码输入框是自定义的控件，可能没有遵循Android设计规范，故而不能被正确识别。</item>
+        <item>自动寻找模式：App程序自动寻找识别到验证码输入框之后，再自动粘贴进去。\n优势：全自动化。\n劣势：在极少数界面中因识别不了验证码输入框而失效。\n\n手动对焦模式：用户手动指定验证码输入框，即光标在哪里就在那里自动输入。\n优势：准确率高。\n劣势：非全自动化，需要多点一下屏幕。</item>
+        <item>如果您设备上默认的短信 App 使用的是它自己的短信数据库，而不是系统的短信数据库，那么标记为已读或者删除验证码短信都可能不会生效。如果发生这样的事情，就说明在您的设备上可能不会生效。</item>
+    </string-array>
+    <!-- faq end -->
 </resources>

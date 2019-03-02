@@ -1,73 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">驗證碼擷取器</string>
 
-    <!-- General -->
+    <!-- general -->
     <string name="okay">好的</string>
     <string name="confirm">確定</string>
+    <string name="cancel">取消</string>
+    <!-- general end -->
 
-    <!-- preferences -->
+    <!-- preferences general -->
     <string name="pref_general_title">一般設定</string>
     <string name="pref_enable_title">啟用</string>
     <string name="pref_enable_summary_off">需要接收和讀取簡訊權限</string>
     <string name="pref_enable_summary_on">不再需要時可關閉此開關</string>
     <string name="pref_show_toast_title">顯示快顯訊息</string>
     <string name="pref_show_toast_summary">接收到驗證碼時顯示快顯訊息</string>
-    <string name="pref_donate_by_alipay_title">支付寶捐贈</string>
-    <string name="pref_donate_by_wechat_title">微信捐贈</string>
-    <string name="pref_about_title">關於</string>
-    <string name="pref_version_title">版本</string>
-    <string name="pref_version_summary">當前版本：%1$s (%2$d)</string>
-    <string name="pref_source_code_title">項目源碼</string>
-    <string name="pref_source_code_summary">歡迎Star ♪(＾∀＾)ﾉ</string>
-    <string name="browser_install_or_enable_prompt">請先安裝或啟用瀏覽器</string>
-    <string name="alipay_install_prompt">請先安裝支付寶</string>
-    <string name="alipay_enable_prompt">請先啟用支付寶</string>
-    <string name="wechat_install_prompt">請先安裝微信</string>
-    <string name="wechat_enable_prompt">請先啟用微信</string>
-    <string name="cur_verification_code">當前驗證碼：%s</string>
-    <string name="pref_mark_as_read_title">標記為已讀</string>
+    <string name="pref_copy_to_clipboard_title">拷貝到剪切板</string>
+    <string name="pref_copy_to_clipboard_summary">擷取成功后拷貝驗證碼到系統剪切板</string>
+    <string name="pref_choose_theme_title">主題</string>
+    <!-- preferences general end -->
+
+    <!-- preferences experimental -->
+    <string name="pref_experimental_title">實驗性功能</string>
+    <string name="pref_mark_as_read_title">驗證碼簡訊標記為已讀</string>
     <string name="pref_mark_as_read_summary">將驗證碼簡訊標記為已讀</string>
+    <string name="pref_delete_sms_title">簡訊刪除</string>
+    <string name="pref_delete_sms_summary">警告：擷取成功后將簡訊刪除</string>
+    <string name="pref_block_notify_title">攔截簡訊通知</string>
+    <string name="pref_block_notify_summary">攔截驗證碼簡訊通知</string>
+    <string name="notification_access_prompt_content">攔截驗證碼短信通知需要手動授予通知使用權。</string>
+    <!-- preferences experimental end -->
+
+    <!-- preferences code SMS -->
+    <string name="pref_smscode_title">驗證碼簡訊</string>
     <string name="pref_smscode_keywords_title">驗證碼簡訊關鍵字</string>
     <string name="pref_smscode_keywords_summary">簡訊關鍵字(正則表達式)</string>
-    <string name="pref_smscode_title">驗證碼簡訊</string>
     <string name="reset">重置</string>
     <string name="code_keywords_hint">關鍵字(正則表達式)</string>
     <string name="pref_smscode_test_title">驗證碼簡訊測試</string>
     <string name="pref_smscode_test_summary">測試是否能正確辨識簡訊中的驗證碼</string>
     <string name="sms_content_hint">簡訊內容</string>
     <string name="test">測試</string>
-    <string name="cancel">取消</string>
+    <string name="cur_verification_code">當前驗證碼：%s</string>
     <string name="cannot_parse_smscode">無法正確辨識驗證碼</string>
-    <string name="auto_input_accessibility_service_description">利用無障礙服務啟用自動輸入。\n\n如果不需要此項功能，則建議關閉。</string>
-    <string name="pref_experimental_title">實驗性功能</string>
-    <string name="pref_entry_auto_input_code_title">自動輸入設定</string>
-    <string name="pref_entry_auto_input_code_summary">驗證碼自動輸入設定</string>
-    <string name="open_auto_input_accessibility">打開無障礙服務</string>
-    <string name="open_auto_input_accessibility_prompt">需要打開無障礙服務啟用自動輸入。\n\n注意：在一些第三方Rom上，無障礙服務會被系統自動關閉，所以此選項可能無效。</string>
-    <string name="go_to_open">去打開</string>
-    <string name="smscode_auto_input_service_label">簡訊驗證碼自動輸入服務</string>
-    <string name="pref_enable_auto_input_code_title">啟用自動輸入</string>
-    <string name="pref_enable_auto_input_code_summary">嘗試自動輸入驗證碼</string>
-    <string name="acquire_root_permission">獲取Root權限</string>
-    <string name="acquire_root_permission_prompt">需要獲取Root權限啟用自動輸入</string>
-    <string name="channel_name_foreground_service">分析簡訊時的通知</string>
-    <string name="sms_code_notification_title">簡訊分析中……</string>
-    <string name="action_home_faq_title">常見問題</string>
-    <string name="pref_verbose_log_mode_title">輸出詳細日誌</string>
-    <string name="pref_verbose_log_mode_summary_off">輸出詳細的日誌(僅用於調試)</string>
-    <string name="pref_choose_theme_title">主題</string>
-    <string name="pref_clear_clipboard_title">清除剪切板</string>
-    <string name="pref_clear_clipboard_summary">自動輸入成功后清除剪切板</string>
-    <string name="pref_others_title">其它</string>
-    <string name="pref_exclude_from_recents_title">不在最近任務列表中顯示</string>
-    <string name="pref_delete_sms_title">簡訊刪除</string>
-    <string name="pref_delete_sms_summary">警告：擷取成功后將簡訊刪除</string>
-    <string name="pref_copy_to_clipboard_title">拷貝到剪切板</string>
-    <string name="pref_copy_to_clipboard_summary">擷取成功后拷貝驗證碼到系統剪切板</string>
+    <!-- preferences code SMS end -->
+
+    <!-- preferences code records -->
+    <string name="pref_code_records_title">簡訊驗證碼記錄</string>
+    <string name="pref_enable_code_records_title">啟用驗證碼記錄</string>
     <string name="pref_entry_code_records_title">驗證碼歷史記錄</string>
     <string name="pref_entry_code_records_summary">最多保留%d條記錄</string>
-    <string name="pref_code_records_title">簡訊驗證碼記錄</string>
     <string name="smscode_records">驗證碼記錄</string>
     <string name="edit_smscode_records">編輯驗證碼記錄</string>
     <string name="prompt_sms_code_copied">已複製驗證碼: %s</string>
@@ -76,11 +57,69 @@
     <string name="some_items_removed">已刪除%d項記錄</string>
     <string name="message_details">簡訊詳情</string>
     <string name="copy_smscode">複製驗證碼</string>
-    <string name="pref_enable_code_records_title">啟用驗證碼記錄</string>
-    <string name="pref_block_notify_title">攔截簡訊通知</string>
-    <string name="pref_block_notify_summary">攔截驗證碼簡訊通知</string>
-    <string name="notification_access_prompt_content">攔截驗證碼短信通知需要手動授予通知使用權。</string>
-    <!-- preferences end -->
+    <!-- preferences code records end -->
+
+    <!-- preferences others -->
+    <string name="pref_others_title">其它</string>
+    <string name="pref_exclude_from_recents_title">不在最近任務列表中顯示</string>
+    <string name="pref_verbose_log_mode_title">輸出詳細日誌</string>
+    <string name="pref_verbose_log_mode_summary_off">輸出詳細的日誌(僅用於調試)</string>
+    <!-- preferences others end -->
+
+    <!-- preferences about -->
+    <string name="pref_about_title">關於</string>
+    <string name="pref_version_title">版本</string>
+    <string name="pref_version_summary">當前版本：%1$s (%2$d)</string>
+    <string name="pref_source_code_title">項目源碼</string>
+    <string name="pref_source_code_summary">歡迎Star ♪(＾∀＾)ﾉ</string>
+    <string name="browser_install_or_enable_prompt">請先安裝或啟用瀏覽器</string>
+    <string name="pref_rating_title">給個評分</string>
+    <string name="pref_rating_summary">在酷安上給個評分</string>
+    <string name="cool_market_enable_prompt">請啟用酷安</string>
+    <string name="cool_market_install_prompt">請安裝酷安</string>
+    <string name="pref_donate_by_alipay_title">支付寶捐贈</string>
+    <string name="alipay_install_prompt">請先安裝支付寶</string>
+    <string name="alipay_enable_prompt">請先啟用支付寶</string>
+    <string name="pref_donate_by_wechat_title">微信捐贈</string>
+    <string name="wechat_install_prompt">請先安裝微信</string>
+    <string name="wechat_enable_prompt">請先啟用微信</string>
+    <!-- preferences about end -->
+
+    <!-- preferences auto-input SMS code -->
+    <string name="pref_entry_auto_input_code_title">自動輸入設定</string>
+    <string name="pref_entry_auto_input_code_summary">驗證碼自動輸入設定</string>
+    <string name="pref_enable_auto_input_code_title">啟用自動輸入</string>
+    <string name="pref_enable_auto_input_code_summary">嘗試自動輸入驗證碼</string>
+    <string name="smscode_auto_input_service_label">簡訊驗證碼自動輸入服務</string>
+    <string name="auto_input_accessibility_service_description">利用無障礙服務啟用自動輸入。\n\n如果不需要此項功能，則建議關閉。</string>
+    <string name="open_auto_input_accessibility">打開無障礙服務</string>
+    <string name="open_auto_input_accessibility_prompt">需要打開無障礙服務啟用自動輸入。\n\n注意：在一些第三方Rom上，無障礙服務會被系統自動關閉，所以此選項可能無效。</string>
+    <string name="go_to_open">去打開</string>
+    <string name="acquire_root_permission">獲取Root權限</string>
+    <string name="acquire_root_permission_prompt">需要獲取Root權限啟用自動輸入</string>
+    <string name="pref_clear_clipboard_title">清除剪切板</string>
+    <string name="pref_clear_clipboard_summary">自動輸入成功后清除剪切板</string>
+    <!-- preferences auto-input SMS code end -->
+
+    <!-- listen mode -->
+    <string name="pref_listen_mode_title">簡訊監聽模式</string>
+    <string name="listen_mode_entry_standard">標準模式(廣播監聽)</string>
+    <string name="listen_mode_entry_compatible">兼容模式(廣播監聽+數據庫監聽)</string>
+    <string name="compatible_mode_prompt_title">兼容模式</string>
+    <string name="compatible_mode_prompt_content">兼容模式需要常駐背景，如果需要開機自啟動則請授予權限。\n\n如果標準模式能正常運作，則不推薦兼容模式。</string>
+    <!-- listen mode end -->
+
+    <!-- alipay packet start -->
+    <string name="pref_get_alipay_packet_title">領取支付寶紅包</string>
+    <string name="pref_get_alipay_packet_summary">每天可領取支付寶紅包</string>
+    <string name="pref_get_alipay_packet_content">打開支付寶首頁搜索 %s 可每天領取紅包~</string>
+    <string name="copy_packet_code_open_alipay">複製紅包碼并打開支付寶</string>
+    <string name="alipay_red_packet_code_copied">已複製紅包碼：%s</string>
+    <string name="get_red_packet">領取紅包</string>
+    <string name="donation_tips_title">捐贈提示</string>
+    <string name="donation_tips_content">捐贈前您可以先領取支付寶紅包哦~</string>
+    <string name="donate_directly">直接捐贈</string>
+    <!-- alipay packet end -->
 
     <!-- Auto input mode -->
     <string name="pref_auto_input_mode_title">自動輸入模式</string>
@@ -99,23 +138,6 @@
     <string name="pref_manual_focus_if_failed_summary">優先自動對焦，自動對焦失敗後轉手動對焦</string>
     <string name="auto_focus_failed_prompt">自動對焦失敗，請在%d秒內手動對焦</string>
 
-    <!-- Listen Mode -->
-    <string name="pref_listen_mode_title">簡訊監聽模式</string>
-    <string name="listen_mode_entry_standard">標準模式(廣播監聽)</string>
-    <string name="listen_mode_entry_compatible">兼容模式(廣播監聽+數據庫監聽)</string>
-    <string name="compatible_mode_prompt_title">兼容模式</string>
-    <string name="compatible_mode_prompt_content">兼容模式需要常駐背景，如果需要開機自啟動則請授予權限。\n\n如果標準模式能正常運作，則不推薦兼容模式。</string>
-    <!-- Listen Mode end -->
-
-    <!-- permission requirement -->
-    <string name="permission_statement">權限聲明</string>
-    <string name="permission_requirement">權限獲取</string>
-    <string name="receive_sms_permission_requirement">需要獲得讀取簡訊權限</string>
-    <string name="prompt_sms_permission_denied">讀取簡訊權限獲取失敗，本應用將無法正常運作。</string>
-    <string name="service_sms_permission_requirement">MIUI中需要獲得通知類簡訊權限</string>
-    <string name="prompt_service_sms_permission_denied">通知類簡訊權限獲取失敗，本應用將無法正常運作。</string>
-    <!-- permission requirement end -->
-
     <!-- theme color -->
     <string name="red">姨媽紅</string>
     <string name="pink">櫻花粉</string>
@@ -127,47 +149,26 @@
     <string name="black">Dark♂黑</string>
     <!-- theme color end -->
 
-    <!-- Q&A -->
+    <!-- SMS parsing notification -->
+    <string name="channel_name_foreground_service">分析簡訊時的通知</string>
+    <string name="sms_code_notification_title">簡訊分析中……</string>
+    <!-- SMS parsing notification end -->
+
+    <!-- FAQ -->
+    <string name="action_home_faq_title">常見問題</string>
     <string name="simplified_question">問：</string>
     <string name="simplified_answer">答：</string>
+    <!-- FAQ end -->
 
-    <string-array name="question_list">
-        <item>這個產品的理念是什麼？</item>
-        <item>自動輸入的原理是什麼？無障礙模式和Root模式的差別在哪裡呢？</item>
-        <item>簡訊監聽的標準模式和兼容模式有什麼區別？如何選取？</item>
-        <item>此App需要在背景執行嗎？會占用多少資源呢？</item>
-        <item>App無效該怎麼辦？</item>
-        <item>為什麼自動輸入在大部分應用上能成功，在特定應用上卻失敗？</item>
-        <item>對焦模式中的自動尋找和手動指定有什麽區別，各有什麽優劣？</item>
-        <item>標記簡訊為已讀或者刪除簡訊，為什麼不生效</item>
-    </string-array>
-
-    <string-array name="answer_list">
-        <item>便捷生活，不做毒瘤，綠色Android，不忘初心。</item>
-        <item>收到驗證碼後，尋找當前介面的驗證碼輸入框，然後自動輸入。\n\n無障礙模式打開後，系統會在背景持續運行這項服務。\n\nRoot模式是透過Root的方式動態開啟/關閉無障礙服務，在分析驗證碼時打開，自動輸入完畢後關閉。\n\n個人推薦使用Root模式。</item>
-        <item>標準模式：僅透過廣播監聽的方式來監聽簡訊。\n\n兼容模式：即透過廣播監聽，又透過簡訊數據庫監聽的方式來監聽簡訊。兼容模式需要常駐背景，如果需要開機自啟動則請授予權限。\n\n如果標準模式能正常運作，則不推薦兼容模式。</item>
-        <item>此App使用了三項服務。\n\n一項用來解析簡訊中的驗證碼，在接收到簡訊時開啟，並在分析完畢後關閉，基本上不占用資源。\n\n一項用來自動輸入(無障礙服務)。\n\n一項用來監聽簡訊數據庫變化，在兼容模式下用到，需要常駐背景。</item>
-        <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此App加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 檢查App的組件（廣播接收器、服務、內容提供者）是否被組件控制類軟體（Blocker、寫輪眼等）禁用。\m\m4.檢查本App是否已套用電池效能最佳化設定，如果在請取消套用（原理已說明，其實不耗電）。\n\n5. 檢查是否已經打開驗證碼保護開關（華為，OPPO等ROM存在此機制），或者是否已授予"通知類簡訊"權限（如MIUI）。\n\n 6. 請聯繫開發者，並回報相關問題。</item>
-        <item>屬於正常現象，因為有些應用的驗證碼輸入框是自定義的控件，可能沒有遵循Android設計規範，故而不能被正確識別。</item>
-        <item>自動尋找模式：App程式自動尋找識別出驗證碼輸入框之後，再自動粘貼進去。\n優勢：全自動化。\n劣勢：在極少數界面中因識別不了驗證碼輸入框而失效。\n\n手動對焦模式：用戶手動指定驗證碼輸入框，即光標在哪裏就在那裏自動輸入。\n優勢：準確率高。\n劣勢：非全自動化，需要多點一下屏幕。</item>
-        <item>如果您設備上默認的簡訊 App 使用的是它自己的簡訊數據庫，而不是系統的簡訊數據庫，那麼標記為已讀或者刪除驗證碼簡訊都可能不會生效。如果發生這樣的事情，就說明在您的設備上可能不會生效。</item>
-    </string-array>
-    <!-- Q&A end -->
-
-    <!-- App Ops WRITE_SMS -->
-    <string name="write_sms_appops_prompt_content">
-        自Android 4.4起，非默認簡訊應用修改簡訊的權限得到限制。除了授予寫簡訊的權限外，還需要修改AppOps的設置給予 WRITE_SMS 權限。\n\n有兩種設定方式：\n
-        1. 通過 ROOT 方式授予，詳情點擊下方的\"ROOT授予\"即可。\n\n
-        2. 通過 ADB 命令方式修改，詳情點擊下方的\"查看ADB設置幫助\"，設置完畢後需重新打開該開關選項。\n\n
-        如果應用此開關後並不生效，則此選項並不適用於您當前的ROM。
-    </string>
+    <!-- app ops write sms -->
+    <string name="write_sms_appops_prompt_content">自Android 4.4起，非默認簡訊應用修改簡訊的權限得到限制。除了授予寫簡訊的權限外，還需要修改AppOps的設置給予 WRITE_SMS 權限。\n\n有兩種設定方式：\n1. 通過 ROOT 方式授予，詳情點擊下方的\"ROOT授予\"即可。\n\n2. 通過 ADB 命令方式修改，詳情點擊下方的\"查看ADB設置幫助\"，設置完畢後需重新打開該開關選項。\n\n如果應用此開關後並不生效，則此選項並不適用於您當前的ROM。</string>
     <string name="extra_permission_request_prompt_title">額外權限請求聲明</string>
     <string name="view_adb_setting_help">查看ADB設置幫助</string>
     <string name="granted_by_root">Root授予</string>
     <string name="granted_appops_by_root_failed">Root授予 AppOps WRITE_SMS 權限失敗</string>
     <string name="granted_appops_by_root_succeed">Root授予 AppOps WRITE_SMS 權限成功</string>
     <string name="relevant_permission_already_granted">已授予相關權限</string>
-    <!-- App Ops WRITE_SMS end -->
+    <!-- app ops write sms end -->
 
     <!-- sms code rule -->
     <string name="rule_company_hint">公司或組織名</string>
@@ -224,7 +225,14 @@
     <string name="import_rules">導入規則</string>
     <!-- sms code rule end -->
 
-    <!-- permission statement start -->
+    <!-- permission requirement start -->
+    <string name="permission_statement">權限聲明</string>
+    <string name="permission_requirement">權限獲取</string>
+    <string name="receive_sms_permission_requirement">需要獲得讀取簡訊權限</string>
+    <string name="prompt_sms_permission_denied">讀取簡訊權限獲取失敗，本應用將無法正常運作。</string>
+    <string name="service_sms_permission_requirement">MIUI中需要獲得通知類簡訊權限</string>
+    <string name="prompt_service_sms_permission_denied">通知類簡訊權限獲取失敗，本應用將無法正常運作。</string>
+
     <string-array name="perm_title_list">
         <item>接收簡訊(RECEIVE_SMS)</item>
         <item>讀簡訊(READ_SMS)</item>
@@ -238,19 +246,7 @@
         <item>驗證碼簡訊標記為已讀需要寫簡訊權限</item>
         <item>僅用於收集崩潰日誌，承諾不會收集任何簡訊數據；不想這樣也可以手動關閉該權限</item>
     </string-array>
-    <!-- permission statement end -->
-
-    <!-- alipay packet start -->
-    <string name="pref_get_alipay_packet_title">領取支付寶紅包</string>
-    <string name="pref_get_alipay_packet_summary">每天可領取支付寶紅包</string>
-    <string name="pref_get_alipay_packet_content">打開支付寶首頁搜索 %s 可每天領取紅包~</string>
-    <string name="copy_packet_code_open_alipay">複製紅包碼并打開支付寶</string>
-    <string name="alipay_red_packet_code_copied">已複製紅包碼：%s</string>
-    <string name="get_red_packet">領取紅包</string>
-    <string name="donation_tips_title">捐贈提示</string>
-    <string name="donation_tips_content">捐贈前您可以先領取支付寶紅包哦~</string>
-    <string name="donate_directly">直接捐贈</string>
-    <!-- alipay packet end -->
+    <!-- permission requirement end -->
 
     <!-- ignore battery optimization -->
     <string name="ignore_battery_optimization">忽略電池效能最佳化</string>
@@ -259,9 +255,28 @@
     <string name="battery_optimization_ignored">已忽略此程式的電池效能最佳化</string>
     <string name="ignore_battery_optimization_manually">請手動設定忽略電池效能最佳化</string>
     <string name="ignore_battery_optimization_settings_failed">跳轉至電池效能最佳化設定失敗，請手動設定</string>
-    <string name="pref_rating_title">給個評分</string>
-    <string name="pref_rating_summary">在酷安上給個評分</string>
-    <string name="cool_market_install_prompt">請安裝酷安</string>
-    <string name="cool_market_enable_prompt">請啟用酷安</string>
     <!-- ignore battery optimization end -->
+
+    <!-- faq -->
+    <string-array name="question_list">
+        <item>這個產品的理念是什麼？</item>
+        <item>自動輸入的原理是什麼？無障礙模式和Root模式的差別在哪裡呢？</item>
+        <item>簡訊監聽的標準模式和兼容模式有什麼區別？如何選取？</item>
+        <item>此App需要在背景執行嗎？會占用多少資源呢？</item>
+        <item>App無效該怎麼辦？</item>
+        <item>為什麼自動輸入在大部分應用上能成功，在特定應用上卻失敗？</item>
+        <item>對焦模式中的自動尋找和手動指定有什麽區別，各有什麽優劣？</item>
+        <item>標記簡訊為已讀或者刪除簡訊，為什麼不生效</item>
+    </string-array>
+    <string-array name="answer_list">
+        <item>便捷生活，不做毒瘤，綠色Android，不忘初心。</item>
+        <item>收到驗證碼後，尋找當前介面的驗證碼輸入框，然後自動輸入。\n\n無障礙模式打開後，系統會在背景持續運行這項服務。\n\nRoot模式是透過Root的方式動態開啟/關閉無障礙服務，在分析驗證碼時打開，自動輸入完畢後關閉。\n\n個人推薦使用Root模式。</item>
+        <item>標準模式：僅透過廣播監聽的方式來監聽簡訊。\n\n兼容模式：即透過廣播監聽，又透過簡訊數據庫監聽的方式來監聽簡訊。兼容模式需要常駐背景，如果需要開機自啟動則請授予權限。\n\n如果標準模式能正常運作，則不推薦兼容模式。</item>
+        <item>此App使用了三項服務。\n\n一項用來解析簡訊中的驗證碼，在接收到簡訊時開啟，並在分析完畢後關閉，基本上不占用資源。\n\n一項用來自動輸入(無障礙服務)。\n\n一項用來監聽簡訊數據庫變化，在兼容模式下用到，需要常駐背景。</item>
+        <item>1. 在驗證碼簡訊測試功能先測試一下內容是否能被正確分析。\n\n2. 因為使用到相關服務及推播，建議將此App加入應用控制類程式(黑閾、綠色守護等)的白名單中。\n\n3. 檢查App的組件（廣播接收器、服務、內容提供者）是否被組件控制類軟體（Blocker、寫輪眼等）禁用。\m\m4.檢查本App是否已套用電池效能最佳化設定，如果在請取消套用（原理已說明，其實不耗電）。\n\n5. 檢查是否已經打開驗證碼保護開關（華為，OPPO等ROM存在此機制），或者是否已授予"通知類簡訊"權限（如MIUI）。\n\n 6. 請聯繫開發者，並回報相關問題。</item>
+        <item>屬於正常現象，因為有些應用的驗證碼輸入框是自定義的控件，可能沒有遵循Android設計規範，故而不能被正確識別。</item>
+        <item>自動尋找模式：App程式自動尋找識別出驗證碼輸入框之後，再自動粘貼進去。\n優勢：全自動化。\n劣勢：在極少數界面中因識別不了驗證碼輸入框而失效。\n\n手動對焦模式：用戶手動指定驗證碼輸入框，即光標在哪裏就在那裏自動輸入。\n優勢：準確率高。\n劣勢：非全自動化，需要多點一下屏幕。</item>
+        <item>如果您設備上默認的簡訊 App 使用的是它自己的簡訊數據庫，而不是系統的簡訊數據庫，那麼標記為已讀或者刪除驗證碼簡訊都可能不會生效。如果發生這樣的事情，就說明在您的設備上可能不會生效。</item>
+    </string-array>
+    <!-- faq end -->
 </resources>
