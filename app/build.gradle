@@ -17,8 +17,8 @@ android {
         applicationId "com.github.tianma8023.smscode"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 19
-        versionName "1.7.0 - 过年好~"
+        versionCode 20
+        versionName "1.7.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "en", "zh-rCN", "zh-rTW"
     }
@@ -65,17 +65,20 @@ android {
     }
 
     applicationVariants.all { variant ->
+//        variant.outputs.all { output ->
+//            def outputFile = output.outputFile
+//            if (outputFile != null && outputFile.name.endsWith(".apk")) {
+//                def fileName = ""
+//                if (variant.buildType.name == 'release') {
+//                    fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_r.apk"
+//                } else if (variant.buildType.name == 'debug') {
+//                    fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_d.apk"
+//                }
+//                outputFileName = fileName
+//            }
+//        }
         variant.outputs.all { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith(".apk")) {
-                def fileName = ""
-                if (variant.buildType.name == 'release') {
-                    fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_r.apk"
-                } else if (variant.buildType.name == 'debug') {
-                    fileName = "SmsCodeExtractor_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_d.apk"
-                }
-                outputFileName = fileName
-            }
+            output.outputFileName = "SmsCodeExtractor_v${variant.versionName}_${releaseTime()}_${variant.productFlavors[0].name}_${variant.buildType.name.charAt(0)}.apk"
         }
     }
 

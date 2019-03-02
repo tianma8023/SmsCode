@@ -1,4 +1,7 @@
 # Update Logs
+- 19.03.02 v1.7.1
+  1. New：add entry for rating on Cool Market.
+  2. Optimization: optimize some functions.
 - 19.02.04 v1.7.0 Happy Chinese New Year
   1. Optimization: optimize the algorithm of parsing SMS code.
 - 19.01.21 v1.6.5
