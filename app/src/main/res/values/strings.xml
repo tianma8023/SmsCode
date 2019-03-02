@@ -254,5 +254,9 @@
     <string name="battery_optimization_ignored">Battery optimization has been ignored</string>
     <string name="ignore_battery_optimization_manually">Please ignore battery optimization manually</string>
     <string name="ignore_battery_optimization_settings_failed">Go to battery optimization settings failed, please setting it manually</string>
+    <string name="pref_rating_title">Rating Me</string>
+    <string name="pref_rating_summary">Rating me on Cool Market</string>
+    <string name="cool_market_enable_prompt">Please enable cool market</string>
+    <string name="cool_market_install_prompt">Please install cool market</string>
     <!-- ignore battery optimization end -->
 </resources>

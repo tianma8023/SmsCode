@@ -76,6 +76,7 @@ import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GET_ALIPAY_PACKET;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_RATING;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
@@ -180,11 +181,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         // about group
         Preference versionPref = findPreference(KEY_VERSION);
         refreshVersionInfoPreference(versionPref);
-
         findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
-
+        findPreference(KEY_RATING).setOnPreferenceClickListener(this);
         findPreference(KEY_GET_ALIPAY_PACKET).setOnPreferenceClickListener(this);
-
         findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
 
         // findPreference(PrefConst.KEY_DONATE_BY_WECHAT).setOnPreferenceClickListener(this);
@@ -281,6 +280,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 break;
             case KEY_DONATE_BY_WECHAT:
                 donateByWechat();
+                break;
+            case KEY_RATING:
+                ratingOnCoolMarket();
                 break;
             default:
                 return false;
@@ -701,6 +703,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     })
                     .build();
             dialog.show();
+        }
+    }
+
+    private void ratingOnCoolMarket() {
+        if (PackageUtils.isCoolMarketEnabled(mActivity)) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID));
+            intent.setPackage(Const.COOL_MARKET_PACKAGE_NAME);
+            startActivity(intent);
+        } else {
+            if (PackageUtils.isCoolMarketInstalled(mActivity)) {
+                // installed but disabled
+                Toast.makeText(mActivity, R.string.cool_market_enable_prompt, Toast.LENGTH_SHORT).show();
+            } else {
+                // not installed
+                Toast.makeText(mActivity, R.string.cool_market_install_prompt, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

@@ -17,6 +17,8 @@ public interface Const {
     String WECHAT_KEY_EXTRA_DONATE = "TianmaDonate";
     String WECHAT_QRCODE_URL = "m01pPa@:hEyGJ5P*a1@$xPI";
 
+    String COOL_MARKET_PACKAGE_NAME = "com.coolapk.market";
+
     String PROJECT_DOC_BASE_URL = "https://tianma8023.github.io/SmsCodeExtractor";
     String DOC_APPOPS_ADB_HELP = "appops_adb_help";
     String DOC_SMS_CODE_RULE_HELP ="sms_code_rule_help";

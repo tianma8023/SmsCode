@@ -233,4 +233,9 @@
     <string name="ignore_battery_optimization_manually">请手动设置忽略电源优化</string>
     <string name="ignore_battery_optimization_settings_failed">跳转到电池优化失败，请手动设置</string>
     <!-- ignore battery optimization end -->
+
+    <string name="pref_rating_title">给个评分</string>
+    <string name="pref_rating_summary">在酷安上给个评分</string>
+    <string name="cool_market_enable_prompt">请启用酷安</string>
+    <string name="cool_market_install_prompt">请安装酷安</string>
 </resources>

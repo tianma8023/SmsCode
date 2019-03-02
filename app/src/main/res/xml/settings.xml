@@ -161,6 +161,12 @@
             android:title="@string/pref_source_code_title"/>
 
         <Preference
+            android:icon="@drawable/ic_rating"
+            android:summary="@string/pref_rating_summary"
+            android:title="@string/pref_rating_title"
+            android:key="@string/pref_rating"/>
+
+        <Preference
             android:icon="@drawable/ic_alipay_red_packet"
             android:key="@string/pref_get_alipay_packet"
             android:summary="@string/pref_get_alipay_packet_summary"

@@ -259,5 +259,9 @@
     <string name="battery_optimization_ignored">已忽略此程式的電池效能最佳化</string>
     <string name="ignore_battery_optimization_manually">請手動設定忽略電池效能最佳化</string>
     <string name="ignore_battery_optimization_settings_failed">跳轉至電池效能最佳化設定失敗，請手動設定</string>
+    <string name="pref_rating_title">給個評分</string>
+    <string name="pref_rating_summary">在酷安上給個評分</string>
+    <string name="cool_market_install_prompt">請安裝酷安</string>
+    <string name="cool_market_enable_prompt">請啟用酷安</string>
     <!-- ignore battery optimization end -->
 </resources>
