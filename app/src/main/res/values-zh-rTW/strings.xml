@@ -21,13 +21,13 @@
 
     <!-- preferences experimental -->
     <string name="pref_experimental_title">實驗性功能</string>
-    <string name="pref_mark_as_read_title">驗證碼簡訊標記為已讀</string>
+    <string name="pref_mark_as_read_title">簡訊標記為已讀</string>
     <string name="pref_mark_as_read_summary">將驗證碼簡訊標記為已讀</string>
     <string name="pref_delete_sms_title">簡訊刪除</string>
-    <string name="pref_delete_sms_summary">警告：擷取成功后將簡訊刪除</string>
-    <string name="pref_block_notify_title">攔截簡訊通知</string>
+    <string name="pref_delete_sms_summary">警告：擷取成功后將驗證碼簡訊刪除</string>
+    <string name="pref_block_notify_title">簡訊通知攔截</string>
     <string name="pref_block_notify_summary">攔截驗證碼簡訊通知</string>
-    <string name="notification_access_prompt_content">攔截驗證碼短信通知需要手動授予通知使用權。</string>
+    <string name="notification_access_prompt_content">攔截驗證碼簡訊通知需要手動授予通知使用權。</string>
     <!-- preferences experimental end -->
 
     <!-- preferences code SMS -->
