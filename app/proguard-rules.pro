@@ -20,6 +20,18 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# obfuscate method & variables
+-obfuscationdictionary proguard-dictionary.txt
+
+# obfuscate class name
+-classobfuscationdictionary proguard-dictionary.txt
+
+# obfuscate package name
+-packageobfuscationdictionary proguard-dictionary.txt
+
+# repackage
+-repackageclasses android.support.v7
+
 # ===============================
 # AndPermission start
 -dontwarn com.yanzhenjie.permission.**
