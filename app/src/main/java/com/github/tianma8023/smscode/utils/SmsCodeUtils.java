@@ -40,19 +40,20 @@ public class SmsCodeUtils {
      */
     public static boolean containsCodeKeywords(Context context, String content) {
         String keywordsRegex = loadCodeKeywords(context);
-        return containsCodeKeywords(keywordsRegex, content);
+        String keyword = parseKeyword(keywordsRegex, content);
+        return !TextUtils.isEmpty(keyword);
     }
 
     /**
-     * 是否包含短信验证码关键字
-     *
-     * @param keywordsRegex SMS code message keywords (regex expressions)
-     * @param content       sms message content
+     * 解析文本内容中的验证码关键字，如果有则返回第一个匹配到的关键字，否则返回 空字符串
      */
-    private static boolean containsCodeKeywords(String keywordsRegex, String content) {
+    private static String parseKeyword(String keywordsRegex, String content) {
         Pattern pattern = Pattern.compile(keywordsRegex);
         Matcher matcher = pattern.matcher(content);
-        return matcher.find();
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return "";
     }
 
     private static String loadCodeKeywords(Context context) {
@@ -80,11 +81,12 @@ public class SmsCodeUtils {
     private static String parseByDefaultRule(Context context, String content) {
         String result = "";
         String keywordsRegex = loadCodeKeywords(context);
-        if (containsCodeKeywords(keywordsRegex, content)) {
+        String keyword = parseKeyword(keywordsRegex, content);
+        if (!TextUtils.isEmpty(keyword)) {
             if (containsChinese(content)) {
-                result = getSmsCodeCN(keywordsRegex, content);
+                result = getSmsCodeCN(keyword, content);
             } else {
-                result = getSmsCodeEN(keywordsRegex, content);
+                result = getSmsCodeEN(keyword, content);
             }
         }
         return result;
@@ -93,12 +95,75 @@ public class SmsCodeUtils {
     /**
      * 获取中文短信中包含的验证码
      */
-    private static String getSmsCodeCN(String keywordsRegex, String content) {
+    private static String getSmsCodeCN(String keyword, String content) {
         // 之前的正则表达式是 [a-zA-Z0-9]{4,8}
         // 现在的正则表达式是 [a-zA-Z0-9]+(\.[a-zA-Z0-9]+)? 匹配数字和字母之间最多一个.的字符串
         // 之前的不能识别和剔除小数，比如 123456.231，很容易就把 123456 作为验证码。
         String codeRegex = "(?<![a-zA-Z0-9])[a-zA-Z0-9]{4,8}(?![a-zA-Z0-9])";
+        return getSmsCode(codeRegex, keyword, content);
+    }
+
+    /**
+     * 获取英文短信包含的验证码
+     */
+    private static String getSmsCodeEN(String keywordsRegex, String content) {
+        // 之前的正则表达式是 [0-9]{4,8} 匹配由数字组成的4到8长度的字符串
+        // 现在的正则表达式是 [0-9]+(\\.[0-9]+)? 匹配数字之间最多一个.的字符串
+        // 之前的不能识别和剔除小数，比如 123456.231，很容易就把 123456 作为验证码。
+        String codeRegex = "(?<![0-9])[0-9]{4,8}(?![0-9])";
         return getSmsCode(codeRegex, keywordsRegex, content);
+    }
+
+    /*
+     * Parse SMS code
+     *
+     * @param codeRegex SMS code regular expression
+     * @param keyword     SMS code SMS keywords expression
+     * @param content           SMS content
+     * @return the SMS code if it's found, otherwise return empty string ""
+     */
+    private static String getSmsCode(String codeRegex, String keyword, String content) {
+        Pattern p = Pattern.compile(codeRegex);
+        Matcher m = p.matcher(content);
+        List<String> possibleCodes = new ArrayList<>();
+        while (m.find()) {
+            final String matchedStr = m.group();
+            possibleCodes.add(matchedStr);
+        }
+        if (possibleCodes.isEmpty()) { // no possible code
+            return "";
+        }
+
+        List<String> filteredCodes = new ArrayList<>();
+        for (String possibleCode : possibleCodes) {
+            if (isNearToKeyword(keyword, possibleCode, content)) {
+                filteredCodes.add(possibleCode);
+            }
+        }
+        if (filteredCodes.isEmpty()) { // no possible code near to keywords
+            filteredCodes = possibleCodes;
+        }
+
+        int maxMatchLevel = LEVEL_NONE;
+        // minimum distance for possible code to keyword
+        int minDistance = content.length();
+        String smsCode = "";
+        for (String filteredCode : filteredCodes) {
+            final int curLevel = getMatchLevel(filteredCode);
+            if (curLevel > maxMatchLevel) {
+                maxMatchLevel = curLevel;
+                // reset the minDistance
+                minDistance = distanceToKeyword(keyword, filteredCode, content);
+                smsCode = filteredCode;
+            } else if (curLevel == maxMatchLevel) {
+                int curDistance = distanceToKeyword(keyword, filteredCode, content);
+                if (curDistance < minDistance) {
+                    minDistance = curDistance;
+                    smsCode = filteredCode;
+                }
+            }
+        }
+        return smsCode;
     }
 
     /* 匹配度：6位纯数字，匹配度最高 */
@@ -126,12 +191,12 @@ public class SmsCodeUtils {
     }
 
     /**
-     * 匹配上的字符串是否靠近关键字
+     * 可能的验证码是否靠近关键字
      */
-    private static boolean isNearToKeywords(String keywordsRegex, String matchedStr, String content) {
+    private static boolean isNearToKeyword(String keyword, String possibleCode, String content) {
         int beginIndex = 0, endIndex = content.length() - 1;
-        int curIndex = content.indexOf(matchedStr);
-        int strLength = matchedStr.length();
+        int curIndex = content.indexOf(possibleCode);
+        int strLength = possibleCode.length();
         int magicNumber = 30;
         if (curIndex - magicNumber > 0) {
             beginIndex = curIndex - magicNumber;
@@ -139,61 +204,18 @@ public class SmsCodeUtils {
         if (curIndex + strLength + magicNumber < endIndex) {
             endIndex = curIndex + strLength + magicNumber;
         }
-        return containsCodeKeywords(keywordsRegex, content.substring(beginIndex, endIndex));
+        return content.substring(beginIndex, endIndex).contains(keyword);
     }
 
     /**
-     * 获取英文短信包含的验证码
+     * 计算可能的验证码与关键字的距离
      */
-    private static String getSmsCodeEN(String keywordsRegex, String content) {
-        // 之前的正则表达式是 [0-9]{4,8} 匹配由数字组成的4到8长度的字符串
-        // 现在的正则表达式是 [0-9]+(\\.[0-9]+)? 匹配数字之间最多一个.的字符串
-        // 之前的不能识别和剔除小数，比如 123456.231，很容易就把 123456 作为验证码。
-        String codeRegex = "(?<![0-9])[0-9]{4,8}(?![0-9])";
-        return getSmsCode(codeRegex, keywordsRegex, content);
+    private static int distanceToKeyword(String keyword, String possibleCode, String content) {
+        int keywordIdx = content.indexOf(keyword);
+        int possibleCodeIdx = content.indexOf(possibleCode);
+        return Math.abs(keywordIdx - possibleCodeIdx);
     }
 
-    /*
-     * Parse SMS code
-     *
-     * @param codeRegex SMS code regular expression
-     * @param keywordsRegex     SMS code SMS keywords expression
-     * @param content           SMS content
-     * @return the SMS code if it's found, otherwise return empty string ""
-     */
-    private static String getSmsCode(String codeRegex, String keywordsRegex, String content) {
-        Pattern p = Pattern.compile(codeRegex);
-        Matcher m = p.matcher(content);
-        List<String> possibleCodes = new ArrayList<>();
-        while (m.find()) {
-            final String matchedStr = m.group();
-            possibleCodes.add(matchedStr);
-        }
-        if (possibleCodes.isEmpty()) { // no possible code
-            return "";
-        }
-        int maxMatchLevel = LEVEL_NONE;
-        String smsCode = "";
-        for (String possibleCode : possibleCodes) {
-            if (isNearToKeywords(keywordsRegex, possibleCode, content)) {
-                final int curLevel = getMatchLevel(possibleCode);
-                if (curLevel > maxMatchLevel) {
-                    maxMatchLevel = curLevel;
-                    smsCode = possibleCode;
-                }
-            }
-        }
-        if (maxMatchLevel == LEVEL_NONE) { // no possible code near to keywords
-            for (String possibleCode : possibleCodes) {
-                final int curLevel = getMatchLevel(possibleCode);
-                if (curLevel > maxMatchLevel) {
-                    maxMatchLevel = curLevel;
-                    smsCode = possibleCode;
-                }
-            }
-        }
-        return smsCode;
-    }
 
     public static boolean isPossiblePhoneNumber(String text) {
         return text.matches("\\d{8,}");
