@@ -36,7 +36,8 @@ public class SmsCodeApp extends Application {
 
         initDatabase();
 
-        performTransitionTask();
+        // There is no need to perform data-transition now.
+        // performTransitionTask();
     }
 
     private void initNotificationChannel() {

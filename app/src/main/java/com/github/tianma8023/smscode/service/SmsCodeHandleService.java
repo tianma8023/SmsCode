@@ -139,7 +139,7 @@ public class SmsCodeHandleService extends IntentService {
         final String smsCode =
                 SmsCodeUtils.parseSmsCodeIfExists(this, msgBody);
 
-        if (TextUtils.isEmpty(smsCode)) { // Not verification code msg.
+        if (TextUtils.isEmpty(smsCode)) { // Not SMS code msg.
             return;
         }
 
@@ -167,30 +167,19 @@ public class SmsCodeHandleService extends IntentService {
 
         XLog.i("Verification code: {}", smsCode);
 
-        Message copyMsg = new Message();
-        copyMsg.obj = smsCode;
-        copyMsg.what = MSG_SMSCODE_EXTRACTED;
+        Message copyMsg = Message.obtain(mMainHandler, MSG_SMSCODE_EXTRACTED, smsCode);
         mMainHandler.sendMessage(copyMsg);
 
         if (SPUtils.deleteSmsEnabled(this)) {
             // delete sms
-            Message deleteMsg = new Message();
-            deleteMsg.obj = smsMsg;
-            deleteMsg.what = MSG_DELETE_SMS;
+            Message deleteMsg = Message.obtain(mMainHandler, MSG_DELETE_SMS, smsMsg);
             mMainHandler.sendMessageDelayed(deleteMsg, 100);
         } else {
             if (SPUtils.markAsReadEnabled(this)) {
                 // mark sms as read
-                Message markMsg = new Message();
-                markMsg.obj = smsMsg;
-                markMsg.what = MSG_MARK_AS_READ;
+                Message markMsg = Message.obtain(mMainHandler, MSG_MARK_AS_READ, smsMsg);
                 mMainHandler.sendMessageDelayed(markMsg, 100);
             }
-        }
-
-        if (SPUtils.recordSmsCodeEnabled(this)) {
-            smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
-            recordSmsMsg(smsMsg);
         }
 
         if (SPUtils.blockNotificationEnabled(this)) {
@@ -198,34 +187,11 @@ public class SmsCodeHandleService extends IntentService {
             Intent intent = new Intent(NotificationMonitorService.ACTION_CANCEL_NOTIFICATION);
             intent.putExtra(NotificationMonitorService.EXTRA_KEY_SMS_MSG, smsMsg);
             sendBroadcast(intent);
-//            final String defaultSmsPkg = SettingsUtils.getDefaultSmsAppPackage(this);
-//            mMainHandler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    boolean success = ShellUtils.cancelAllNotifications(defaultSmsPkg);
-//                    XLog.d("cancel notification by root: {}", success);
-//                }
-//            }, 1000);
         }
-    }
 
-    private void recordSmsMsg(SmsMsg smsMsg) {
-        try {
-            DBManager dm = DBManager.get(this);
-            dm.addSmsMsg(smsMsg);
-            XLog.d("add SMS message record succeed");
-
-            List<SmsMsg> smsMsgList = dm.queryAllSmsMsg();
-            if (smsMsgList.size() > PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT) {
-                List<SmsMsg> outdatedMsgList = new ArrayList<>();
-                for (int i = PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT; i < smsMsgList.size(); i++) {
-                    outdatedMsgList.add(smsMsgList.get(i));
-                }
-                dm.removeSmsMsgList(outdatedMsgList);
-                XLog.d("Remove outdated SMS message records succeed");
-            }
-        } catch (Exception e) {
-            XLog.e("add SMS message record failed", e);
+        if (SPUtils.recordSmsCodeEnabled(this)) {
+            smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
+            recordSmsMsg(smsMsg);
         }
     }
 
@@ -358,6 +324,26 @@ public class SmsCodeHandleService extends IntentService {
             if (cursor != null) {
                 cursor.close();
             }
+        }
+    }
+
+    private void recordSmsMsg(SmsMsg smsMsg) {
+        try {
+            DBManager dm = DBManager.get(this);
+            dm.addSmsMsg(smsMsg);
+            XLog.d("add SMS message record succeed");
+
+            List<SmsMsg> smsMsgList = dm.queryAllSmsMsg();
+            if (smsMsgList.size() > PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT) {
+                List<SmsMsg> outdatedMsgList = new ArrayList<>();
+                for (int i = PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT; i < smsMsgList.size(); i++) {
+                    outdatedMsgList.add(smsMsgList.get(i));
+                }
+                dm.removeSmsMsgList(outdatedMsgList);
+                XLog.d("Remove outdated SMS message records succeed");
+            }
+        } catch (Exception e) {
+            XLog.e("add SMS message record failed", e);
         }
     }
 
