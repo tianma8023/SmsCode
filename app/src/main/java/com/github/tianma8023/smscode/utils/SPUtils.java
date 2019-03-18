@@ -258,4 +258,12 @@ public class SPUtils {
         return PreferenceUtils.getBoolean(context,
                 PrefConst.KEY_BLOCK_NOTIFICATION, PrefConst.BLOCK_NOTIFICATION_DEFAULT);
     }
+
+    /**
+     * 是否显示验证码通知
+     */
+    public static boolean showCodeNotificationEnabled(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                PrefConst.KEY_SHOW_CODE_NOTIFICATION, PrefConst.SHOW_CODE_NOTIFICATION_DEFAULT);
+    }
 }

@@ -3,7 +3,10 @@ package com.github.tianma8023.smscode.service;
 import android.Manifest;
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -48,9 +51,6 @@ public class SmsCodeHandleService extends IntentService {
 
     private static final String SERVICE_NAME = "SmsCodeHandleService";
 
-    private static final int NOTIFY_ID_FOREGROUND_SVC = 0xff;
-
-    private static final int JOB_ID = 0x100;
     public static final String EXTRA_KEY_SMS_MESSAGE_DATA = "key_sms_message_data";
 
     private static final int MSG_SMSCODE_EXTRACTED = 0xff;
@@ -69,11 +69,7 @@ public class SmsCodeHandleService extends IntentService {
     }
 
     public SmsCodeHandleService() {
-        this(SERVICE_NAME);
-    }
-
-    public SmsCodeHandleService(String name) {
-        super(name);
+        super(SERVICE_NAME);
     }
 
     @Override
@@ -82,14 +78,14 @@ public class SmsCodeHandleService extends IntentService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Show a notification for the foreground service.
             Notification notification = new NotificationCompat.Builder(this, NotificationConst.CHANNEL_ID_FOREGROUND_SERVICE)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_notification))
+                    .setSmallIcon(R.drawable.ic_app_icon)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon))
                     .setWhen(System.currentTimeMillis())
-                    .setContentText(getString(R.string.sms_code_notification_title))
+                    .setContentText(getString(R.string.foreground_notification_title))
                     .setAutoCancel(true)
                     .setColor(getColor(R.color.ic_launcher_background))
                     .build();
-            startForeground(NOTIFY_ID_FOREGROUND_SVC, notification);
+            startForeground(NotificationConst.NOTIFICATION_ID_FOREGROUND_SVC, notification);
         }
     }
 
@@ -189,9 +185,13 @@ public class SmsCodeHandleService extends IntentService {
             sendBroadcast(intent);
         }
 
+        smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
         if (SPUtils.recordSmsCodeEnabled(this)) {
-            smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
             recordSmsMsg(smsMsg);
+        }
+
+        if (SPUtils.showCodeNotificationEnabled(this)) {
+            showCodeNotification(smsMsg);
         }
     }
 
@@ -345,6 +345,34 @@ public class SmsCodeHandleService extends IntentService {
         } catch (Exception e) {
             XLog.e("add SMS message record failed", e);
         }
+    }
+
+    private void showCodeNotification(SmsMsg smsMsg) {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String smsCode = smsMsg.getSmsCode();
+        String title = smsMsg.getCompany();
+        String content = getString(R.string.code_notification_content, smsCode);
+
+        int notificationId = smsMsg.hashCode();
+        Intent copyCodeIntent = CodeCopyService.buildCopyCodeIntent(this, smsCode);
+        PendingIntent pi = PendingIntent.getService(this,
+                0,
+                copyCodeIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(this, NotificationConst.CHANNEL_ID_SMSCODE_NOTIFICATION)
+                .setSmallIcon(R.drawable.ic_app_icon)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_icon))
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle(title)
+                .setContentText(content)
+                .setContentIntent(pi)
+                .setAutoCancel(true)
+                .setColor(ContextCompat.getColor(this, R.color.ic_launcher_background))
+                .build();
+
+        manager.notify(notificationId, notification);
     }
 
     private void sleep(int seconds) {

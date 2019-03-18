@@ -13,7 +13,9 @@
     <string name="pref_enable_summary_off">需要接收和读取短信权限</string>
     <string name="pref_enable_summary_on">不再需要时可关闭此开关</string>
     <string name="pref_show_toast_title">显示Toast</string>
-    <string name="pref_show_toast_summary">接收到验证码时显示Toast</string>
+    <string name="pref_show_toast_summary">收到验证码时显示toast</string>
+    <string name="pref_show_code_notification_title">显示通知</string>
+    <string name="pref_show_code_notification_summary">收到验证码时显示通知</string>
     <string name="pref_copy_to_clipboard_title">复制到剪切板</string>
     <string name="pref_copy_to_clipboard_summary">提取成功后复制验证码到系统剪切板</string>
     <string name="pref_choose_theme_title">主题</string>
@@ -150,7 +152,9 @@
 
     <!-- SMS parsing notification -->
     <string name="channel_name_foreground_service">解析短信时的通知</string>
-    <string name="sms_code_notification_title">短信解析中……</string>
+    <string name="foreground_notification_title">短信解析中……</string>
+    <string name="channel_name_smscode_notification">验证码通知</string>
+    <string name="code_notification_content">验证码：%s</string>
     <!-- SMS parsing notification end -->
 
     <!-- FAQ -->

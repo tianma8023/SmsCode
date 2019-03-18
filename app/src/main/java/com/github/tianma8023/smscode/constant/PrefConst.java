@@ -21,6 +21,8 @@ public interface PrefConst {
 
     String KEY_SHOW_TOAST = "pref_show_toast";
     boolean SHOW_TOAST_DEFAULT = true;
+    String KEY_SHOW_CODE_NOTIFICATION = "pref_show_code_notification";
+    boolean SHOW_CODE_NOTIFICATION_DEFAULT = false;
     String KEY_COPY_TO_CLIPBOARD = "pref_copy_to_clipboard";
     boolean COPY_TO_CLIPBOARD_DEFAULT = true;
 

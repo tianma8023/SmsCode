@@ -31,6 +31,14 @@
             android:title="@string/pref_show_toast_title"/>
 
         <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_notification"
+            android:dependency="@string/pref_enable"
+            android:key="@string/pref_show_code_notification"
+            android:summary="@string/pref_show_code_notification_summary"
+            android:title="@string/pref_show_code_notification_title"/>
+
+        <SwitchPreference
             android:defaultValue="true"
             android:dependency="@string/pref_enable"
             android:icon="@drawable/ic_copy"
@@ -162,9 +170,9 @@
 
         <Preference
             android:icon="@drawable/ic_rating"
+            android:key="@string/pref_rating"
             android:summary="@string/pref_rating_summary"
-            android:title="@string/pref_rating_title"
-            android:key="@string/pref_rating"/>
+            android:title="@string/pref_rating_title"/>
 
         <Preference
             android:icon="@drawable/ic_alipay_red_packet"

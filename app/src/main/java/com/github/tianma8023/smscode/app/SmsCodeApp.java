@@ -42,9 +42,15 @@ public class SmsCodeApp extends Application {
 
     private void initNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // foreground service notification channel
             String channelId = NotificationConst.CHANNEL_ID_FOREGROUND_SERVICE;
             String channelName = getString(R.string.channel_name_foreground_service);
             createNotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_MIN);
+
+            // SMS code notification channel
+            channelId = NotificationConst.CHANNEL_ID_SMSCODE_NOTIFICATION;
+            channelName = getString(R.string.channel_name_smscode_notification);
+            createNotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
         }
     }
 
