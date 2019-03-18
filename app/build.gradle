@@ -127,7 +127,7 @@ dependencies {
     implementation 'com.github.tony19:logback-android:1.1.1-12'
 
     // tencent bugly
-    implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:crashreport:2.8.6'
 
     // EventBus
     implementation 'org.greenrobot:eventbus:3.1.1'
