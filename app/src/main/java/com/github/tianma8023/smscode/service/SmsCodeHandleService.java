@@ -350,8 +350,9 @@ public class SmsCodeHandleService extends IntentService {
     private void showCodeNotification(SmsMsg smsMsg) {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        String company = smsMsg.getCompany();
         String smsCode = smsMsg.getSmsCode();
-        String title = smsMsg.getCompany();
+        String title = TextUtils.isEmpty(company) ? smsMsg.getSender() : company;
         String content = getString(R.string.code_notification_content, smsCode);
 
         int notificationId = smsMsg.hashCode();
