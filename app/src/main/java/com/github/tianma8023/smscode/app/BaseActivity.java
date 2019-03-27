@@ -20,16 +20,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         setTheme(ThemeItemContainer.get().getItemAt(index).getThemeRes());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        MobclickAgent.onResume(this);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+////        MobclickAgent.onResume(this);
+//    }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        MobclickAgent.onPause(this);
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+////        MobclickAgent.onPause(this);
+//    }
 }

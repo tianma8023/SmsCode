@@ -18,9 +18,9 @@ import java.util.Locale;
 
 public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHolder> {
 
-    private SimpleDateFormat mDateFormat;
+    private final SimpleDateFormat mDateFormat;
 
-    public CodeRecordAdapter(@Nullable List<RecordItem> data) {
+    CodeRecordAdapter(@Nullable List<RecordItem> data) {
         super(R.layout.code_record_item, data);
 
         mDateFormat = new SimpleDateFormat("MM.dd HH:mm", Locale.getDefault());
@@ -55,8 +55,8 @@ public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHold
     }
 
     public void setAllSelected(boolean selected) {
-        for (int i = 0; i < getItemCount(); i++) {
-            getItem(i).setSelected(selected);
+        for(RecordItem recordItem : getData()) {
+            recordItem.setSelected(selected);
         }
         notifyDataSetChanged();
     }
@@ -103,7 +103,7 @@ public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHold
     public void addItems(List<SmsMsg> smsMsgList) {
         List<RecordItem> itemsToAdd = new ArrayList<>();
         for (SmsMsg msg : smsMsgList) {
-            RecordItem item = new RecordItem(msg, false);
+            RecordItem item = new RecordItem(msg);
             if (!getData().contains(item)) {
                 itemsToAdd.add(item);
             }

@@ -28,8 +28,11 @@ public class ClipboardUtils {
             return;
         }
         if(cm.hasPrimaryClip()) {
-            if (cm.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                cm.setPrimaryClip(ClipData.newPlainText("Copy text", ""));
+            ClipDescription cd = cm.getPrimaryClipDescription();
+            if (cd != null) {
+                if (cd.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    cm.setPrimaryClip(ClipData.newPlainText("Copy text", ""));
+                }
             }
         }
     }

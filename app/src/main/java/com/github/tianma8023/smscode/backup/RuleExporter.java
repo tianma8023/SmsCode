@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * SmsCode rules exporter
  */
-public class RuleExporter implements Closeable{
+public class RuleExporter implements Closeable {
 
     private JsonWriter mJsonWriter;
 
@@ -46,7 +46,7 @@ public class RuleExporter implements Closeable{
     private void exportRuleList(List<SmsCodeRule> ruleList) throws IOException {
         mJsonWriter.name(BackupConst.KEY_RULES)
                 .beginArray();
-        for(SmsCodeRule rule : ruleList) {
+        for (SmsCodeRule rule : ruleList) {
             exportRule(rule);
         }
         mJsonWriter.endArray();

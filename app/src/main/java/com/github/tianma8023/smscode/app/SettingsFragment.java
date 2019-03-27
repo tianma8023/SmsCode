@@ -599,11 +599,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (!ShellUtils.allowOpWriteSMS()) {
+                            if (ShellUtils.allowOpWriteSMS()) {
+                                Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
+                            } else {
                                 switchPref.setChecked(false);
                                 Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
                             }
                         }
                     })

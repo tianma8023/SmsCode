@@ -12,7 +12,7 @@ public class FaqItemAdapter extends BaseQuickAdapter<FaqItem, BaseViewHolder> {
     private final String mQuestionPrefix;
     private final String mAnswerPrefix;
 
-    public FaqItemAdapter(Context context, List<FaqItem> items) {
+    FaqItemAdapter(Context context, List<FaqItem> items) {
         super(R.layout.faq_item, items);
         mQuestionPrefix = context.getString(R.string.simplified_question);
         mAnswerPrefix = context.getString(R.string.simplified_answer);

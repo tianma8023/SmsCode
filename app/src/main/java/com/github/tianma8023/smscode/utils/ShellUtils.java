@@ -58,7 +58,7 @@ public class ShellUtils {
         }
         String enabledServicesStr = sb.toString();
         CommandResult putResult = Shell.SU.run("settings put secure " +
-                                    ENABLED_ACCESSIBILITY_SERVICES + " \"" + enabledServicesStr + "\"");
+                ENABLED_ACCESSIBILITY_SERVICES + " \"" + enabledServicesStr + "\"");
         return putResult.isSuccessful();
     }
 
@@ -88,10 +88,11 @@ public class ShellUtils {
                     XLog.d("accessibility_enabled: {}", accessibilityEnabled);
                     if (!accessibilityEnabled) {
                         accessibilityEnabled = setAccessibilityEnabled(true);
-                        if (!accessibilityEnabled)
+                        XLog.d("set accessibility_enabled: {}", accessibilityEnabled);
+                        if (!accessibilityEnabled) {
                             return false;
+                        }
                     }
-                    XLog.d("set accessibility_enabled: {}", accessibilityEnabled);
                 }
             }
             return enabled;
@@ -146,6 +147,7 @@ public class ShellUtils {
 
     /**
      * Input text by ROOT
+     *
      * @param text text to input
      * @return true if input text by ROOT succeed, otherwise return false
      */
@@ -156,7 +158,8 @@ public class ShellUtils {
 
     /**
      * Grant AppOpsManager WRITE_SMS permissions.
-     * @return
+     *
+     * @return true if grant succeed, false if not.
      */
     public static boolean allowOpWriteSMS() {
         String cmd = "appops set " + BuildConfig.APPLICATION_ID + " WRITE_SMS allow";
@@ -166,8 +169,9 @@ public class ShellUtils {
 
     /**
      * cancel all notifications of given package
+     *
      * @param packageName package name
-     * @return
+     * @return true if cancel succeed, false if not.
      */
     public static boolean cancelAllNotifications(String packageName) {
         String cmd = String.format("service call notification 1 s16 '%s'", packageName);

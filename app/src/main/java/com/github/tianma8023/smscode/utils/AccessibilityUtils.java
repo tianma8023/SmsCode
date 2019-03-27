@@ -56,8 +56,8 @@ public class AccessibilityUtils {
     /**
      * 获取无障碍服务的ID
      *
-     * @param serviceClz
-     * @return
+     * @param serviceClz accessibility service class
+     * @return accessibility service id
      */
     public static String getServiceId(Class<? extends AccessibilityService> serviceClz) {
         // eg.
@@ -76,8 +76,8 @@ public class AccessibilityUtils {
     /**
      * 获取无障碍服务的名称
      *
-     * @param serviceClz
-     * @return
+     * @param serviceClz accessibility service class
+     * @return accessibility service name
      */
     public static String getServiceName(Class<? extends AccessibilityService> serviceClz) {
         // eg.

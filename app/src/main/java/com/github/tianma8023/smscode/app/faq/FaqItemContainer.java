@@ -13,7 +13,7 @@ public class FaqItemContainer {
 
     private List<FaqItem> mFaqItems = new ArrayList<>();
 
-    public FaqItemContainer(Context context) {
+    FaqItemContainer(Context context) {
         loadItems(context);
     }
 
@@ -26,7 +26,7 @@ public class FaqItemContainer {
         }
     }
 
-    public List<FaqItem> getFaqItems() {
+    List<FaqItem> getFaqItems() {
         return mFaqItems;
     }
 }

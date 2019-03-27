@@ -251,8 +251,6 @@ public class SPUtils {
 
     /**
      * 是否拦截短信通知
-     * @param context
-     * @return
      */
     public static boolean blockNotificationEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,

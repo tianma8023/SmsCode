@@ -28,7 +28,7 @@ public class SettingsUtils {
 
     /**
      * Get system default SMS app package
-     * @return
+     * @return default SMS app package
      */
     public static String getDefaultSmsAppPackage(Context context) {
         String key  = "sms_default_application";
@@ -37,8 +37,8 @@ public class SettingsUtils {
 
     /**
      * Check notification listener enabled or not.
-     * @param context
-     * @return
+     * @param context context
+     * @return true if notification listener enabled, otherwise return false
      */
     public static boolean checkNotificationListenerEnabled(Context context) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {

@@ -42,7 +42,7 @@ public class CodeRecordsFragment extends BackPressFragment {
     private static final int RECORD_MODE_EDIT = 1;
 
     @IntDef({RECORD_MODE_NORMAL, RECORD_MODE_EDIT})
-    @interface RecordMode {
+    private @interface RecordMode {
     }
 
     private Activity mActivity;
@@ -55,8 +55,8 @@ public class CodeRecordsFragment extends BackPressFragment {
 
     private CodeRecordAdapter mCodeRecordAdapter;
 
-    private @RecordMode
-    int mCurrentMode = RECORD_MODE_NORMAL;
+    @RecordMode
+    private int mCurrentMode = RECORD_MODE_NORMAL;
 
     public static CodeRecordsFragment newInstance() {
         return new CodeRecordsFragment();
@@ -252,7 +252,7 @@ public class CodeRecordsFragment extends BackPressFragment {
         });
         snackbar.setAction(R.string.revoke, new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 mCodeRecordAdapter.addItems(itemsToRemove);
             }
         });
