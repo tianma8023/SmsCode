@@ -1,6 +1,9 @@
 # Update Logs
+- 19.03.27 v1.7.3
+  1. Optimization: optimize the algorithm of parsing SMS code.
+  2. Fix: crash when sharing code rules file.
 - 19.03.18 v1.7.2
-  1. New: add an option for showing SMS code notification
+  1. New: add an option for showing SMS code notification.
   2. Optimization: optimize the algorithm of parsing SMS code.
 - 19.03.02 v1.7.1
   1. New：add entry for rating on Cool Market.
