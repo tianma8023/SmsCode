@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/text_margin_dp_6"
-    android:layout_marginBottom="@dimen/text_margin_dp_6"
+    android:layout_marginTop="@dimen/dp_6"
+    android:layout_marginBottom="@dimen/dp_6"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:paddingStart="@dimen/text_margin_dp_24"
-    android:paddingEnd="@dimen/text_margin_dp_24">
+    android:paddingStart="@dimen/dp_24"
+    android:paddingEnd="@dimen/dp_24">
 
     <TextView
         android:id="@+id/tv_perm_title"
