@@ -61,10 +61,10 @@ public class HomeActivity extends BaseActivity implements
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
+        handleIntent(getIntent());
+
         // setup toolbar
         setupToolbar();
-
-        handleIntent(getIntent());
     }
 
     @Override
