@@ -21,14 +21,14 @@ public interface PrefConst {
 
     String KEY_SHOW_TOAST = "pref_show_toast";
     boolean SHOW_TOAST_DEFAULT = true;
-    String KEY_SHOW_CODE_NOTIFICATION = "pref_show_code_notification";
-    boolean SHOW_CODE_NOTIFICATION_DEFAULT = false;
     String KEY_COPY_TO_CLIPBOARD = "pref_copy_to_clipboard";
     boolean COPY_TO_CLIPBOARD_DEFAULT = true;
 
     String KEY_CHOOSE_THEME = "pref_choose_theme";
     String KEY_CURRENT_THEME_INDEX = "pref_current_theme_index";
     int CURRENT_THEME_INDEX_DEFAULT = 0;
+
+    String KEY_ENTRY_AUTO_INPUT_CODE = "pref_entry_auto_input_code";
 
     String KEY_EXPERIMENTAL = "pref_experimental";
     String KEY_MARK_AS_READ = "pref_mark_as_read";
@@ -38,7 +38,13 @@ public interface PrefConst {
     String KEY_BLOCK_NOTIFICATION = "pref_block_notification";
     boolean BLOCK_NOTIFICATION_DEFAULT = false;
 
-    String KEY_ENTRY_AUTO_INPUT_CODE = "pref_entry_auto_input_code";
+    String KEY_SHOW_CODE_NOTIFICATION = "pref_show_code_notification";
+    boolean SHOW_CODE_NOTIFICATION_DEFAULT = false;
+    String KEY_AUTO_CANCEL_CODE_NOTIFICATION = "pref_auto_cancel_code_notification";
+    boolean AUTO_CANCEL_CODE_NOTIFICATION_DEFAULT = false;
+    String KEY_NOTIFICATION_RETENTION_TIME = "pref_notification_retention_time";
+    String NOTIFICATION_RETENTION_TIME_DEFAULT = "5";
+
 
     String KEY_SMSCODE_KEYWORDS = "pref_smscode_keywords";
     String SMSCODE_KEYWORDS_DEFAULT = SmsCodeConst.VERIFICATION_KEYWORDS_REGEX;

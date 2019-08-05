@@ -63,7 +63,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        XLog.d("CurrentThread: {}", Thread.currentThread());
         handleException(e);
         // let system handle uncaught exception if default crash handler exists.
         // otherwise kill app programmatically

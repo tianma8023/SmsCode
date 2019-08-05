@@ -1,10 +1,10 @@
 package com.github.tianma8023.smscode.service;
 
 import android.Manifest;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +14,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Telephony;
 import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -42,24 +43,39 @@ import com.github.tianma8023.smscode.utils.XLog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
  * 处理验证码的Service
  */
-public class SmsCodeHandleService extends IntentService {
+public class SmsCodeHandleService extends Service {
 
     private static final String SERVICE_NAME = "SmsCodeHandleService";
 
     public static final String EXTRA_KEY_SMS_MESSAGE_DATA = "key_sms_message_data";
 
     private static final int MSG_SMSCODE_EXTRACTED = 0xff;
-    private static final int MSG_MARK_AS_READ = 0xfe;
-    private static final int MSG_DELETE_SMS = 0xfd;
 
-    private boolean mAutoInputEnabled;
-    private boolean mIsAutoInputModeRoot;
+    private static final int MSG_ENABLE_ACCESSIBILITY_SERVICE = 0xff;
+
+    private static final int MSG_COPY_TO_CLIPBOARD = 0;
+    private static final int MSG_SHOW_TOAST = 1;
+    private static final int MSG_DELETE_SMS = 2;
+    private static final int MSG_MARK_AS_READ = 3;
+    private static final int MSG_RECORD_SMS_MSG = 4;
+    private static final int MSG_AUTO_INPUT_CODE = 5;
+    private static final int MSG_CLEAR_CLIPBOARD = 6;
+    private static final int MSG_SHOW_CODE_NOTIFICATION = 7;
+    private static final int MSG_CANCEL_NOTIFICATION = 8;
+    private static final int MSG_QUIT_QUEUE = 9;
+    private static final int WAIT_FOR_QUIT = 10;
+
+    private AtomicInteger mPreQuitQueueCount;
+    private static final int DEFAULT_QUIT_COUNT = 0;
+
     private String mFocusMode;
+    private String mAutoInputMode;
 
     private static final int OP_DELETE = 0;
     private static final int OP_MARK_AS_READ = 1;
@@ -68,13 +84,24 @@ public class SmsCodeHandleService extends IntentService {
     @interface SmsOp {
     }
 
+    private volatile Handler uiHandler;
+    private volatile Handler workerHandler;
+
     public SmsCodeHandleService() {
-        super(SERVICE_NAME);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        HandlerThread workerThread = new HandlerThread(SERVICE_NAME);
+        workerThread.start();
+
+        uiHandler = new WorkerHandler(Looper.getMainLooper());
+        workerHandler = new WorkerHandler(workerThread.getLooper());
+
+        mPreQuitQueueCount = new AtomicInteger(DEFAULT_QUIT_COUNT);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Show a notification for the foreground service.
             Notification notification = new NotificationCompat.Builder(this, NotificationConst.CHANNEL_ID_FOREGROUND_SERVICE)
@@ -90,13 +117,17 @@ public class SmsCodeHandleService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
-        if (intent == null)
-            return;
-        if (intent.hasExtra(EXTRA_KEY_SMS_MESSAGE_DATA)) {
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null && intent.hasExtra(EXTRA_KEY_SMS_MESSAGE_DATA)) {
             SmsMsg smsMsg = intent.getParcelableExtra(EXTRA_KEY_SMS_MESSAGE_DATA);
             doWork(smsMsg);
         }
+        return START_NOT_STICKY;
     }
 
     private void doWork(SmsMsg smsMsg) {
@@ -130,54 +161,78 @@ public class SmsCodeHandleService extends IntentService {
             XLog.i("Body: {}", StringUtils.escape(msgBody));
         }
 
-        if (TextUtils.isEmpty(msgBody))
+        if (TextUtils.isEmpty(msgBody)) {
             return;
-        final String smsCode =
-                SmsCodeUtils.parseSmsCodeIfExists(this, msgBody);
+        }
+        String smsCode = SmsCodeUtils.parseSmsCodeIfExists(this, msgBody);
 
         if (TextUtils.isEmpty(smsCode)) { // Not SMS code msg.
             return;
         }
 
+        XLog.i("Sms code: {}", smsCode);
         smsMsg.setSmsCode(smsCode);
+        smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
 
-        mAutoInputEnabled = SPUtils.autoInputCodeEnabled(this);
-        XLog.d("AutoInputEnabled: {}", mAutoInputEnabled);
-        if (mAutoInputEnabled) {
+        // 是否需要启动 AccessibilityService
+        boolean autoInputEnabled = SPUtils.autoInputCodeEnabled(this);
+        if (autoInputEnabled) {
             mFocusMode = SPUtils.getFocusMode(this);
-            mIsAutoInputModeRoot = PrefConst.AUTO_INPUT_MODE_ROOT.equals(SPUtils.getAutoInputMode(this));
+            mAutoInputMode = SPUtils.getAutoInputMode(this);
 
-            XLog.d("FocusMode: {}", mFocusMode);
-            XLog.d("AutoInputRootMode: {}", mIsAutoInputModeRoot);
-            if (mIsAutoInputModeRoot && PrefConst.FOCUS_MODE_AUTO.equals(mFocusMode)) {
+            if (PrefConst.AUTO_INPUT_MODE_ROOT.equals(mAutoInputMode)
+                    && PrefConst.FOCUS_MODE_AUTO.equals(mFocusMode)) {
                 // Root mode + Auto Focus Mode
-                String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
-                // 用root的方式启动
-                boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
-                XLog.d("Accessibility enabled by Root: {}", enabled);
-                if (enabled) { // waiting for AutoInputService working on.
-                    sleep(1);
-                }
+                workerHandler.sendEmptyMessage(MSG_ENABLE_ACCESSIBILITY_SERVICE);
             }
         }
 
-        XLog.i("Verification code: {}", smsCode);
+        // 是否需要复制到剪切板
+        if (SPUtils.copyToClipboardEnabled(this)) {
+            Message copyMsg = uiHandler.obtainMessage(MSG_COPY_TO_CLIPBOARD, smsCode);
+            uiHandler.sendMessage(copyMsg);
+        }
 
-        Message copyMsg = Message.obtain(mMainHandler, MSG_SMSCODE_EXTRACTED, smsCode);
-        mMainHandler.sendMessage(copyMsg);
+        // 是否显示Toast
+        if (SPUtils.showToast(this)) {
+            Message toastMsg = uiHandler.obtainMessage(MSG_SHOW_TOAST, smsCode);
+            uiHandler.sendMessage(toastMsg);
+        }
 
+        // 是否自动输入
+        if (autoInputEnabled) {
+            Message autoInputMsg = workerHandler.obtainMessage(MSG_AUTO_INPUT_CODE, smsMsg);
+            workerHandler.sendMessage(autoInputMsg);
+        }
+
+        // 是否显示通知
+        if (SPUtils.showCodeNotification(this)) {
+            Message notificationMsg = workerHandler.obtainMessage(MSG_SHOW_CODE_NOTIFICATION, smsMsg);
+            workerHandler.sendMessage(notificationMsg);
+        }
+
+        // 是否记录验证码短信
+        if (SPUtils.recordSmsCodeEnabled(this)) {
+            Message recordMsg = workerHandler.obtainMessage(MSG_RECORD_SMS_MSG, smsMsg);
+            workerHandler.sendMessage(recordMsg);
+        }
+
+        // 是否删除验证码短信NotificationController
         if (SPUtils.deleteSmsEnabled(this)) {
-            // delete sms
-            Message deleteMsg = Message.obtain(mMainHandler, MSG_DELETE_SMS, smsMsg);
-            mMainHandler.sendMessageDelayed(deleteMsg, 100);
+            Message deleteMsg = workerHandler.obtainMessage(MSG_DELETE_SMS, smsMsg);
+            workerHandler.sendMessageDelayed(deleteMsg, 100);
+            mPreQuitQueueCount.getAndIncrement();
         } else {
+            // 是否标记验证码短信为已读
             if (SPUtils.markAsReadEnabled(this)) {
                 // mark sms as read
-                Message markMsg = Message.obtain(mMainHandler, MSG_MARK_AS_READ, smsMsg);
-                mMainHandler.sendMessageDelayed(markMsg, 100);
+                Message markMsg = workerHandler.obtainMessage(MSG_MARK_AS_READ, smsMsg);
+                workerHandler.sendMessageDelayed(markMsg, 100);
+                mPreQuitQueueCount.getAndIncrement();
             }
         }
 
+        // 是否拦截验证码短信通知
         if (SPUtils.blockNotificationEnabled(this)) {
             // cancel notification
             Intent intent = new Intent(NotificationMonitorService.ACTION_CANCEL_NOTIFICATION);
@@ -185,71 +240,119 @@ public class SmsCodeHandleService extends IntentService {
             sendBroadcast(intent);
         }
 
-        smsMsg.setCompany(SmsCodeUtils.parseCompany(msgBody));
-        if (SPUtils.recordSmsCodeEnabled(this)) {
-            recordSmsMsg(smsMsg);
-        }
-
-        if (SPUtils.showCodeNotificationEnabled(this)) {
-            showCodeNotification(smsMsg);
-        }
+        mPreQuitQueueCount.getAndIncrement();
+        workerHandler.sendEmptyMessageDelayed(WAIT_FOR_QUIT, 200);
     }
 
-    private Handler mMainHandler = new Handler(Looper.getMainLooper()) {
+    private class WorkerHandler extends Handler {
+        WorkerHandler(Looper looper) {
+            super(looper);
+        }
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MSG_SMSCODE_EXTRACTED:
-                    onSmsCodeExtracted((String) msg.obj);
+                case MSG_ENABLE_ACCESSIBILITY_SERVICE: {
+                    enableAccessibilityService();
                     break;
-                case MSG_MARK_AS_READ: {
-                    SmsMsg smsMsg = (SmsMsg) msg.obj;
-                    String sender = smsMsg.getSender();
-                    String body = smsMsg.getBody();
-                    markSmsAsRead(sender, body);
+                }
+                case MSG_COPY_TO_CLIPBOARD: {
+                    copyToClipboard((String) msg.obj);
+                    break;
+                }
+                case MSG_SHOW_TOAST: {
+                    showToast((String) msg.obj);
                     break;
                 }
                 case MSG_DELETE_SMS: {
                     SmsMsg smsMsg = (SmsMsg) msg.obj;
-                    String sender = smsMsg.getSender();
-                    String body = smsMsg.getBody();
-                    deleteSms(sender, body);
+                    deleteSms(smsMsg.getSender(), smsMsg.getBody());
+                    handlePreQuitQueue();
                     break;
                 }
-            }
-        }
-    };
-
-
-    private void onSmsCodeExtracted(final String smsCode) {
-        boolean copyToClipboardEnabled = SPUtils.copyToClipboardEnabled(this);
-        if (copyToClipboardEnabled) {
-            ClipboardUtils.copyToClipboard(this, smsCode);
-        }
-
-        if (SPUtils.showToast(this)) {
-            showToast(smsCode);
-        }
-
-        if (mAutoInputEnabled) {
-            if (mIsAutoInputModeRoot && PrefConst.FOCUS_MODE_MANUAL.equals(mFocusMode)) {
-                // focus mode: manual focus
-                // input mode: root mode
-                boolean success = ShellUtils.inputText(smsCode);
-                if (success) {
-                    XLog.i("Auto input succeed");
-                    if (copyToClipboardEnabled &&
-                            SPUtils.shouldClearClipboard(this)) {
-                        ClipboardUtils.clearClipboard(this);
-                    }
+                case MSG_MARK_AS_READ: {
+                    SmsMsg smsMsg = (SmsMsg) msg.obj;
+                    markSmsAsRead(smsMsg.getSender(), smsMsg.getBody());
+                    handlePreQuitQueue();
+                    break;
                 }
-            } else {
-                // start auto input
-                Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);
-                intent.putExtra(SmsCodeAutoInputService.EXTRA_KEY_SMS_CODE, smsCode);
-                sendBroadcast(intent);
+                case MSG_RECORD_SMS_MSG: {
+                    recordSmsMsg((SmsMsg) msg.obj);
+                    break;
+                }
+                case MSG_AUTO_INPUT_CODE: {
+                    SmsMsg smsMsg = (SmsMsg) msg.obj;
+                    handleAutoInputCode(smsMsg.getSmsCode());
+                    break;
+                }
+                case MSG_CLEAR_CLIPBOARD: {
+                    clearClipboard();
+                    break;
+                }
+                case MSG_SHOW_CODE_NOTIFICATION: {
+                    showCodeNotification((SmsMsg) msg.obj);
+                    break;
+                }
+                case MSG_CANCEL_NOTIFICATION: {
+                    cancelNotification((Integer) msg.obj);
+                    handlePreQuitQueue();
+                    break;
+                }
+                case WAIT_FOR_QUIT: {
+                    handlePreQuitQueue();
+                    break;
+                }
+                case MSG_QUIT_QUEUE: {
+                    quit();
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException("Unsupported msg type");
             }
         }
+    }
+
+    private void enableAccessibilityService() {
+        String accessSvcName = AccessibilityUtils.getServiceName(SmsCodeAutoInputService.class);
+        // 用root的方式启动
+        boolean enabled = ShellUtils.enableAccessibilityService(accessSvcName);
+        XLog.d("Accessibility enabled by Root: {}", enabled);
+        if (enabled) { // waiting for AutoInputService working on.
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void copyToClipboard(String smsCode) {
+        ClipboardUtils.copyToClipboard(this, smsCode);
+    }
+
+    private void handleAutoInputCode(String smsCode) {
+        if (PrefConst.AUTO_INPUT_MODE_ROOT.equals(mAutoInputMode)
+                && PrefConst.FOCUS_MODE_MANUAL.equals(mFocusMode)) {
+            // focus mode: manual focus
+            // input mode: root mode
+            boolean success = ShellUtils.inputText(smsCode);
+            if (success) {
+                XLog.i("Auto input succeed");
+                if (SPUtils.copyToClipboardEnabled(this) &&
+                        SPUtils.shouldClearClipboard(this)) {
+                    uiHandler.sendEmptyMessage(MSG_CLEAR_CLIPBOARD);
+                }
+            }
+        } else {
+            // start auto input
+            Intent intent = new Intent(SmsCodeAutoInputService.ACTION_START_AUTO_INPUT);
+            intent.putExtra(SmsCodeAutoInputService.EXTRA_KEY_SMS_CODE, smsCode);
+            sendBroadcast(intent);
+        }
+    }
+
+    private void clearClipboard() {
+        ClipboardUtils.clearClipboard(this);
     }
 
     private void showToast(String smsCode) {
@@ -374,13 +477,38 @@ public class SmsCodeHandleService extends IntentService {
                 .build();
 
         manager.notify(notificationId, notification);
+
+        // 是否自动清除验证码通知
+        if (SPUtils.autoCancelCodeNotification(this)) {
+            Message cancelNotifyMsg = workerHandler
+                    .obtainMessage(MSG_CANCEL_NOTIFICATION, notificationId);
+            int retentionTime = SPUtils.getNotificationRetentionTime(this) * 1000;
+            workerHandler.sendMessageDelayed(cancelNotifyMsg, retentionTime);
+            mPreQuitQueueCount.getAndIncrement();
+        }
     }
 
-    private void sleep(int seconds) {
-        try {
-            TimeUnit.SECONDS.sleep(seconds);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    private void cancelNotification(int notificationId) {
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager == null) {
+            return;
         }
+        manager.cancel(notificationId);
+    }
+
+    private void handlePreQuitQueue() {
+        mPreQuitQueueCount.decrementAndGet();
+        if (mPreQuitQueueCount.get() <= DEFAULT_QUIT_COUNT) {
+            // 结束Looper
+            workerHandler.sendEmptyMessage(MSG_QUIT_QUEUE);
+        }
+    }
+
+    private void quit() {
+        if (workerHandler != null) {
+            workerHandler.getLooper().quitSafely();
+            XLog.d("worker thread quit");
+        }
+        stopSelf();
     }
 }

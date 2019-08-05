@@ -260,8 +260,25 @@ public class SPUtils {
     /**
      * 是否显示验证码通知
      */
-    public static boolean showCodeNotificationEnabled(Context context) {
+    public static boolean showCodeNotification(Context context) {
         return PreferenceUtils.getBoolean(context,
                 PrefConst.KEY_SHOW_CODE_NOTIFICATION, PrefConst.SHOW_CODE_NOTIFICATION_DEFAULT);
+    }
+
+    /**
+     * 是否自动清除验证码通知
+     */
+    public static boolean autoCancelCodeNotification(Context context) {
+        return PreferenceUtils.getBoolean(context,
+                PrefConst.KEY_AUTO_CANCEL_CODE_NOTIFICATION, PrefConst.AUTO_CANCEL_CODE_NOTIFICATION_DEFAULT);
+    }
+
+    /**
+     * 获取验证码通知保留时间
+     */
+    public static int getNotificationRetentionTime(Context context) {
+        String value = PreferenceUtils.getString(context,
+                PrefConst.KEY_NOTIFICATION_RETENTION_TIME, PrefConst.NOTIFICATION_RETENTION_TIME_DEFAULT);
+        return Integer.valueOf(value);
     }
 }
