@@ -3,14 +3,14 @@ package com.github.tianma8023.smscode.app.record;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.BaseActivity;
 import com.github.tianma8023.smscode.app.base.BackPressEventDispatchHelper;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

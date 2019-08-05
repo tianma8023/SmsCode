@@ -19,7 +19,6 @@ android {
         targetSdkVersion 28
         versionCode 22
         versionName "1.7.3"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "en", "zh-rCN", "zh-rTW"
 //        archivesBaseName = "SmsCode-v$versionName-${releaseTime()}"
     }
@@ -85,6 +84,11 @@ android {
     productFlavors.all { flavor ->
         flavor.manifestPlaceholders = [UMENG_CHANNEL_NAME: name]
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 greendao {
@@ -94,21 +98,17 @@ greendao {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:design:28.0.0' // material design support
-    implementation 'com.android.support:recyclerview-v7:28.0.0' // recycler view
-    implementation 'com.android.support:cardview-v7:28.0.0' // card view
-    implementation 'com.android.support:customtabs:28.0.0' // custom tabs
-    implementation 'com.android.support:preference-v7:28.0.0' // preference support
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+//    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0' // material design support
+    implementation 'androidx.recyclerview:recyclerview:1.0.0' // recycler view
+    implementation 'androidx.cardview:cardview:1.0.0' // card view
+    implementation 'androidx.browser:browser:1.0.0' // custom tabs
+    implementation 'androidx.preference:preference:1.0.0' // preference support
 
     // ButterKnife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Material Dialogs
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
@@ -142,5 +142,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // BRVAH
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.44'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45-androidx'
 }

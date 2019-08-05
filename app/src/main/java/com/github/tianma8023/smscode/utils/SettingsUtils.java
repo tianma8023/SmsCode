@@ -8,11 +8,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.service.NotificationMonitorService;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Utility of android.provider.Settings

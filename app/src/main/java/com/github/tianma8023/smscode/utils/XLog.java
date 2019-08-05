@@ -1,10 +1,10 @@
 package com.github.tianma8023.smscode.utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import org.slf4j.LoggerFactory;
 
+import androidx.annotation.NonNull;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 

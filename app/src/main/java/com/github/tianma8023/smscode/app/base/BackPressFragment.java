@@ -1,6 +1,6 @@
 package com.github.tianma8023.smscode.app.base;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 /**
  * Fragment that handled back pressed event.

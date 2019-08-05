@@ -5,13 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Telephony;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsMessage;
 
 import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.service.SmsCodeHandleService;
 import com.github.tianma8023.smscode.utils.SmsMessageUtils;
 import com.github.tianma8023.smscode.utils.XLog;
+
+import androidx.core.content.ContextCompat;
 
 public class SmsReceiver extends BroadcastReceiver {
 

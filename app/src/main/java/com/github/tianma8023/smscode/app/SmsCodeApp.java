@@ -4,7 +4,6 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
@@ -17,6 +16,8 @@ import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import androidx.annotation.RequiresApi;
 
 public class SmsCodeApp extends Application {
 

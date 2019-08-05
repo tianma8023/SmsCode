@@ -1,12 +1,12 @@
 package com.github.tianma8023.smscode.app.permissions;
 
-import android.support.annotation.Nullable;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.tianma8023.smscode.R;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class PermItemAdapter extends BaseQuickAdapter<PermItem, BaseViewHolder> {
 

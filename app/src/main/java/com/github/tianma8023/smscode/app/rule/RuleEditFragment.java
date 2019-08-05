@@ -3,13 +3,6 @@ package com.github.tianma8023.smscode.app.rule;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -35,6 +28,7 @@ import com.github.tianma8023.smscode.entity.SmsCodeRule;
 import com.github.tianma8023.smscode.event.Event;
 import com.github.tianma8023.smscode.event.XEventBus;
 import com.github.tianma8023.smscode.utils.Utils;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -42,6 +36,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

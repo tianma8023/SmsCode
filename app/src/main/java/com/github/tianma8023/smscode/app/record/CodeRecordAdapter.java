@@ -1,6 +1,5 @@
 package com.github.tianma8023.smscode.app.record;
 
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +14,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
 
 public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHolder> {
 

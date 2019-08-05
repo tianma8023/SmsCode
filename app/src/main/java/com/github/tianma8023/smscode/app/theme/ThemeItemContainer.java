@@ -1,14 +1,14 @@
 package com.github.tianma8023.smscode.app.theme;
 
-import android.support.annotation.ColorRes;
-import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
-
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.PrefConst;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 
 public class ThemeItemContainer {
 

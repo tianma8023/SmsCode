@@ -11,13 +11,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Telephony;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 
 import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import ch.qos.logback.classic.Level;
 
 /**

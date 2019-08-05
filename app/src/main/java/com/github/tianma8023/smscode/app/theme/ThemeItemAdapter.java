@@ -1,13 +1,14 @@
 package com.github.tianma8023.smscode.app.theme;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.tianma8023.smscode.R;
 
 import java.util.List;
+
+import androidx.core.content.ContextCompat;
 
 public class ThemeItemAdapter extends BaseQuickAdapter<ThemeItem, BaseViewHolder> {
 

@@ -19,9 +19,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Telephony;
-import android.support.annotation.IntDef;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -44,6 +41,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import androidx.annotation.IntDef;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 
 /**

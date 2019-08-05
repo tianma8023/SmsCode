@@ -3,7 +3,6 @@ package com.github.tianma8023.smscode.backup;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
 
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.backup.exception.BackupInvalidException;
@@ -22,6 +21,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.core.content.FileProvider;
 
 public class BackupManager {
 

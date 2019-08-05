@@ -1,10 +1,11 @@
 package com.github.tianma8023.smscode.utils;
 
 import android.content.Context;
-import android.support.annotation.RawRes;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import androidx.annotation.RawRes;
 
 public class ResUtils {
 
