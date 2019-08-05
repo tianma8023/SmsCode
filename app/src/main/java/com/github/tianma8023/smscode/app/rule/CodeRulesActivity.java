@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.app.BaseActivity;
+import com.github.tianma8023.smscode.app.base.BaseActivity;
 import com.github.tianma8023.smscode.event.Event;
 import com.github.tianma8023.smscode.event.XEventBus;
 

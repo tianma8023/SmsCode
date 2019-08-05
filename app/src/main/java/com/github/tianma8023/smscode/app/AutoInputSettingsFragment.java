@@ -7,26 +7,26 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.base.BasePreferenceFragment;
 import com.github.tianma8023.smscode.service.accessibility.SmsCodeAutoInputService;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.SwitchPreference;
 
+import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ACCESSIBILITY;
 import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ROOT;
-import static com.github.tianma8023.smscode.constant.PrefConst.FOCUS_MODE_AUTO;
-import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.ENABLE_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.FOCUS_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.FOCUS_MODE_AUTO;
 import static com.github.tianma8023.smscode.constant.PrefConst.MANUAL_FOCUS_IF_FAILED;
 
-public class AutoInputSettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
+public class AutoInputSettingsFragment extends BasePreferenceFragment implements Preference.OnPreferenceChangeListener {
 
     private Context mContext;
 
@@ -46,18 +46,18 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings_auto_input_code);
 
-        SwitchPreference autoInputEnablePref = (SwitchPreference) findPreference(ENABLE_AUTO_INPUT_CODE);
+        SwitchPreference autoInputEnablePref = findPreference(ENABLE_AUTO_INPUT_CODE);
         autoInputEnablePref.setOnPreferenceChangeListener(this);
 
-        mAutoInputModePref = (ListPreference) findPreference(AUTO_INPUT_MODE);
+        mAutoInputModePref = findPreference(AUTO_INPUT_MODE);
         mAutoInputModePref.setOnPreferenceChangeListener(this);
         mAutoInputMode = mAutoInputModePref.getValue();
 
-        ListPreference focusModePref = (ListPreference) findPreference(FOCUS_MODE);
+        ListPreference focusModePref = findPreference(FOCUS_MODE);
         focusModePref.setOnPreferenceChangeListener(this);
         mFocusMode = focusModePref.getValue();
 
-        mManualFocusIfFailedPref = (SwitchPreference) findPreference(MANUAL_FOCUS_IF_FAILED);
+        mManualFocusIfFailedPref = findPreference(MANUAL_FOCUS_IF_FAILED);
 
         refreshEnableAutoInputPreference(autoInputEnablePref.isChecked());
         refreshAutoInputModePreference(mAutoInputMode);

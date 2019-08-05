@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.base.BasePreferenceFragment;
 import com.github.tianma8023.smscode.app.permissions.PermItemAdapter;
 import com.github.tianma8023.smscode.app.permissions.PermItemContainer;
 import com.github.tianma8023.smscode.app.record.CodeRecordsActivity;
@@ -52,7 +53,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -69,21 +69,21 @@ import static com.github.tianma8023.smscode.constant.PrefConst.ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.ENTRY_CODE_RECORDS;
 import static com.github.tianma8023.smscode.constant.PrefConst.EXCLUDE_FROM_RECENTS;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GENERAL;
 import static com.github.tianma8023.smscode.constant.PrefConst.GET_ALIPAY_PACKET;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GENERAL;
 import static com.github.tianma8023.smscode.constant.PrefConst.LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.MARK_AS_READ;
+import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT;
 import static com.github.tianma8023.smscode.constant.PrefConst.RATING;
 import static com.github.tianma8023.smscode.constant.PrefConst.SMSCODE_TEST;
 import static com.github.tianma8023.smscode.constant.PrefConst.SOURCE_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.VERBOSE_LOG_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.VERSION;
-import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT;
 
 /**
  * 首选项Fragment
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends BasePreferenceFragment implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
     public static final String EXTRA_CURRENT_THEME = "extra_current_theme";
     public static final String EXTRA_ACTION = "extra_action";
@@ -124,18 +124,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         addPreferencesFromResource(R.xml.settings);
 
         // general groups
-        mEnablePref = (SwitchPreference) findPreference(PrefConst.ENABLE);
+        mEnablePref = findPreference(PrefConst.ENABLE);
         mEnablePref.setOnPreferenceChangeListener(this);
 
         // listen mode preference
-        ListPreference listenModePref = (ListPreference) findPreference(LISTEN_MODE);
+        ListPreference listenModePref = findPreference(LISTEN_MODE);
         listenModePref.setOnPreferenceChangeListener(this);
         mCurListenMode = listenModePref.getValue();
         refreshListenModePreference(listenModePref, mCurListenMode);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // hide copy to clipboard preference
-            PreferenceGroup generalGroup = (PreferenceGroup) findPreference(KEY_GENERAL);
+            PreferenceGroup generalGroup = findPreference(KEY_GENERAL);
             Preference copyToClipboardPref = findPreference(COPY_TO_CLIPBOARD);
             generalGroup.removePreference(copyToClipboardPref);
         }
@@ -173,11 +173,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         // others group
         // exclude from recent apps preference
-        mExcludeFromRecentsPref = (SwitchPreference) findPreference(EXCLUDE_FROM_RECENTS);
+        mExcludeFromRecentsPref = findPreference(EXCLUDE_FROM_RECENTS);
         mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
 
         // verbose log preference
-        SwitchPreference verboseLogPref = (SwitchPreference) findPreference(VERBOSE_LOG_MODE);
+        SwitchPreference verboseLogPref = findPreference(VERBOSE_LOG_MODE);
         verboseLogPref.setOnPreferenceChangeListener(this);
         refreshVerboseLogPreference(verboseLogPref, verboseLogPref.isChecked());
         // others group end

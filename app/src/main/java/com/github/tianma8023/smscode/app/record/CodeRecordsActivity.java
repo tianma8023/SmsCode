@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.app.BaseActivity;
-import com.github.tianma8023.smscode.app.base.BackPressEventDispatchHelper;
+import com.github.tianma8023.smscode.app.base.BaseActivity;
+import com.github.tianma8023.smscode.app.base.back.BackPressEventDispatchHelper;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;

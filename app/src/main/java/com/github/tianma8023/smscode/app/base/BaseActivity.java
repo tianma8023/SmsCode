@@ -1,4 +1,4 @@
-package com.github.tianma8023.smscode.app;
+package com.github.tianma8023.smscode.app.base;
 
 import android.os.Bundle;
 

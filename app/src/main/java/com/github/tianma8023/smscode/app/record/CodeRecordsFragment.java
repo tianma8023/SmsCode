@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.app.base.BackPressFragment;
+import com.github.tianma8023.smscode.app.base.back.BackPressFragment;
 import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.utils.ClipboardUtils;

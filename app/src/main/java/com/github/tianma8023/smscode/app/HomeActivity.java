@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
+import com.github.tianma8023.smscode.app.base.BaseActivity;
 import com.github.tianma8023.smscode.app.faq.FaqFragment;
 import com.github.tianma8023.smscode.app.permissions.PermItemAdapter;
 import com.github.tianma8023.smscode.app.permissions.PermItemContainer;
