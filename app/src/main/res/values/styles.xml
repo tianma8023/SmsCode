@@ -9,6 +9,7 @@
         <item name="preferenceIconColor">?android:attr/colorAccent</item>
         <item name="toolbarPopupStyle">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="itemBackgroundColor">@color/item_background_color_light</item>
+        <item name="itemSelectedBackgroundColor">@color/item_selected_background_color_light</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme">
@@ -64,6 +65,7 @@
         <item name="faq_textColorSecondary">@color/faq_textColorSecondary_white</item>
         <item name="toolbarPopupStyle">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="itemBackgroundColor">@color/item_background_color_dark</item>
+        <item name="itemSelectedBackgroundColor">@color/item_selected_background_color_dark</item>
     </style>
 
     <style name="AppTheme.Black" parent="AppTheme.Dark">

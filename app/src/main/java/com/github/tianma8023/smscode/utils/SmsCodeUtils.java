@@ -100,10 +100,11 @@ public class SmsCodeUtils {
         // 现在的正则表达式是 [a-zA-Z0-9]+(\.[a-zA-Z0-9]+)? 匹配数字和字母之间最多一个.的字符串
         // 之前的不能识别和剔除小数，比如 123456.231，很容易就把 123456 作为验证码。
         String codeRegex = "(?<![a-zA-Z0-9])[a-zA-Z0-9]{4,8}(?![a-zA-Z0-9])";
-        String smsCode = getSmsCode(codeRegex, keyword, content);
+        // 先去掉所有空白字符处理
+        String handledContent = removeAllWhiteSpaces(content);
+        String smsCode = getSmsCode(codeRegex, keyword, handledContent);
         if (TextUtils.isEmpty(smsCode)) {
-            // 没解析出就去掉所有空白字符再处理
-            content = removeAllWhiteSpaces(content);
+            // 没解析出就按照原文本再处理一遍
             smsCode = getSmsCode(codeRegex, keyword, content);
         }
         return smsCode;

@@ -16,7 +16,7 @@ public class RuleAdapter extends BaseQuickAdapter<SmsCodeRule, BaseViewHolder> {
     private OnCreateItemContextMenuListener mContextMenuListener;
 
     RuleAdapter(List<SmsCodeRule> ruleList) {
-        super(R.layout.rule_item, ruleList);
+        super(R.layout.item_rule, ruleList);
     }
 
     @Override

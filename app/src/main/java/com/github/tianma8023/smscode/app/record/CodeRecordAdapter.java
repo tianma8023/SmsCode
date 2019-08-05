@@ -21,7 +21,7 @@ public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHold
     private final SimpleDateFormat mDateFormat;
 
     CodeRecordAdapter(@Nullable List<RecordItem> data) {
-        super(R.layout.code_record_item, data);
+        super(R.layout.item_code_record, data);
 
         mDateFormat = new SimpleDateFormat("MM.dd HH:mm", Locale.getDefault());
     }

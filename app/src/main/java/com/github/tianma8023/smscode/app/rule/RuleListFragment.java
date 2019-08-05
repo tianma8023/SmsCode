@@ -50,6 +50,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -122,9 +123,11 @@ public class RuleListFragment extends Fragment {
         mActivity = getActivity();
 
         List<SmsCodeRule> rules = DBManager.get(mActivity).queryAllSmsCodeRules();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         mRuleAdapter = new RuleAdapter(rules);
         mRecyclerView.setAdapter(mRuleAdapter);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mActivity, DividerItemDecoration.VERTICAL));
 
         // swipe to remove
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mSwipeToRemoveCallback);

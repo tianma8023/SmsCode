@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 public class PermItemAdapter extends BaseQuickAdapter<PermItem, BaseViewHolder> {
 
     public PermItemAdapter(@Nullable List<PermItem> data) {
-        super(R.layout.permission_item, data);
+        super(R.layout.item_permission, data);
     }
 
     @Override

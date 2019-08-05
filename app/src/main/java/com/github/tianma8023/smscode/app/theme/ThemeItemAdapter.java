@@ -15,7 +15,7 @@ public class ThemeItemAdapter extends BaseQuickAdapter<ThemeItem, BaseViewHolder
     private Context mContext;
 
     public ThemeItemAdapter(Context context, List<ThemeItem> themeItemList) {
-        super(R.layout.theme_item, themeItemList);
+        super(R.layout.item_theme, themeItemList);
         mContext = context;
     }
 
