@@ -56,8 +56,6 @@ public class SmsCodeHandleService extends Service {
 
     public static final String EXTRA_KEY_SMS_MESSAGE_DATA = "key_sms_message_data";
 
-    private static final int MSG_SMSCODE_EXTRACTED = 0xff;
-
     private static final int MSG_ENABLE_ACCESSIBILITY_SERVICE = 0xff;
 
     private static final int MSG_COPY_TO_CLIPBOARD = 0;
@@ -236,8 +234,13 @@ public class SmsCodeHandleService extends Service {
 
         // 是否拦截验证码短信通知
         if (SPUtils.blockNotificationEnabled(this)) {
-            // cancel notification
-            Intent intent = new Intent(NotificationMonitorService.ACTION_CANCEL_NOTIFICATION);
+            // block sms notification
+            uiHandler.postDelayed(() -> {
+                Intent intent = new Intent(NotificationMonitorService.ACTION_BLOCK_SMS_NOTIFICATION);
+                intent.putExtra(NotificationMonitorService.EXTRA_KEY_SMS_MSG, smsMsg);
+                sendBroadcast(intent);
+            }, 500);
+            Intent intent = new Intent(NotificationMonitorService.ACTION_BLOCK_SMS_NOTIFICATION);
             intent.putExtra(NotificationMonitorService.EXTRA_KEY_SMS_MSG, smsMsg);
             sendBroadcast(intent);
         }

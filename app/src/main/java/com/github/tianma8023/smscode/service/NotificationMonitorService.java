@@ -18,7 +18,7 @@ import com.github.tianma8023.smscode.utils.XLog;
  */
 public class NotificationMonitorService extends NotificationListenerService {
 
-    public static final String ACTION_CANCEL_NOTIFICATION = "action_cancel_notification";
+    public static final String ACTION_BLOCK_SMS_NOTIFICATION = "action_block_sms_notification";
 
     public static final String EXTRA_KEY_SMS_MSG = "extra_key_sms_msg";
 
@@ -27,8 +27,8 @@ public class NotificationMonitorService extends NotificationListenerService {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            XLog.d("NotificationController: {}", action);
-            if (ACTION_CANCEL_NOTIFICATION.equals(action)) {
+            XLog.d("NotificationController receive: {}", action);
+            if (ACTION_BLOCK_SMS_NOTIFICATION.equals(action)) {
                 mSmsMsg = intent.getParcelableExtra(EXTRA_KEY_SMS_MSG);
                 performCancelNotification();
             }
@@ -48,7 +48,7 @@ public class NotificationMonitorService extends NotificationListenerService {
         if (mControllerReceiver == null) {
             mControllerReceiver = new NotificationControllerReceiver();
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ACTION_CANCEL_NOTIFICATION);
+            intentFilter.addAction(ACTION_BLOCK_SMS_NOTIFICATION);
             registerReceiver(mControllerReceiver, intentFilter);
         }
     }
@@ -114,7 +114,7 @@ public class NotificationMonitorService extends NotificationListenerService {
 
                 if (hit) {
                     cancelNotification(sbn.getKey());
-                    XLog.d("cancel notification succeed");
+                    XLog.i("block sms notification succeed");
                     break;
                 }
             }
