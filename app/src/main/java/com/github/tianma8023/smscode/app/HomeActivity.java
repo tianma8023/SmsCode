@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.BuildConfig;
@@ -27,7 +26,6 @@ import com.github.tianma8023.smscode.service.SmsObserveService;
 import com.github.tianma8023.smscode.utils.SPUtils;
 import com.github.tianma8023.smscode.utils.SettingsUtils;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -266,12 +264,7 @@ public class HomeActivity extends BaseActivity implements
                 .title(R.string.ignore_battery_optimization_statement)
                 .content(R.string.ignore_battery_optimization_content)
                 .positiveText(R.string.yes)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ignoreBatteryOptimization();
-                    }
-                })
+                .onPositive((dialog, which) -> ignoreBatteryOptimization())
                 .negativeText(R.string.no)
                 .show();
     }

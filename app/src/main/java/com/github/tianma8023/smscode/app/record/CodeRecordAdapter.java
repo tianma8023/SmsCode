@@ -10,7 +10,6 @@ import com.github.tianma8023.smscode.entity.SmsMsg;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -112,13 +111,10 @@ public class CodeRecordAdapter extends BaseQuickAdapter<RecordItem, BaseViewHold
 
         if (!itemsToAdd.isEmpty()) {
             getData().addAll(itemsToAdd);
-            Collections.sort(getData(), new Comparator<RecordItem>() {
-                @Override
-                public int compare(RecordItem o1, RecordItem o2) {
-                    long date1 = o1.getSmsMsg().getDate();
-                    long date2 = o2.getSmsMsg().getDate();
-                    return Long.compare(date2, date1);
-                }
+            Collections.sort(getData(), (o1, o2) -> {
+                long date1 = o1.getSmsMsg().getDate();
+                long date2 = o2.getSmsMsg().getDate();
+                return Long.compare(date2, date1);
             });
             notifyDataSetChanged();
         }

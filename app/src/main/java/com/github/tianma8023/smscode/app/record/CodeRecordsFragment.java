@@ -9,9 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.app.base.BackPressFragment;
 import com.github.tianma8023.smscode.db.DBManager;
@@ -85,12 +83,9 @@ public class CodeRecordsFragment extends BackPressFragment {
         List<RecordItem> records = new ArrayList<>();
 
         mCodeRecordAdapter = new CodeRecordAdapter(records);
-        mCodeRecordAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                RecordItem recordItem = mCodeRecordAdapter.getItem(position);
-                itemClicked(recordItem, position);
-            }
+        mCodeRecordAdapter.setOnItemClickListener((adapter, view, position) -> {
+            RecordItem recordItem = mCodeRecordAdapter.getItem(position);
+            itemClicked(recordItem, position);
         });
 
         mCodeRecordAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -100,24 +95,18 @@ public class CodeRecordsFragment extends BackPressFragment {
             }
         });
 
-        mCodeRecordAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                int viewId = view.getId();
-                if (viewId == R.id.record_details_view) {
-                    RecordItem item = mCodeRecordAdapter.getItem(position);
-                    showSmsDetails(item);
-                }
+        mCodeRecordAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            int viewId = view.getId();
+            if (viewId == R.id.record_details_view) {
+                RecordItem item = mCodeRecordAdapter.getItem(position);
+                showSmsDetails(item);
             }
         });
 
-        mCodeRecordAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                RecordItem recordItem = mCodeRecordAdapter.getItem(position);
-                itemLongClicked(recordItem, position);
-                return true;
-            }
+        mCodeRecordAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            RecordItem recordItem = mCodeRecordAdapter.getItem(position);
+            itemLongClicked(recordItem, position);
+            return true;
         });
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
@@ -157,12 +146,7 @@ public class CodeRecordsFragment extends BackPressFragment {
                 .title(R.string.message_details)
                 .content(smsMsg.getBody())
                 .positiveText(R.string.copy_smscode)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        copySmsCode(recordItem);
-                    }
-                })
+                .onPositive((dialog, which) -> copySmsCode(recordItem))
                 .negativeText(R.string.cancel)
                 .show();
     }
@@ -250,12 +234,7 @@ public class CodeRecordsFragment extends BackPressFragment {
                 }
             }
         });
-        snackbar.setAction(R.string.revoke, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCodeRecordAdapter.addItems(itemsToRemove);
-            }
-        });
+        snackbar.setAction(R.string.revoke, v -> mCodeRecordAdapter.addItems(itemsToRemove));
         snackbar.show();
 
         mCurrentMode = RECORD_MODE_NORMAL;

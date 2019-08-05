@@ -4,20 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import android.text.Editable;
 import android.text.InputType;
 import android.view.ContextMenu;
@@ -32,9 +20,7 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDButton;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tianma8023.smscode.R;
-import com.github.tianma8023.smscode.adapter.OnCreateItemContextMenuListener;
 import com.github.tianma8023.smscode.backup.BackupManager;
 import com.github.tianma8023.smscode.backup.ExportResult;
 import com.github.tianma8023.smscode.backup.ImportResult;
@@ -47,7 +33,8 @@ import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.widget.DialogAsyncTask;
 import com.github.tianma8023.smscode.widget.FabScrollBehavior;
 import com.github.tianma8023.smscode.widget.TextWatcherAdapter;
-import com.yanzhenjie.permission.Action;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.yanzhenjie.permission.AndPermission;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +44,15 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -134,21 +130,15 @@ public class RuleListFragment extends Fragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mSwipeToRemoveCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        mRuleAdapter.setContextMenuListener(new OnCreateItemContextMenuListener() {
-            @Override
-            public void onCreateItemContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo, int position) {
-                mSelectedPosition = position;
-                onCreateContextMenu(menu, v, menuInfo);
-            }
+        mRuleAdapter.setContextMenuListener((menu, v, menuInfo, position) -> {
+            mSelectedPosition = position;
+            onCreateContextMenu(menu, v, menuInfo);
         });
 
-        mRuleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mSelectedPosition = position;
-                XEventBus.post(new Event.StartRuleEditEvent(
-                        RuleEditFragment.EDIT_TYPE_UPDATE, mRuleAdapter.getItem(position)));
-            }
+        mRuleAdapter.setOnItemClickListener((adapter, view, position) -> {
+            mSelectedPosition = position;
+            XEventBus.post(new Event.StartRuleEditEvent(
+                    RuleEditFragment.EDIT_TYPE_UPDATE, mRuleAdapter.getItem(position)));
         });
 
         mRuleAdapter.registerAdapterDataObserver(mDataObserver);
@@ -158,13 +148,10 @@ public class RuleListFragment extends Fragment {
         params.setBehavior(new FabScrollBehavior());
         mFabButton.setLayoutParams(params);
 
-        mFabButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SmsCodeRule emptyRule = new SmsCodeRule();
-                XEventBus.post(new Event.StartRuleEditEvent(
-                        RuleEditFragment.EDIT_TYPE_CREATE, emptyRule));
-            }
+        mFabButton.setOnClickListener(v -> {
+            SmsCodeRule emptyRule = new SmsCodeRule();
+            XEventBus.post(new Event.StartRuleEditEvent(
+                    RuleEditFragment.EDIT_TYPE_CREATE, emptyRule));
         });
 
         refreshEmptyView();
@@ -262,7 +249,7 @@ public class RuleListFragment extends Fragment {
         return true;
     }
 
-    ItemTouchHelper.Callback mSwipeToRemoveCallback =
+    private ItemTouchHelper.Callback mSwipeToRemoveCallback =
             new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.END | ItemTouchHelper.START) {
                 @Override
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -296,12 +283,7 @@ public class RuleListFragment extends Fragment {
                 }
             }
         });
-        snackbar.setAction(R.string.revoke, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mRuleAdapter.addRule(position, itemToRemove);
-            }
-        });
+        snackbar.setAction(R.string.revoke, v -> mRuleAdapter.addRule(position, itemToRemove));
         snackbar.show();
     }
 
@@ -343,23 +325,17 @@ public class RuleListFragment extends Fragment {
         AndPermission.with(this)
                 .runtime()
                 .permission(permission)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        if (type == TYPE_IMPORT) {
-                            attemptImportRuleList();
-                        } else if (type == TYPE_EXPORT) {
-                            attemptExportRuleList();
-                        } else if (type == TYPE_IMPORT_DIRECT) {
-                            showImportDialogConfirm(importUri);
-                        }
+                .onGranted(data -> {
+                    if (type == TYPE_IMPORT) {
+                        attemptImportRuleList();
+                    } else if (type == TYPE_EXPORT) {
+                        attemptExportRuleList();
+                    } else if (type == TYPE_IMPORT_DIRECT) {
+                        showImportDialogConfirm(importUri);
                     }
                 })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        Snackbar.make(mRecyclerView, R.string.external_storage_perm_denied_prompt, Snackbar.LENGTH_LONG).show();
-                    }
+                .onDenied(data -> {
+                    Snackbar.make(mRecyclerView, R.string.external_storage_perm_denied_prompt, Snackbar.LENGTH_LONG).show();
                 })
                 .start();
     }
@@ -377,13 +353,10 @@ public class RuleListFragment extends Fragment {
         final MaterialDialog exportFilenameDialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.backup_file_name)
                 .content(content)
-                .input(hint, defaultFilename, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        File file = new File(BackupManager.getBackupDir(), input.toString());
-                        new ExportAsyncTask(mActivity, mRuleAdapter,
-                                file, getString(R.string.exporting)).execute();
-                    }
+                .input(hint, defaultFilename, (dialog, input) -> {
+                    File file = new File(BackupManager.getBackupDir(), input.toString());
+                    new ExportAsyncTask(mActivity, mRuleAdapter,
+                            file, getString(R.string.exporting)).execute();
                 })
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
                 .negativeText(R.string.cancel)
@@ -391,11 +364,9 @@ public class RuleListFragment extends Fragment {
 
         final EditText editText = exportFilenameDialog.getInputEditText();
         if (editText != null) {
-            exportFilenameDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    editText.setSelection(0, defaultFilename.length() - BackupManager.getBackupFileExtension().length());
-                }
+            exportFilenameDialog.setOnShowListener(dialog -> {
+                int stop = defaultFilename.length() - BackupManager.getBackupFileExtension().length();
+                editText.setSelection(0, stop);
             });
             final MDButton positiveBtn =
                     exportFilenameDialog.getActionButton(DialogAction.POSITIVE);
@@ -425,13 +396,10 @@ public class RuleListFragment extends Fragment {
         final MaterialDialog importDialog = new MaterialDialog.Builder(mActivity)
                 .title(R.string.choose_backup_file)
                 .items(filenames)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
-                        File file = files[position];
-                        Uri uri = Uri.fromFile(file);
-                        showImportDialogConfirm(uri);
-                    }
+                .itemsCallback((dialog, itemView, position, text) -> {
+                    File file = files[position];
+                    Uri uri = Uri.fromFile(file);
+                    showImportDialogConfirm(uri);
                 })
                 .build();
         importDialog.show();
@@ -442,22 +410,11 @@ public class RuleListFragment extends Fragment {
                 .title(R.string.import_confirmation_title)
                 .content(R.string.import_confirmation_message)
                 .positiveText(R.string.yes)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        new ImportAsyncTask(mActivity, uri,
-                                getString(R.string.importing), true).execute();
-                    }
-                })
+                .onPositive((dialog, which) -> new ImportAsyncTask(mActivity, uri,
+                        getString(R.string.importing), true).execute())
                 .negativeText(R.string.no)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new ImportAsyncTask(mActivity, uri,
-                                getString(R.string.importing), false).execute();
-                    }
-                })
+                .onNegative((dialog, which) -> new ImportAsyncTask(mActivity, uri,
+                        getString(R.string.importing), false).execute())
                 .show();
     }
 
@@ -533,12 +490,9 @@ public class RuleListFragment extends Fragment {
         }
         Snackbar snackbar = Snackbar.make(mRecyclerView, msgId, Snackbar.LENGTH_LONG);
         if (event.result == ExportResult.SUCCESS) {
-            snackbar.setAction(R.string.share, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mActivity != null) {
-                        BackupManager.shareBackupFile(mActivity, event.file);
-                    }
+            snackbar.setAction(R.string.share, v -> {
+                if (mActivity != null) {
+                    BackupManager.shareBackupFile(mActivity, event.file);
                 }
             });
         }

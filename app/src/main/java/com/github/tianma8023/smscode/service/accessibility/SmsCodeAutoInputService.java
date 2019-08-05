@@ -141,12 +141,9 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
             if (!success && SPUtils.manualFocusIfFailedEnabled(this)) {
                 XLog.d("auto focus failed, transfer to manual focus");
                 final int secs = 3;
-                mInnerHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String text = getString(R.string.auto_focus_failed_prompt, secs);
-                        Toast.makeText(SmsCodeAutoInputService.this, text, Toast.LENGTH_LONG).show();
-                    }
+                mInnerHandler.post(() -> {
+                    String text = getString(R.string.auto_focus_failed_prompt, secs);
+                    Toast.makeText(SmsCodeAutoInputService.this, text, Toast.LENGTH_LONG).show();
                 });
                 sleep(secs * 1000);
                 success = tryToAutoInputByManualFocus(smsCode, isRootAutoInputMode);

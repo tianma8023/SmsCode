@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,10 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.Const;
@@ -107,22 +104,14 @@ public class RuleEditFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
-        mQuickChooseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showQuickChooseDialog();
-            }
-        });
+        mQuickChooseBtn.setOnClickListener(v -> showQuickChooseDialog());
 
-        mCodeRegexEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    saveIfValid();
-                    return true;
-                }
-                return false;
+        mCodeRegexEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                saveIfValid();
+                return true;
             }
+            return false;
         });
         initArguments();
     }
@@ -177,29 +166,21 @@ public class RuleEditFragment extends Fragment {
                 .title(R.string.quick_choose)
                 .customView(dialogView, false)
                 .negativeText(R.string.cancel)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
+                .onNegative((dialog, which) -> dialog.dismiss())
                 .positiveText(R.string.confirm)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        String codeType = codeTypes[mCodeTypeIndex];
-                        String codeLenText = codeLenEditText.getText().toString();
+                .onPositive((dialog, which) -> {
+                    String codeType = codeTypes[mCodeTypeIndex];
+                    String codeLenText = codeLenEditText.getText().toString();
 
-                        if (TextUtils.isEmpty(codeLenText)) {
-                            codeLenEditText.setError(getString(R.string.code_length_empty_prompt));
-                            return;
-                        }
-                        // (?<![0-9])[0-9]{4}(?![0-9])
-                        String format = "(?<!%s)%s{%s}(?!%s)";
-                        String codeRegex = String.format(format, codeType, codeType, codeLenText, codeType);
-                        setText(mCodeRegexEditText, codeRegex);
-                        dialog.dismiss();
+                    if (TextUtils.isEmpty(codeLenText)) {
+                        codeLenEditText.setError(getString(R.string.code_length_empty_prompt));
+                        return;
                     }
+                    // (?<![0-9])[0-9]{4}(?![0-9])
+                    String format = "(?<!%s)%s{%s}(?!%s)";
+                    String codeRegex = String.format(format, codeType, codeType, codeLenText, codeType);
+                    setText(mCodeRegexEditText, codeRegex);
+                    dialog.dismiss();
                 })
                 .autoDismiss(false)
                 .build();
@@ -217,7 +198,7 @@ public class RuleEditFragment extends Fragment {
         return editText.getText().toString();
     }
 
-    private void setError(EditText editText,@StringRes int textId) {
+    private void setError(EditText editText, @StringRes int textId) {
         setError(editText, getString(textId));
     }
 
@@ -313,12 +294,9 @@ public class RuleEditFragment extends Fragment {
 
     private void loadTemplate() {
         ExecutorService singleThreadPool = Executors.newSingleThreadExecutor();
-        singleThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                SmsCodeRule template = TemplateRuleManager.loadTemplate(mActivity);
-                XEventBus.post(new Event.TemplateLoadEvent(template));
-            }
+        singleThreadPool.execute(() -> {
+            SmsCodeRule template = TemplateRuleManager.loadTemplate(mActivity);
+            XEventBus.post(new Event.TemplateLoadEvent(template));
         });
     }
 
@@ -338,21 +316,18 @@ public class RuleEditFragment extends Fragment {
         setError(mCodeRegexEditText, null);
 
         ExecutorService singleThreadPool = Executors.newSingleThreadExecutor();
-        singleThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                String company = getText(mCompanyEditText);
-                String keyword = getText(mKeywordEditText);
-                String codeRegex = getText(mCodeRegexEditText);
+        singleThreadPool.execute(() -> {
+            String company = getText(mCompanyEditText);
+            String keyword = getText(mKeywordEditText);
+            String codeRegex = getText(mCodeRegexEditText);
 
-                SmsCodeRule template = new SmsCodeRule();
+            SmsCodeRule template = new SmsCodeRule();
 
-                template.setCompany(company);
-                template.setCodeKeyword(keyword);
-                template.setCodeRegex(codeRegex);
-                boolean result = TemplateRuleManager.saveTemplate(mActivity, template);
-                XEventBus.post(new Event.TemplateSaveEvent(result));
-            }
+            template.setCompany(company);
+            template.setCodeKeyword(keyword);
+            template.setCodeRegex(codeRegex);
+            boolean result = TemplateRuleManager.saveTemplate(mActivity, template);
+            XEventBus.post(new Event.TemplateSaveEvent(result));
         });
     }
 

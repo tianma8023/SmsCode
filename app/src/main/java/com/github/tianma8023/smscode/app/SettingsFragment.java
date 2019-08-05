@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,7 +16,6 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
@@ -42,10 +40,8 @@ import com.github.tianma8023.smscode.utils.Utils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.utils.rom.MiuiUtils;
 import com.github.tianma8023.smscode.utils.rom.RomUtils;
-import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Rationale;
-import com.yanzhenjie.permission.RequestExecutor;
 
 import java.io.File;
 import java.util.List;
@@ -294,23 +290,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 .title(R.string.donation_tips_title)
                 .content(R.string.donation_tips_content)
                 .positiveText(R.string.donate_directly)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (checkAlipayExists()) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
-                            startActivity(intent);
-                        }
+                .onPositive((dialog, which) -> {
+                    if (checkAlipayExists()) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(Const.ALIPAY_QRCODE_URI_PREFIX + Const.ALIPAY_QRCODE_URL));
+                        startActivity(intent);
                     }
                 })
                 .negativeText(R.string.get_red_packet)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        getAlipayPacket();
-                    }
-                })
+                .onNegative((dialog, which) -> getAlipayPacket())
                 .show();
     }
 
@@ -320,18 +308,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 .title(R.string.pref_get_alipay_packet_title)
                 .content(getString(R.string.pref_get_alipay_packet_content, packetCode))
                 .positiveText(R.string.copy_packet_code_open_alipay)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ClipboardUtils.copyToClipboard(mActivity, packetCode);
-                        String text = getString(R.string.alipay_red_packet_code_copied, Const.ALIPAY_RED_PACKET_CODE);
-                        Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
+                .onPositive((dialog, which) -> {
+                    ClipboardUtils.copyToClipboard(mActivity, packetCode);
+                    String text = getString(R.string.alipay_red_packet_code_copied, Const.ALIPAY_RED_PACKET_CODE);
+                    Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
 
-                        if (checkAlipayExists()) {
-                            PackageManager pm = mActivity.getPackageManager();
-                            Intent intent = pm.getLaunchIntentForPackage(Const.ALIPAY_PACKAGE_NAME);
-                            startActivity(intent);
-                        }
+                    if (checkAlipayExists()) {
+                        PackageManager pm = mActivity.getPackageManager();
+                        Intent intent = pm.getLaunchIntentForPackage(Const.ALIPAY_PACKAGE_NAME);
+                        startActivity(intent);
                     }
                 })
                 .show();
@@ -436,16 +421,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
     private static final int MSG_SMSCODE_TEST = 0xff;
 
-    private Handler mHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_SMSCODE_TEST:
-                    handleSmsCode((String) msg.obj);
-                    return true;
-            }
-            return false;
+    private Handler mHandler = new Handler(msg -> {
+        switch (msg.what) {
+            case MSG_SMSCODE_TEST:
+                handleSmsCode((String) msg.obj);
+                return true;
         }
+        return false;
     });
 
     private void handleSmsCode(String verificationCode) {
@@ -476,47 +458,24 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
             return;
         }
 
-        Rationale<List<String>> rationale = new Rationale<List<String>>() {
-            @Override
-            public void showRationale(Context context, List<String> data, final RequestExecutor executor) {
-                new MaterialDialog.Builder(mActivity)
-                        .title(R.string.permission_requirement)
-                        .content(R.string.receive_sms_permission_requirement)
-                        .positiveText(R.string.okay)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                executor.execute();
-                            }
-                        })
-                        .negativeText(R.string.cancel)
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                executor.cancel();
-                            }
-                        })
-                        .show();
-            }
-        };
+        Rationale<List<String>> rationale = (context, data, executor) -> new MaterialDialog.Builder(mActivity)
+                .title(R.string.permission_requirement)
+                .content(R.string.receive_sms_permission_requirement)
+                .positiveText(R.string.okay)
+                .onPositive((dialog, which) -> executor.execute())
+                .negativeText(R.string.cancel)
+                .onNegative((dialog, which) -> executor.cancel())
+                .show();
 
         AndPermission.with(this)
                 .runtime()
                 .permission(Manifest.permission.READ_SMS,
                         Manifest.permission.RECEIVE_SMS)
                 .rationale(rationale)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        requestOtherPermissionsIfNecessary();
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        Toast.makeText(mActivity, R.string.prompt_sms_permission_denied, Toast.LENGTH_LONG).show();
-                        mEnablePref.setChecked(false);
-                    }
+                .onGranted(data -> requestOtherPermissionsIfNecessary())
+                .onDenied(data -> {
+                    Toast.makeText(mActivity, R.string.prompt_sms_permission_denied, Toast.LENGTH_LONG).show();
+                    mEnablePref.setChecked(false);
                 })
                 .start();
     }
@@ -530,12 +489,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 .title(R.string.permission_statement)
                 .adapter(adapter, layoutManager)
                 .positiveText(R.string.okay)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        tryToAcquireNecessaryPermissions();
-                    }
-                })
+                .onPositive((dialog, which) -> tryToAcquireNecessaryPermissions())
                 .show();
     }
 
@@ -547,20 +501,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                         .title(R.string.permission_requirement)
                         .content(R.string.service_sms_permission_requirement)
                         .positiveText(R.string.okay)
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                MiuiUtils.goToPermissionEditorActivity(mActivity);
-                                SPUtils.setServiceSmsPromptShown(mActivity, true);
-                            }
+                        .onPositive((dialog, which) -> {
+                            MiuiUtils.goToPermissionEditorActivity(mActivity);
+                            SPUtils.setServiceSmsPromptShown(mActivity, true);
                         })
                         .negativeText(R.string.cancel)
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                Toast.makeText(mActivity, R.string.prompt_service_sms_permission_denied, Toast.LENGTH_LONG).show();
-                                mEnablePref.setChecked(false);
-                            }
+                        .onNegative((dialog, which) -> {
+                            Toast.makeText(mActivity, R.string.prompt_service_sms_permission_denied, Toast.LENGTH_LONG).show();
+                            mEnablePref.setChecked(false);
                         })
                         .show();
             }
@@ -588,31 +536,20 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     .title(R.string.extra_permission_request_prompt_title)
                     .content(R.string.write_sms_appops_prompt_content)
                     .negativeText(R.string.view_adb_setting_help)
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            String url = Utils.getProjectDocUrl(Const.PROJECT_DOC_BASE_URL, Const.DOC_APPOPS_ADB_HELP);
-                            Utils.showWebPage(mActivity, url);
-                        }
+                    .onNegative((dialog, which) -> {
+                        String url = Utils.getProjectDocUrl(Const.PROJECT_DOC_BASE_URL, Const.DOC_APPOPS_ADB_HELP);
+                        Utils.showWebPage(mActivity, url);
                     })
                     .positiveText(R.string.granted_by_root)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            if (ShellUtils.allowOpWriteSMS()) {
-                                Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
-                            } else {
-                                switchPref.setChecked(false);
-                                Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
-                            }
+                    .onPositive((dialog, which) -> {
+                        if (ShellUtils.allowOpWriteSMS()) {
+                            Toast.makeText(mActivity, R.string.granted_appops_by_root_succeed, Toast.LENGTH_SHORT).show();
+                        } else {
+                            switchPref.setChecked(false);
+                            Toast.makeText(mActivity, R.string.granted_appops_by_root_failed, Toast.LENGTH_LONG).show();
                         }
                     })
-                    .cancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            switchPref.setChecked(false);
-                        }
-                    }).show();
+                    .cancelListener(dialog -> switchPref.setChecked(false)).show();
         } else {
             Toast.makeText(mActivity, R.string.relevant_permission_already_granted, Toast.LENGTH_LONG).show();
         }
@@ -662,19 +599,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                     .title(R.string.permission_requirement)
                     .content(R.string.notification_access_prompt_content)
                     .positiveText(R.string.go_to_open)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            SettingsUtils.gotoNotificationListenerSettings(mActivity);
-                        }
-                    })
+                    .onPositive((dialog1, which) -> SettingsUtils.gotoNotificationListenerSettings(mActivity))
                     .negativeText(R.string.cancel)
-                    .cancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            switchPref.setChecked(false);
-                        }
-                    })
+                    .cancelListener(dialog12 -> switchPref.setChecked(false))
                     .build();
             dialog.show();
         }

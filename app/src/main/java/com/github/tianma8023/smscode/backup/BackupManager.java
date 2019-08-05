@@ -13,11 +13,9 @@ import com.github.tianma8023.smscode.utils.StorageUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -59,24 +57,16 @@ public class BackupManager {
 
     public static File[] getBackupFiles() {
         File backupDir = getBackupDir();
-        File[] files = backupDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(BACKUP_FILE_EXTENSION);
-            }
-        });
+        File[] files = backupDir.listFiles((dir, name) -> name.endsWith(BACKUP_FILE_EXTENSION));
 
         if (files != null) {
-            Arrays.sort(files, new Comparator<File>() {
-                @Override
-                public int compare(File f1, File f2) {
-                    String s1 = f1.getName();
-                    String s2 = f2.getName();
-                    int extLength = BACKUP_FILE_EXTENSION.length();
-                    s1 = s1.substring(0, s1.length() - extLength);
-                    s2 = s2.substring(0, s2.length() - extLength);
-                    return s1.compareTo(s2);
-                }
+            Arrays.sort(files, (f1, f2) -> {
+                String s1 = f1.getName();
+                String s2 = f2.getName();
+                int extLength = BACKUP_FILE_EXTENSION.length();
+                s1 = s1.substring(0, s1.length() - extLength);
+                s2 = s2.substring(0, s2.length() - extLength);
+                return s1.compareTo(s2);
             });
         }
         return files;

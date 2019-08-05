@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.service.accessibility.SmsCodeAutoInputService;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
 import com.github.tianma8023.smscode.utils.ShellUtils;
 
-import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -109,12 +107,7 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
                     .title(R.string.open_auto_input_accessibility)
                     .content(R.string.open_auto_input_accessibility_prompt)
                     .positiveText(R.string.go_to_open)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            AccessibilityUtils.gotoAccessibility(mContext);
-                        }
-                    })
+                    .onPositive((dialog, which) -> AccessibilityUtils.gotoAccessibility(mContext))
                     .show();
         }
     }
@@ -124,12 +117,7 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
                 .title(R.string.acquire_root_permission)
                 .content(R.string.acquire_root_permission_prompt)
                 .positiveText(R.string.okay)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        ShellUtils.checkRootPermission();
-                    }
-                })
+                .onPositive((dialog, which) -> ShellUtils.checkRootPermission())
                 .show();
     }
 
