@@ -1,12 +1,12 @@
-# SmsCodeExtractor
-SmsCodeExtractor is non-xposed version of [XposedSmsCode](https://github.com/tianma8023/XposedSmsCode)。 It can recognize, parse SMS code and copy it to clipboard when a new message arrives, it can also auto-input SMS code.
+# SmsCode
+SmsCode is non-xposed version of [XposedSmsCode](https://github.com/tianma8023/XposedSmsCode)。 It can recognize, parse SMS code and copy it to clipboard when a new message arrives, it can also auto-input SMS code.
 
 [中文版说明](/README-CN.md)
 
 # Screenshots
 <img src="art/en/01.png" width="180"/><img src="art/en/02.png" width="180"/><img src="art/en/03.png" width="180"/><img src="art/en/04.png" width="180"/>
 
-You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.github.tianma8023.smscode) or [releases](https://github.com/tianma8023/SmsCodeExtractor/releases/).
+You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.github.tianma8023.smscode) or [releases](https://github.com/tianma8023/SmsCode/releases/).
 
 # Attention
 - **This module is suitable for AOSP ROM, it may not work well on other 3rd-party Rom.**
@@ -37,6 +37,11 @@ You can download the latest App from [Coolapk](https://www.coolapk.com/apk/com.g
 - [Android Shell](https://github.com/jaredrummler/AndroidShell)
 - [logback-android](https://github.com/tony19/logback-android)
 - [Bugly](https://bugly.qq.com)
+- [EventBus](https://github.com/greenrobot/EventBus)
+- [GreenDao](https://github.com/greenrobot/greenDAO)
+- [GreenDaoUpgradeHelper](https://github.com/yuweiguocn/GreenDaoUpgradeHelper)
+- [Gson](https://github.com/google/gson)
+- [BRVAH](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 
 # License
 All code is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.txt) 

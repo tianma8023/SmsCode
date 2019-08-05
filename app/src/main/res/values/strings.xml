@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SMS Code Extractor</string>
+    <string name="app_name">SmsCode</string>
 
     <!-- general -->
     <string name="okay">OK</string>

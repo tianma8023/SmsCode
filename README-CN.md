@@ -1,4 +1,4 @@
-# SmsCodeExtractor
+# SmsCode
 识别短信验证码的App，是 [XposedSmsCode](https://github.com/tianma8023/XposedSmsCode) 的普通（非Xposed）版本。能识别短信中验证码，并将其拷贝至系统剪切板，亦可以自动输入验证码。
 
 [English Version](/README.md)
@@ -6,7 +6,7 @@
 # 应用截图
 <img src="art/cn/01.png" width="180"/><img src="art/cn/02.png" width="180"/><img src="art/cn/03.png" width="180"/><img src="art/cn/04.png" width="180"/>
 
-可以从 [酷安](https://www.coolapk.com/apk/com.github.tianma8023.smscode) 或者 [releases](https://github.com/tianma8023/SmsCodeExtractor/releases/) 下载最新的App。
+可以从 [酷安](https://www.coolapk.com/apk/com.github.tianma8023.smscode) 或者 [releases](https://github.com/tianma8023/SmsCode/releases/) 下载最新的App。
 
 # 已有功能
 - 收到验证码短信后将验证码复制到系统剪贴板
@@ -37,6 +37,11 @@
 - [Android Shell](https://github.com/jaredrummler/AndroidShell)
 - [logback-android](https://github.com/tony19/logback-android)
 - [Bugly](https://bugly.qq.com)
+- [EventBus](https://github.com/greenrobot/EventBus)
+- [GreenDao](https://github.com/greenrobot/greenDAO)
+- [GreenDaoUpgradeHelper](https://github.com/yuweiguocn/GreenDaoUpgradeHelper)
+- [Gson](https://github.com/google/gson)
+- [BRVAH](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)
 
 # 协议
 所有的源码均遵循 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.txt) 协议
