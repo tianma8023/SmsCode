@@ -53,6 +53,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
 import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,12 +62,14 @@ import ch.qos.logback.classic.Level;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_BLOCK_NOTIFICATION;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CODE_RULES;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_COPY_TO_CLIPBOARD;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DELETE_SMS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALIPAY;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_CODE_RECORDS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
+import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GENERAL;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GET_ALIPAY_PACKET;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
@@ -129,6 +132,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         listenModePref.setOnPreferenceChangeListener(this);
         mCurListenMode = listenModePref.getValue();
         refreshListenModePreference(listenModePref, mCurListenMode);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // hide copy to clipboard preference
+            PreferenceGroup generalGroup = (PreferenceGroup) findPreference(KEY_GENERAL);
+            Preference copyToClipboardPref = findPreference(KEY_COPY_TO_CLIPBOARD);
+            generalGroup.removePreference(copyToClipboardPref);
+        }
+
 
         findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
 

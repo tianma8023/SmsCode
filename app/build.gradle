@@ -12,11 +12,11 @@ def static releaseTime() {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.github.tianma8023.smscode"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 22
         versionName "1.7.3"
         resConfigs "en", "zh-rCN", "zh-rTW"
