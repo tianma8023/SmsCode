@@ -5,12 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.provider.Telephony;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 
 import com.github.tianma8023.smscode.entity.SmsMsg;
-import com.github.tianma8023.smscode.utils.SettingsUtils;
 import com.github.tianma8023.smscode.utils.XLog;
 
 /**
@@ -72,12 +72,12 @@ public class NotificationMonitorService extends NotificationListenerService {
     /**
      * Try to cancel code message notification
      */
-    private void performCancelNotification() {
+    private synchronized void performCancelNotification() {
         if (mSmsMsg == null) {
             return;
         }
 
-        String defaultSmsPkg = SettingsUtils.getDefaultSmsAppPackage(this);
+        String defaultSmsPkg = Telephony.Sms.getDefaultSmsPackage(this);
         if (TextUtils.isEmpty(defaultSmsPkg)) {
             return;
         }
@@ -114,11 +114,11 @@ public class NotificationMonitorService extends NotificationListenerService {
 
                 if (hit) {
                     cancelNotification(sbn.getKey());
-                    mSmsMsg = null;
                     XLog.d("cancel notification succeed");
                     break;
                 }
             }
         }
+        mSmsMsg = null;
     }
 }
