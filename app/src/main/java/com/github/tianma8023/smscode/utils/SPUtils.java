@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.github.tianma8023.smscode.constant.PrefConst;
 
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CLEAR_CLIPBOARD;
+import static com.github.tianma8023.smscode.constant.PrefConst.CLEAR_CLIPBOARD;
 import static com.github.tianma8023.smscode.constant.PrefConst.CLEAR_CLIPBOARD_DEFAULT;
 
 /**
@@ -87,7 +87,7 @@ public class SPUtils {
      */
     public static boolean isEnable(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_ENABLE, PrefConst.ENABLE_DEFAULT);
+                PrefConst.ENABLE, PrefConst.ENABLE_DEFAULT);
     }
 
     /**
@@ -95,7 +95,7 @@ public class SPUtils {
      */
     public static String getListenMode(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_LISTEN_MODE, PrefConst.LISTEN_MODE_STANDARD);
+                PrefConst.LISTEN_MODE, PrefConst.LISTEN_MODE_STANDARD);
     }
 
     /**
@@ -103,7 +103,7 @@ public class SPUtils {
      */
     public static boolean autoInputCodeEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_ENABLE_AUTO_INPUT_CODE, PrefConst.ENABLE_AUTO_INPUT_CODE_DEFAULT);
+                PrefConst.ENABLE_AUTO_INPUT_CODE, PrefConst.ENABLE_AUTO_INPUT_CODE_DEFAULT);
     }
 
     /**
@@ -127,7 +127,7 @@ public class SPUtils {
      */
     public static void setAutoInputMode(Context context, String autoInputMode) {
         PreferenceUtils.putString(context,
-                PrefConst.KEY_AUTO_INPUT_MODE, autoInputMode);
+                PrefConst.AUTO_INPUT_MODE, autoInputMode);
     }
 
     /**
@@ -135,7 +135,7 @@ public class SPUtils {
      */
     public static String getAutoInputMode(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_AUTO_INPUT_MODE, PrefConst.AUTO_INPUT_MODE_DEFAULT);
+                PrefConst.AUTO_INPUT_MODE, PrefConst.AUTO_INPUT_MODE_DEFAULT);
     }
 
     /**
@@ -143,7 +143,7 @@ public class SPUtils {
      */
     public static boolean isVerboseLogMode(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_VERBOSE_LOG_MODE, PrefConst.VERBOSE_LOG_MODE_DEFAULT);
+                PrefConst.VERBOSE_LOG_MODE, PrefConst.VERBOSE_LOG_MODE_DEFAULT);
     }
 
     /**
@@ -151,7 +151,7 @@ public class SPUtils {
      */
     public static boolean showToast(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_SHOW_TOAST, PrefConst.SHOW_TOAST_DEFAULT);
+                PrefConst.SHOW_TOAST, PrefConst.SHOW_TOAST_DEFAULT);
     }
 
     /**
@@ -159,7 +159,7 @@ public class SPUtils {
      */
     public static String getFocusMode(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_FOCUS_MODE, PrefConst.FOCUS_MODE_MANUAL);
+                PrefConst.FOCUS_MODE, PrefConst.FOCUS_MODE_MANUAL);
     }
 
     /**
@@ -167,7 +167,7 @@ public class SPUtils {
      */
     public static String getSMSCodeKeywords(Context context) {
         return PreferenceUtils.getString(context,
-                PrefConst.KEY_SMSCODE_KEYWORDS, PrefConst.SMSCODE_KEYWORDS_DEFAULT);
+                PrefConst.SMSCODE_KEYWORDS, PrefConst.SMSCODE_KEYWORDS_DEFAULT);
     }
 
     /**
@@ -175,14 +175,14 @@ public class SPUtils {
      */
     public static int getCurrentThemeIndex(Context context) {
         return PreferenceUtils.getInt(context,
-                PrefConst.KEY_CURRENT_THEME_INDEX, PrefConst.CURRENT_THEME_INDEX_DEFAULT);
+                PrefConst.CURRENT_THEME_INDEX, PrefConst.CURRENT_THEME_INDEX_DEFAULT);
     }
 
     /**
      * 设置当前主题的index
      */
     public static void setCurrentThemeIndex(Context context, int curIndex) {
-        PreferenceUtils.putInt(context, PrefConst.KEY_CURRENT_THEME_INDEX, curIndex);
+        PreferenceUtils.putInt(context, PrefConst.CURRENT_THEME_INDEX, curIndex);
     }
 
     /**
@@ -206,7 +206,7 @@ public class SPUtils {
      */
     public static boolean shouldClearClipboard(Context context) {
         return PreferenceUtils.getBoolean(context,
-                KEY_CLEAR_CLIPBOARD, CLEAR_CLIPBOARD_DEFAULT);
+                CLEAR_CLIPBOARD, CLEAR_CLIPBOARD_DEFAULT);
     }
 
     /**
@@ -214,7 +214,7 @@ public class SPUtils {
      */
     public static boolean markAsReadEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_MARK_AS_READ, PrefConst.MARK_AS_READ_DEFAULT);
+                PrefConst.MARK_AS_READ, PrefConst.MARK_AS_READ_DEFAULT);
     }
 
     /**
@@ -222,7 +222,7 @@ public class SPUtils {
      */
     public static boolean deleteSmsEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_DELETE_SMS, PrefConst.DELETE_SMS_DEFAULT);
+                PrefConst.DELETE_SMS, PrefConst.DELETE_SMS_DEFAULT);
     }
 
     /**
@@ -230,7 +230,7 @@ public class SPUtils {
      */
     public static boolean copyToClipboardEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_COPY_TO_CLIPBOARD, PrefConst.COPY_TO_CLIPBOARD_DEFAULT);
+                PrefConst.COPY_TO_CLIPBOARD, PrefConst.COPY_TO_CLIPBOARD_DEFAULT);
     }
 
     /**
@@ -238,7 +238,7 @@ public class SPUtils {
      */
     public static boolean manualFocusIfFailedEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_MANUAL_FOCUS_IF_FAILED, PrefConst.MANUAL_FOCUS_IF_FAILED_DEFAULT);
+                PrefConst.MANUAL_FOCUS_IF_FAILED, PrefConst.MANUAL_FOCUS_IF_FAILED_DEFAULT);
     }
 
     /**
@@ -246,7 +246,7 @@ public class SPUtils {
      */
     public static boolean recordSmsCodeEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_ENABLE_CODE_RECORDS, PrefConst.ENABLE_CODE_RECORDS_DEFAULT);
+                PrefConst.ENABLE_CODE_RECORDS, PrefConst.ENABLE_CODE_RECORDS_DEFAULT);
     }
 
     /**
@@ -254,7 +254,7 @@ public class SPUtils {
      */
     public static boolean blockNotificationEnabled(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_BLOCK_NOTIFICATION, PrefConst.BLOCK_NOTIFICATION_DEFAULT);
+                PrefConst.BLOCK_NOTIFICATION, PrefConst.BLOCK_NOTIFICATION_DEFAULT);
     }
 
     /**
@@ -262,7 +262,7 @@ public class SPUtils {
      */
     public static boolean showCodeNotification(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_SHOW_CODE_NOTIFICATION, PrefConst.SHOW_CODE_NOTIFICATION_DEFAULT);
+                PrefConst.SHOW_CODE_NOTIFICATION, PrefConst.SHOW_CODE_NOTIFICATION_DEFAULT);
     }
 
     /**
@@ -270,7 +270,7 @@ public class SPUtils {
      */
     public static boolean autoCancelCodeNotification(Context context) {
         return PreferenceUtils.getBoolean(context,
-                PrefConst.KEY_AUTO_CANCEL_CODE_NOTIFICATION, PrefConst.AUTO_CANCEL_CODE_NOTIFICATION_DEFAULT);
+                PrefConst.AUTO_CANCEL_CODE_NOTIFICATION, PrefConst.AUTO_CANCEL_CODE_NOTIFICATION_DEFAULT);
     }
 
     /**
@@ -278,7 +278,7 @@ public class SPUtils {
      */
     public static int getNotificationRetentionTime(Context context) {
         String value = PreferenceUtils.getString(context,
-                PrefConst.KEY_NOTIFICATION_RETENTION_TIME, PrefConst.NOTIFICATION_RETENTION_TIME_DEFAULT);
+                PrefConst.NOTIFICATION_RETENTION_TIME, PrefConst.NOTIFICATION_RETENTION_TIME_DEFAULT);
         return Integer.valueOf(value);
     }
 }

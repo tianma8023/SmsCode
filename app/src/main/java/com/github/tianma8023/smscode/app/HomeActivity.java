@@ -116,14 +116,14 @@ public class HomeActivity extends BaseActivity implements
             onNestedPreferenceClicked(key, title);
             return;
         }
-        if (PrefConst.KEY_CHOOSE_THEME.equals(key)) {
+        if (PrefConst.CHOOSE_THEME.equals(key)) {
             onChooseThemePreferenceClicked();
         }
     }
 
     private void onNestedPreferenceClicked(String key, String title) {
         Fragment newFragment = null;
-        if (PrefConst.KEY_ENTRY_AUTO_INPUT_CODE.equals(key)) {
+        if (PrefConst.ENTRY_AUTO_INPUT_CODE.equals(key)) {
             newFragment = new AutoInputSettingsFragment();
         }
         if (newFragment == null)

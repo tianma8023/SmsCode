@@ -59,25 +59,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ch.qos.logback.classic.Level;
 
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_BLOCK_NOTIFICATION;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CHOOSE_THEME;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_CODE_RULES;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_COPY_TO_CLIPBOARD;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DELETE_SMS;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_DONATE_BY_ALIPAY;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_CODE_RECORDS;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_EXCLUDE_FROM_RECENTS;
+import static com.github.tianma8023.smscode.constant.PrefConst.BLOCK_NOTIFICATION;
+import static com.github.tianma8023.smscode.constant.PrefConst.CHOOSE_THEME;
+import static com.github.tianma8023.smscode.constant.PrefConst.CODE_RULES;
+import static com.github.tianma8023.smscode.constant.PrefConst.COPY_TO_CLIPBOARD;
+import static com.github.tianma8023.smscode.constant.PrefConst.DELETE_SMS;
+import static com.github.tianma8023.smscode.constant.PrefConst.DONATE_BY_ALIPAY;
+import static com.github.tianma8023.smscode.constant.PrefConst.ENABLE;
+import static com.github.tianma8023.smscode.constant.PrefConst.ENTRY_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.ENTRY_CODE_RECORDS;
+import static com.github.tianma8023.smscode.constant.PrefConst.EXCLUDE_FROM_RECENTS;
 import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GENERAL;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_GET_ALIPAY_PACKET;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_LISTEN_MODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MARK_AS_READ;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_RATING;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SMSCODE_TEST;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_SOURCE_CODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERBOSE_LOG_MODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_VERSION;
+import static com.github.tianma8023.smscode.constant.PrefConst.GET_ALIPAY_PACKET;
+import static com.github.tianma8023.smscode.constant.PrefConst.LISTEN_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.MARK_AS_READ;
+import static com.github.tianma8023.smscode.constant.PrefConst.RATING;
+import static com.github.tianma8023.smscode.constant.PrefConst.SMSCODE_TEST;
+import static com.github.tianma8023.smscode.constant.PrefConst.SOURCE_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.VERBOSE_LOG_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.VERSION;
 import static com.github.tianma8023.smscode.constant.PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT;
 
 /**
@@ -124,11 +124,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         addPreferencesFromResource(R.xml.settings);
 
         // general groups
-        mEnablePref = (SwitchPreference) findPreference(PrefConst.KEY_ENABLE);
+        mEnablePref = (SwitchPreference) findPreference(PrefConst.ENABLE);
         mEnablePref.setOnPreferenceChangeListener(this);
 
         // listen mode preference
-        ListPreference listenModePref = (ListPreference) findPreference(KEY_LISTEN_MODE);
+        ListPreference listenModePref = (ListPreference) findPreference(LISTEN_MODE);
         listenModePref.setOnPreferenceChangeListener(this);
         mCurListenMode = listenModePref.getValue();
         refreshListenModePreference(listenModePref, mCurListenMode);
@@ -136,36 +136,36 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // hide copy to clipboard preference
             PreferenceGroup generalGroup = (PreferenceGroup) findPreference(KEY_GENERAL);
-            Preference copyToClipboardPref = findPreference(KEY_COPY_TO_CLIPBOARD);
+            Preference copyToClipboardPref = findPreference(COPY_TO_CLIPBOARD);
             generalGroup.removePreference(copyToClipboardPref);
         }
 
 
-        findPreference(KEY_ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
+        findPreference(ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
 
-        Preference chooseThemePref = findPreference(PrefConst.KEY_CHOOSE_THEME);
+        Preference chooseThemePref = findPreference(PrefConst.CHOOSE_THEME);
         chooseThemePref.setOnPreferenceClickListener(this);
         initChooseThemePreference(chooseThemePref);
         // general groups end
 
 
         // experimental groups
-        findPreference(KEY_MARK_AS_READ).setOnPreferenceChangeListener(this);
+        findPreference(MARK_AS_READ).setOnPreferenceChangeListener(this);
 
-        findPreference(KEY_BLOCK_NOTIFICATION).setOnPreferenceChangeListener(this);
+        findPreference(BLOCK_NOTIFICATION).setOnPreferenceChangeListener(this);
 
-        findPreference(KEY_DELETE_SMS).setOnPreferenceChangeListener(this);
+        findPreference(DELETE_SMS).setOnPreferenceChangeListener(this);
         // experimental groups end
 
 
         // code message group
-        findPreference(KEY_CODE_RULES).setOnPreferenceClickListener(this);
-        findPreference(KEY_SMSCODE_TEST).setOnPreferenceClickListener(this);
+        findPreference(CODE_RULES).setOnPreferenceClickListener(this);
+        findPreference(SMSCODE_TEST).setOnPreferenceClickListener(this);
         // code message group end
 
 
         // code records group
-        Preference recordsEntryPref = findPreference(KEY_ENTRY_CODE_RECORDS);
+        Preference recordsEntryPref = findPreference(ENTRY_CODE_RECORDS);
         recordsEntryPref.setOnPreferenceClickListener(this);
         initRecordEntryPreference(recordsEntryPref);
         // code records group end
@@ -173,23 +173,23 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
 
         // others group
         // exclude from recent apps preference
-        mExcludeFromRecentsPref = (SwitchPreference) findPreference(KEY_EXCLUDE_FROM_RECENTS);
+        mExcludeFromRecentsPref = (SwitchPreference) findPreference(EXCLUDE_FROM_RECENTS);
         mExcludeFromRecentsPref.setOnPreferenceChangeListener(this);
 
         // verbose log preference
-        SwitchPreference verboseLogPref = (SwitchPreference) findPreference(KEY_VERBOSE_LOG_MODE);
+        SwitchPreference verboseLogPref = (SwitchPreference) findPreference(VERBOSE_LOG_MODE);
         verboseLogPref.setOnPreferenceChangeListener(this);
         refreshVerboseLogPreference(verboseLogPref, verboseLogPref.isChecked());
         // others group end
 
 
         // about group
-        Preference versionPref = findPreference(KEY_VERSION);
+        Preference versionPref = findPreference(VERSION);
         refreshVersionInfoPreference(versionPref);
-        findPreference(KEY_SOURCE_CODE).setOnPreferenceClickListener(this);
-        findPreference(KEY_RATING).setOnPreferenceClickListener(this);
-        findPreference(KEY_GET_ALIPAY_PACKET).setOnPreferenceClickListener(this);
-        findPreference(KEY_DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
+        findPreference(SOURCE_CODE).setOnPreferenceClickListener(this);
+        findPreference(RATING).setOnPreferenceClickListener(this);
+        findPreference(GET_ALIPAY_PACKET).setOnPreferenceClickListener(this);
+        findPreference(DONATE_BY_ALIPAY).setOnPreferenceClickListener(this);
         // about group end
     }
 
@@ -213,7 +213,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
         String extraAction = args.getString(EXTRA_ACTION);
         if (ACTION_GET_RED_PACKET.equals(extraAction)) {
             args.remove(EXTRA_ACTION);
-            scrollToPreference(PrefConst.KEY_GET_ALIPAY_PACKET);
+            scrollToPreference(PrefConst.GET_ALIPAY_PACKET);
             getAlipayPacket();
         }
     }
@@ -249,35 +249,35 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public boolean onPreferenceClick(Preference preference) {
         String key = preference.getKey();
         switch (key) {
-            case KEY_ENTRY_AUTO_INPUT_CODE:
+            case ENTRY_AUTO_INPUT_CODE:
                 if (mPreferenceClickCallback != null) {
                     mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), true);
                 }
                 break;
-            case KEY_CHOOSE_THEME:
+            case CHOOSE_THEME:
                 if (mPreferenceClickCallback != null) {
                     mPreferenceClickCallback.onPreferenceClicked(key, preference.getTitle().toString(), false);
                 }
                 break;
-            case KEY_CODE_RULES:
+            case CODE_RULES:
                 CodeRulesActivity.startToMe(mActivity);
                 break;
-            case KEY_ENTRY_CODE_RECORDS:
+            case ENTRY_CODE_RECORDS:
                 CodeRecordsActivity.startToMe(mActivity);
                 break;
-            case KEY_SMSCODE_TEST:
+            case SMSCODE_TEST:
                 showSmsCodeTestDialog();
                 break;
-            case KEY_GET_ALIPAY_PACKET:
+            case GET_ALIPAY_PACKET:
                 getAlipayPacket();
                 break;
-            case KEY_SOURCE_CODE:
+            case SOURCE_CODE:
                 aboutProject();
                 break;
-            case KEY_DONATE_BY_ALIPAY:
+            case DONATE_BY_ALIPAY:
                 donateByAlipay();
                 break;
-            case KEY_RATING:
+            case RATING:
                 ratingOnCoolMarket();
                 break;
             default:
@@ -349,10 +349,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
         switch (key) {
-            case KEY_ENABLE:
+            case ENABLE:
                 onEnabledSwitched((Boolean) newValue);
                 break;
-            case KEY_LISTEN_MODE: {
+            case LISTEN_MODE: {
                 if (!newValue.equals(mCurListenMode)) {
                     mCurListenMode = (String) newValue;
                     refreshListenModePreference((ListPreference) preference, mCurListenMode);
@@ -362,19 +362,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Prefer
                 }
                 break;
             }
-            case KEY_MARK_AS_READ:
+            case MARK_AS_READ:
                 showAppOpsPrompt((SwitchPreference) preference, (Boolean) newValue);
                 break;
-            case KEY_DELETE_SMS:
+            case DELETE_SMS:
                 showAppOpsPrompt((SwitchPreference) preference, (Boolean) newValue);
                 break;
-            case KEY_VERBOSE_LOG_MODE:
+            case VERBOSE_LOG_MODE:
                 refreshVerboseLogPreference(preference, (Boolean) newValue);
                 break;
-            case KEY_EXCLUDE_FROM_RECENTS:
+            case EXCLUDE_FROM_RECENTS:
                 onExcludeFromRecentsSwitched((Boolean) newValue);
                 break;
-            case KEY_BLOCK_NOTIFICATION:
+            case BLOCK_NOTIFICATION:
                 onBlockNotificationSwitched((SwitchPreference) preference, (Boolean) newValue);
                 break;
             default:

@@ -20,11 +20,11 @@ import androidx.preference.SwitchPreference;
 import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ACCESSIBILITY;
 import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE_ROOT;
 import static com.github.tianma8023.smscode.constant.PrefConst.FOCUS_MODE_AUTO;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_AUTO_INPUT_MODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENABLE_AUTO_INPUT_CODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_ENTRY_AUTO_INPUT_CODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_FOCUS_MODE;
-import static com.github.tianma8023.smscode.constant.PrefConst.KEY_MANUAL_FOCUS_IF_FAILED;
+import static com.github.tianma8023.smscode.constant.PrefConst.AUTO_INPUT_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.ENABLE_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.ENTRY_AUTO_INPUT_CODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.FOCUS_MODE;
+import static com.github.tianma8023.smscode.constant.PrefConst.MANUAL_FOCUS_IF_FAILED;
 
 public class AutoInputSettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
@@ -46,18 +46,18 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.settings_auto_input_code);
 
-        SwitchPreference autoInputEnablePref = (SwitchPreference) findPreference(KEY_ENABLE_AUTO_INPUT_CODE);
+        SwitchPreference autoInputEnablePref = (SwitchPreference) findPreference(ENABLE_AUTO_INPUT_CODE);
         autoInputEnablePref.setOnPreferenceChangeListener(this);
 
-        mAutoInputModePref = (ListPreference) findPreference(KEY_AUTO_INPUT_MODE);
+        mAutoInputModePref = (ListPreference) findPreference(AUTO_INPUT_MODE);
         mAutoInputModePref.setOnPreferenceChangeListener(this);
         mAutoInputMode = mAutoInputModePref.getValue();
 
-        ListPreference focusModePref = (ListPreference) findPreference(KEY_FOCUS_MODE);
+        ListPreference focusModePref = (ListPreference) findPreference(FOCUS_MODE);
         focusModePref.setOnPreferenceChangeListener(this);
         mFocusMode = focusModePref.getValue();
 
-        mManualFocusIfFailedPref = (SwitchPreference) findPreference(KEY_MANUAL_FOCUS_IF_FAILED);
+        mManualFocusIfFailedPref = (SwitchPreference) findPreference(MANUAL_FOCUS_IF_FAILED);
 
         refreshEnableAutoInputPreference(autoInputEnablePref.isChecked());
         refreshAutoInputModePreference(mAutoInputMode);
@@ -69,10 +69,10 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
         switch (key) {
-            case KEY_ENABLE_AUTO_INPUT_CODE:
+            case ENABLE_AUTO_INPUT_CODE:
                 refreshEnableAutoInputPreference((Boolean) newValue);
                 break;
-            case KEY_AUTO_INPUT_MODE: {
+            case AUTO_INPUT_MODE: {
                 if (!newValue.equals(mAutoInputMode)) {
                     mAutoInputMode = (String) newValue;
                     refreshAutoInputModePreference(mAutoInputMode);
@@ -84,7 +84,7 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
                 }
                 break;
             }
-            case KEY_FOCUS_MODE: {
+            case FOCUS_MODE: {
                 if (!newValue.equals(mFocusMode)) {
                     mFocusMode = (String) newValue;
                     refreshFocusModePreference((ListPreference) preference, mFocusMode);
@@ -155,7 +155,7 @@ public class AutoInputSettingsFragment extends PreferenceFragmentCompat implemen
     }
 
     private void refreshManualFocusIfFailedPreference() {
-        PreferenceGroup autoInputGroup = (PreferenceGroup) findPreference(KEY_ENTRY_AUTO_INPUT_CODE);
+        PreferenceGroup autoInputGroup = (PreferenceGroup) findPreference(ENTRY_AUTO_INPUT_CODE);
         if (FOCUS_MODE_AUTO.equals(mFocusMode)) {
             // auto-focus
             // show manual focus if failed preference
