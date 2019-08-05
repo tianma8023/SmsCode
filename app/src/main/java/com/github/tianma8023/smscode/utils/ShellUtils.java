@@ -97,7 +97,7 @@ public class ShellUtils {
             }
             return enabled;
         } catch (Exception e) {
-            XLog.e("error occurs enableAccessibilityService by Shell", e);
+            XLog.e("Error occurs enableAccessibilityService by Shell", e);
             return false;
         }
     }
@@ -120,7 +120,7 @@ public class ShellUtils {
             enabledServices.remove(accessibilityServiceName);
             return setEnabledAccessibilityServices(enabledServices);
         } catch (Exception e) {
-            XLog.e("error occurs disableAccessibilityService by Shell", e);
+            XLog.e("Error occurs disableAccessibilityService by Shell", e);
             return false;
         }
     }

@@ -439,7 +439,7 @@ public class SmsCodeHandleService extends Service {
         try {
             DBManager dm = DBManager.get(this);
             dm.addSmsMsg(smsMsg);
-            XLog.d("add SMS message record succeed");
+            XLog.d("Add SMS message record succeed");
 
             List<SmsMsg> smsMsgList = dm.queryAllSmsMsg();
             if (smsMsgList.size() > PrefConst.MAX_SMS_RECORDS_COUNT_DEFAULT) {
@@ -451,12 +451,14 @@ public class SmsCodeHandleService extends Service {
                 XLog.d("Remove outdated SMS message records succeed");
             }
         } catch (Exception e) {
-            XLog.e("add SMS message record failed", e);
+            XLog.e("Add SMS message record failed", e);
         }
     }
 
     private void showCodeNotification(SmsMsg smsMsg) {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager == null)
+            return;
 
         String company = smsMsg.getCompany();
         String smsCode = smsMsg.getSmsCode();
@@ -512,7 +514,7 @@ public class SmsCodeHandleService extends Service {
     private void quit() {
         if (workerHandler != null) {
             workerHandler.getLooper().quitSafely();
-            XLog.d("worker thread quit");
+            XLog.d("Worker thread quit");
         }
         stopSelf();
     }

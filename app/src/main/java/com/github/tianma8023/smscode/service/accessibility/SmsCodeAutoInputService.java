@@ -49,7 +49,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            XLog.d("AutoInputControllerReceiver action={}", action);
+            XLog.d("AutoInputReceiver received: {}", action);
             if (ACTION_START_AUTO_INPUT.equals(action)) {
                 String smsCode = intent.getStringExtra(EXTRA_KEY_SMS_CODE);
 //                autoInputSmsCode(smsCode);
@@ -130,7 +130,6 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
         if (PrefConst.FOCUS_MODE_AUTO.equals(focusMode)) {
             // focus mode: auto focus
             for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
-                XLog.d("try times {}", i+1);
                 success = tryToAutoInputByAutoFocus(smsCode);
                 if (success) {
                     break;
@@ -139,7 +138,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
             }
 
             if (!success && SPUtils.manualFocusIfFailedEnabled(this)) {
-                XLog.d("auto focus failed, transfer to manual focus");
+                XLog.d("Auto focus failed, transfer to manual focus");
                 final int secs = 3;
                 mInnerHandler.post(() -> {
                     String text = getString(R.string.auto_focus_failed_prompt, secs);
@@ -151,7 +150,6 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
         } else {
             // focus mode: manual focus
             for (int i = 0; i < AUTO_INPUT_MAX_TRY_TIMES; i++) {
-                XLog.d("try times {}", i+1);
                 success = tryToAutoInputByManualFocus(smsCode, isRootAutoInputMode);
                 if (success) {
                     break;
@@ -218,7 +216,7 @@ public class SmsCodeAutoInputService extends BaseAccessibilityService {
                 return autoInputBeforeOreo(editTextNodes, smsCode);
             }
         } catch (Exception e) {
-            XLog.e("error occurs in traverse()", e);
+            XLog.e("Error occurs in traverse()", e);
         }
         return false;
     }

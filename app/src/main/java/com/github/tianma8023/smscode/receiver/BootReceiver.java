@@ -19,7 +19,7 @@ public class BootReceiver extends BroadcastReceiver {
         boolean enable = SPUtils.isEnable(context);
         String listenMode = SPUtils.getListenMode(context);
         if (enable && PrefConst.LISTEN_MODE_COMPATIBLE.equals(listenMode)) {
-            XLog.d("BootReceiver#onReceived() - {}", intent.getAction());
+            XLog.d("BootReceiver received: {}", intent.getAction());
             boolean isVerboseLog = SPUtils.isVerboseLogMode(context);
             try {
                 SmsObserveService.startMe(context, isVerboseLog);

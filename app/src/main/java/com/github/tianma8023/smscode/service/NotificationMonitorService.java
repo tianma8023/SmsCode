@@ -27,7 +27,7 @@ public class NotificationMonitorService extends NotificationListenerService {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            XLog.d("NotificationController receive: {}", action);
+            XLog.d("NotificationReceiver received: {}", action);
             if (ACTION_BLOCK_SMS_NOTIFICATION.equals(action)) {
                 mSmsMsg = intent.getParcelableExtra(EXTRA_KEY_SMS_MSG);
                 performCancelNotification();
@@ -103,7 +103,7 @@ public class NotificationMonitorService extends NotificationListenerService {
                 CharSequence text = notification.extras.getCharSequence(Notification.EXTRA_TEXT);
 
 
-                XLog.d("title = {}, text = {}", title, text);
+                XLog.d("Notification title = {}, text = {}", title, text);
                 boolean hit = false;
 
                 if (title != null && title.toString().contains(sender)) {
@@ -114,7 +114,7 @@ public class NotificationMonitorService extends NotificationListenerService {
 
                 if (hit) {
                     cancelNotification(sbn.getKey());
-                    XLog.i("block sms notification succeed");
+                    XLog.i("Block sms notification succeed");
                     break;
                 }
             }
