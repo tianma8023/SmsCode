@@ -1,4 +1,11 @@
 # Update Logs
+- 19.08.06 v1.8.0
+  1. Adapt to Android Q, upgrade targetSdk to Android Q
+  2. New option: auto cancel SMS code notification within certain time.
+  3. Change: migrate to androidx.
+  4. Change: beautify some UI.
+  5. Optimize: optimize the logic of parsing SMS code.
+  6. Fix: fix some logic and display errors.
 - 19.03.27 v1.7.3
   1. Optimization: optimize the algorithm of parsing SMS code.
   2. Fix: crash when sharing code rules file.
