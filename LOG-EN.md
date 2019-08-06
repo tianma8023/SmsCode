@@ -1,4 +1,6 @@
 # Update Logs
+- 19.08.06 v1.8.1
+  1. Fix: fix the issue of always showing parsing notification when non-code SMS arrives
 - 19.08.06 v1.8.0
   1. Adapt to Android Q, upgrade targetSdk to Android Q
   2. New option: auto cancel SMS code notification within certain time.
