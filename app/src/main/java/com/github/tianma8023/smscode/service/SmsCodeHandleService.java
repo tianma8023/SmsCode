@@ -125,17 +125,23 @@ public class SmsCodeHandleService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        boolean success = false;
         if (intent != null && intent.hasExtra(EXTRA_KEY_SMS_MESSAGE_DATA)) {
             SmsMsg smsMsg = intent.getParcelableExtra(EXTRA_KEY_SMS_MESSAGE_DATA);
-            doWork(smsMsg);
+            success = doWork(smsMsg);
+        }
+        if (success) {
+            waitForQuit(200);
+        } else {
+            waitForQuit(0);
         }
         return START_NOT_STICKY;
     }
 
-    private void doWork(SmsMsg smsMsg) {
+    private boolean doWork(SmsMsg smsMsg) {
         if (!SPUtils.isEnable(this)) {
             XLog.i("SmsCode disabled, exiting");
-            return;
+            return false;
         }
 
         String sender = smsMsg.getSender();
@@ -152,7 +158,7 @@ public class SmsCodeHandleService extends Service {
         if (Math.abs(date - lastDate) <= 5000 && lastSender.equals(sender)) {
             // duplicate SMS message
             XLog.d("Duplicate SMS, exiting");
-            return;
+            return false;
         }
 
         if (BuildConfig.DEBUG) {
@@ -164,12 +170,12 @@ public class SmsCodeHandleService extends Service {
         }
 
         if (TextUtils.isEmpty(msgBody)) {
-            return;
+            return false;
         }
         String smsCode = SmsCodeUtils.parseSmsCodeIfExists(this, msgBody);
 
         if (TextUtils.isEmpty(smsCode)) { // Not SMS code msg.
-            return;
+            return false;
         }
 
         XLog.i("Sms code: {}", smsCode);
@@ -223,15 +229,15 @@ public class SmsCodeHandleService extends Service {
         // 是否删除验证码短信NotificationController
         if (SPUtils.deleteSmsEnabled(this)) {
             Message deleteMsg = workerHandler.obtainMessage(MSG_DELETE_SMS, smsMsg);
-            workerHandler.sendMessageDelayed(deleteMsg, 100);
             mPreQuitQueueCount.getAndIncrement();
+            workerHandler.sendMessageDelayed(deleteMsg, 100);
         } else {
             // 是否标记验证码短信为已读
             if (SPUtils.markAsReadEnabled(this)) {
                 // mark sms as read
                 Message markMsg = workerHandler.obtainMessage(MSG_MARK_AS_READ, smsMsg);
-                workerHandler.sendMessageDelayed(markMsg, 100);
                 mPreQuitQueueCount.getAndIncrement();
+                workerHandler.sendMessageDelayed(markMsg, 100);
             }
         }
 
@@ -248,8 +254,12 @@ public class SmsCodeHandleService extends Service {
             sendBroadcast(intent);
         }
 
+        return true;
+    }
+
+    private void waitForQuit(long delay) {
         mPreQuitQueueCount.getAndIncrement();
-        workerHandler.sendEmptyMessageDelayed(MSG_WAIT_FOR_QUIT, 200);
+        workerHandler.sendEmptyMessageDelayed(MSG_WAIT_FOR_QUIT, delay);
     }
 
     private class WorkerHandler extends Handler {
@@ -505,8 +515,8 @@ public class SmsCodeHandleService extends Service {
             Message cancelNotifyMsg = workerHandler
                     .obtainMessage(MSG_CANCEL_NOTIFICATION, notificationId);
             int retentionTime = SPUtils.getNotificationRetentionTime(this) * 1000;
-            workerHandler.sendMessageDelayed(cancelNotifyMsg, retentionTime);
             mPreQuitQueueCount.getAndIncrement();
+            workerHandler.sendMessageDelayed(cancelNotifyMsg, retentionTime);
         }
     }
 
