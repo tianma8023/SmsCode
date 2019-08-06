@@ -116,7 +116,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".service.CodeCopyService"
+            android:name=".service.CopyCodeService"
             android:exported="false">
         </service>
 

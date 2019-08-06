@@ -14,12 +14,16 @@ public class ClipboardUtils {
     }
 
     public static void copyToClipboard(Context context, String text) {
-        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (cm == null) {
-            return;
+        try {
+            ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            if (cm == null) {
+                return;
+            }
+            ClipData clipData = ClipData.newPlainText("Copy text", text);
+            cm.setPrimaryClip(clipData);
+        } catch (Throwable t) {
+            XLog.e("Error occurs when copy to clipboard", t);
         }
-        ClipData clipData = ClipData.newPlainText("Copy text", text);
-        cm.setPrimaryClip(clipData);
     }
 
     public static void clearClipboard(Context context) {
@@ -27,7 +31,7 @@ public class ClipboardUtils {
         if (cm == null) {
             return;
         }
-        if(cm.hasPrimaryClip()) {
+        if (cm.hasPrimaryClip()) {
             ClipDescription cd = cm.getPrimaryClipDescription();
             if (cd != null) {
                 if (cd.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {

@@ -158,6 +158,6 @@ public class SmsMsg implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, sender, body, date, company, smsCode);
     }
 }

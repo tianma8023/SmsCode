@@ -10,6 +10,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.text.TextUtils;
 
+import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.utils.XLog;
 
@@ -18,7 +19,7 @@ import com.github.tianma8023.smscode.utils.XLog;
  */
 public class NotificationMonitorService extends NotificationListenerService {
 
-    public static final String ACTION_BLOCK_SMS_NOTIFICATION = "action_block_sms_notification";
+    public static final String ACTION_BLOCK_SMS_NOTIFICATION = BuildConfig.APPLICATION_ID + "action.BLOCK_SMS_NOTIFICATION";
 
     public static final String EXTRA_KEY_SMS_MSG = "extra_key_sms_msg";
 

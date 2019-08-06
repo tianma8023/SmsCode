@@ -13,6 +13,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.tianma8023.smscode.BuildConfig;
 import com.github.tianma8023.smscode.R;
 import com.github.tianma8023.smscode.constant.PrefConst;
 import com.github.tianma8023.smscode.utils.AccessibilityUtils;
@@ -35,8 +36,8 @@ import androidx.annotation.RequiresApi;
  */
 public class SmsCodeAutoInputService extends BaseAccessibilityService {
 
-    public static final String ACTION_START_AUTO_INPUT = "action_start_auto_input";
-    public static final String ACTION_STOP_AUTO_INPUT = "action_stop_auto_input";
+    public static final String ACTION_START_AUTO_INPUT = BuildConfig.APPLICATION_ID + "action.START_AUTO_INPUT";
+    public static final String ACTION_STOP_AUTO_INPUT = BuildConfig.APPLICATION_ID + "action.STOP_AUTO_INPUT";
 
     public static final String EXTRA_KEY_SMS_CODE = "extra_key_sms_code";
 

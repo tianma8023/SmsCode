@@ -5,9 +5,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -56,7 +58,7 @@ public class SmsCodeHandleService extends Service {
 
     public static final String EXTRA_KEY_SMS_MESSAGE_DATA = "key_sms_message_data";
 
-    private static final int MSG_ENABLE_ACCESSIBILITY_SERVICE = 0xff;
+    public static final String ACTION_STOP_HANDLE_SERVICE = BuildConfig.APPLICATION_ID + "action.STOP_HANDLE_SERVICE";
 
     private static final int MSG_COPY_TO_CLIPBOARD = 0;
     private static final int MSG_SHOW_TOAST = 1;
@@ -68,7 +70,8 @@ public class SmsCodeHandleService extends Service {
     private static final int MSG_SHOW_CODE_NOTIFICATION = 7;
     private static final int MSG_CANCEL_NOTIFICATION = 8;
     private static final int MSG_QUIT_QUEUE = 9;
-    private static final int WAIT_FOR_QUIT = 10;
+    private static final int MSG_WAIT_FOR_QUIT = 10;
+    private static final int MSG_ENABLE_ACCESSIBILITY_SERVICE = 11;
 
     private AtomicInteger mPreQuitQueueCount;
     private static final int DEFAULT_QUIT_COUNT = 0;
@@ -246,7 +249,7 @@ public class SmsCodeHandleService extends Service {
         }
 
         mPreQuitQueueCount.getAndIncrement();
-        workerHandler.sendEmptyMessageDelayed(WAIT_FOR_QUIT, 200);
+        workerHandler.sendEmptyMessageDelayed(MSG_WAIT_FOR_QUIT, 200);
     }
 
     private class WorkerHandler extends Handler {
@@ -303,7 +306,7 @@ public class SmsCodeHandleService extends Service {
                     handlePreQuitQueue();
                     break;
                 }
-                case WAIT_FOR_QUIT: {
+                case MSG_WAIT_FOR_QUIT: {
                     handlePreQuitQueue();
                     break;
                 }
@@ -466,11 +469,16 @@ public class SmsCodeHandleService extends Service {
         String content = getString(R.string.code_notification_content, smsCode);
 
         int notificationId = smsMsg.hashCode();
-        Intent copyCodeIntent = CodeCopyService.buildCopyCodeIntent(this, smsCode);
-        PendingIntent pi = PendingIntent.getService(this,
+
+        Intent copyCodeIntent = CopyCodeService.createCopyCodeIntent(this, smsCode);
+        PendingIntent contentIntent = PendingIntent.getService(this,
                 0,
                 copyCodeIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent stopServiceIntent = new Intent(ACTION_STOP_HANDLE_SERVICE);
+        PendingIntent deleteIntent = PendingIntent.getBroadcast(this,
+                0, stopServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new NotificationCompat.Builder(this, NotificationConst.CHANNEL_ID_SMSCODE_NOTIFICATION)
                 .setSmallIcon(R.drawable.ic_app_icon)
@@ -478,15 +486,22 @@ public class SmsCodeHandleService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .setContentTitle(title)
                 .setContentText(content)
-                .setContentIntent(pi)
+                .setContentIntent(contentIntent)
+                .setDeleteIntent(deleteIntent)
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(this, R.color.ic_launcher_background))
+                .setGroup(NotificationConst.GROUP_KEY_SMSCODE_NOTIFICATION)
                 .build();
 
         manager.notify(notificationId, notification);
 
         // 是否自动清除验证码通知
         if (SPUtils.autoCancelCodeNotification(this)) {
+            if (mCommandReceiver == null) {
+                mCommandReceiver = new CommandReceiver();
+                mCommandReceiver.register(this);
+            }
+
             Message cancelNotifyMsg = workerHandler
                     .obtainMessage(MSG_CANCEL_NOTIFICATION, notificationId);
             int retentionTime = SPUtils.getNotificationRetentionTime(this) * 1000;
@@ -516,6 +531,33 @@ public class SmsCodeHandleService extends Service {
             workerHandler.getLooper().quitSafely();
             XLog.d("Worker thread quit");
         }
+        if (mCommandReceiver != null) {
+            mCommandReceiver.unregister(this);
+        }
         stopSelf();
+    }
+
+    private CommandReceiver mCommandReceiver = null;
+
+    private class CommandReceiver extends BroadcastReceiver {
+
+        void register(Context context) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ACTION_STOP_HANDLE_SERVICE);
+            context.registerReceiver(mCommandReceiver, filter);
+        }
+
+        void unregister(Context context) {
+            context.unregisterReceiver(this);
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            XLog.d("CommandReceiver received: {}", action);
+            if (ACTION_STOP_HANDLE_SERVICE.equals(action)) {
+                handlePreQuitQueue();
+            }
+        }
     }
 }
