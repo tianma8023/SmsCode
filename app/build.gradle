@@ -17,8 +17,8 @@ android {
         applicationId "com.github.tianma8023.smscode"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 22
-        versionName "1.7.3"
+        versionCode 23
+        versionName "1.8.0"
         resConfigs "en", "zh-rCN", "zh-rTW"
 //        archivesBaseName = "SmsCode-v$versionName-${releaseTime()}"
     }
@@ -101,7 +101,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'com.google.android.material:material:1.0.0' // material design support
     implementation 'androidx.recyclerview:recyclerview:1.0.0' // recycler view
-    implementation 'androidx.cardview:cardview:1.0.0' // card view
     implementation 'androidx.browser:browser:1.0.0' // custom tabs
     implementation 'androidx.preference:preference:1.1.0-rc01' // preference support
 
