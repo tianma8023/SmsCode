@@ -101,15 +101,15 @@ greendao {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0' // material design support
-    implementation 'androidx.recyclerview:recyclerview:1.0.0' // recycler view
-    implementation 'androidx.browser:browser:1.0.0' // custom tabs
-    implementation 'androidx.preference:preference:1.1.0-rc01' // preference support
+    implementation 'androidx.recyclerview:recyclerview:1.1.0' // recycler view
+    implementation 'androidx.browser:browser:1.2.0' // custom tabs
+    implementation 'androidx.preference:preference:1.1.0' // preference support
 
     // ButterKnife
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
 
     // Material Dialogs
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
@@ -140,7 +140,7 @@ dependencies {
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
 
     // Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // BRVAH
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.45-androidx'
