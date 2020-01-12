@@ -1,4 +1,7 @@
 # Update Logs
+- 20.01.13 v1.8.2
+  1. Fix: Rules import/export issue
+  2. Change: Show "Copy to Clipboard" option on Android 10
 - 19.08.06 v1.8.1
   1. Fix: fix the issue of always showing parsing notification when non-code SMS arrives
 - 19.08.06 v1.8.0
