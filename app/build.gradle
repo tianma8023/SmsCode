@@ -2,10 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply greenDao plugin
 apply from: 'and-res-guard.gradle'
 
-def key = file('F:\\Keystore\\tianma.jks')
+def keyFile = file(findProperty("tianma.keystore.path") as String)
+def propertyFile = file(findProperty("tianma.signature.path") as String)
 
 def keyProps = new Properties()
-keyProps.load(new FileInputStream("app\\signature.properties"))
+if (propertyFile.exists()) {
+    keyProps.load(new FileInputStream(propertyFile))
+}
 
 def static releaseTime() {
     return new Date().format("yyMMdd", TimeZone.default)
@@ -25,7 +28,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile key
+            storeFile keyFile
             storePassword keyProps['STORE_PASSWORD']
             keyAlias keyProps['KEY_ALIAS']
             keyPassword keyProps['KEY_PASSWORD']
@@ -35,7 +38,7 @@ android {
     buildTypes {
 
         debug {
-            if (key.exists()) {
+            if (keyFile.exists()) {
                 println "using tianma's keystore"
                 signingConfig signingConfigs.release
             } else {
@@ -48,7 +51,7 @@ android {
             minifyEnabled true
             shrinkResources true
 
-            if (key.exists()) {
+            if (keyFile.exists()) {
                 println "using tianma's keystore"
                 signingConfig signingConfigs.release
             } else {
