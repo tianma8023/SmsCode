@@ -21,6 +21,7 @@ public class ClipboardUtils {
             }
             ClipData clipData = ClipData.newPlainText("Copy text", text);
             cm.setPrimaryClip(clipData);
+            XLog.d("Copy {} to clipboard", text);
         } catch (Throwable t) {
             XLog.e("Error occurs when copy to clipboard", t);
         }

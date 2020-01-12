@@ -196,8 +196,7 @@ public class SmsCodeHandleService extends Service {
         }
 
         // 是否需要复制到剪切板
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
-                SPUtils.copyToClipboardEnabled(this)) {
+        if (SPUtils.copyToClipboardEnabled(this)) {
             Message copyMsg = uiHandler.obtainMessage(MSG_COPY_TO_CLIPBOARD, smsCode);
             uiHandler.sendMessage(copyMsg);
         }

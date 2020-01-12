@@ -133,13 +133,12 @@ public class SettingsFragment extends BasePreferenceFragment implements Preferen
         mCurListenMode = listenModePref.getValue();
         refreshListenModePreference(listenModePref, mCurListenMode);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // hide copy to clipboard preference
-            PreferenceGroup generalGroup = findPreference(KEY_GENERAL);
-            Preference copyToClipboardPref = findPreference(COPY_TO_CLIPBOARD);
-            generalGroup.removePreference(copyToClipboardPref);
-        }
-
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            // hide copy to clipboard preference
+//            PreferenceGroup generalGroup = findPreference(KEY_GENERAL);
+//            Preference copyToClipboardPref = findPreference(COPY_TO_CLIPBOARD);
+//            generalGroup.removePreference(copyToClipboardPref);
+//        }
 
         findPreference(ENTRY_AUTO_INPUT_CODE).setOnPreferenceClickListener(this);
 

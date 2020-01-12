@@ -40,9 +40,7 @@ public class CopyCodeService extends Service {
             final String action = intent.getAction();
             if (ACTION_COPY_CODE.equals(action)) {
                 final String smsCode = intent.getStringExtra(EXTRA_KEY_CODE);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    handleActionCopyCode(smsCode);
-                }
+                handleActionCopyCode(smsCode);
                 sendStopHandleServiceBroadcast(this);
             }
         }

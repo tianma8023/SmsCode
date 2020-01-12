@@ -34,6 +34,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -43,7 +44,8 @@ import butterknife.ButterKnife;
 public class HomeActivity extends BaseActivity implements
         SettingsFragment.OnPreferenceClickCallback {
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     private static final String TAG_NESTED = "tag_nested";
     private static final String TAG_FAQ = "tag_faq";
@@ -141,7 +143,7 @@ public class HomeActivity extends BaseActivity implements
 
     private void refreshActionBar(String title) {
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setTitle(title);
             actionBar.setHomeButtonEnabled(true);
             if (mCurrentFragment instanceof SettingsFragment) {
