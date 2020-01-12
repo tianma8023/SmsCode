@@ -241,6 +241,7 @@
     <string name="action_rule_help">Help</string>
     <string name="share">Share</string>
     <string name="import_rules">Import Rules</string>
+    <string name="documents_ui_not_found">DocumentsUI app not found</string>
     <!-- sms code rule end -->
 
     <!-- permission requirement start -->

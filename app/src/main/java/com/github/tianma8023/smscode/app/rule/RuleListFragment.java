@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -28,6 +30,7 @@ import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.entity.SmsCodeRule;
 import com.github.tianma8023.smscode.event.Event;
 import com.github.tianma8023.smscode.event.XEventBus;
+import com.github.tianma8023.smscode.utils.SnackbarHelper;
 import com.github.tianma8023.smscode.utils.Utils;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.github.tianma8023.smscode.widget.DialogAsyncTask;
@@ -54,6 +57,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -62,6 +66,9 @@ import butterknife.ButterKnife;
  * SMS code codeRule list fragment
  */
 public class RuleListFragment extends Fragment {
+
+    private static final int REQUEST_CODE_EXPORT_RULES = 0xfff;
+    private static final int REQUEST_CODE_IMPORT_RULES = 0xffe;
 
     private static final int TYPE_EXPORT = 1;
     private static final int TYPE_IMPORT = 2;
@@ -109,8 +116,7 @@ public class RuleListFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_rule_list, container, false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -176,7 +182,7 @@ public class RuleListFragment extends Fragment {
 
             if (ContentResolver.SCHEME_FILE.equals(importUri.getScheme())) {
                 // file:// URI need storage permission
-                requestPermission(TYPE_IMPORT_DIRECT, importUri);
+                importOrExportRuleList(TYPE_IMPORT_DIRECT, importUri);
             } else {
                 // content:// URI don't need storage permission
                 showImportDialogConfirm(importUri);
@@ -217,10 +223,10 @@ public class RuleListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_import_rules:
-                requestPermission(TYPE_IMPORT, null);
+                importOrExportRuleList(TYPE_IMPORT, null);
                 break;
             case R.id.action_export_rules:
-                requestPermission(TYPE_EXPORT, null);
+                importOrExportRuleList(TYPE_EXPORT, null);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -273,7 +279,7 @@ public class RuleListFragment extends Fragment {
         }
         mRuleAdapter.removeItemAt(position);
 
-        Snackbar snackbar = Snackbar.make(mRecyclerView, R.string.removed, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = SnackbarHelper.makeLong(mRecyclerView, R.string.removed);
         snackbar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -314,20 +320,60 @@ public class RuleListFragment extends Fragment {
         }
     }
 
+    private void importOrExportRuleList(@BackupType int type, Uri importUri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            importOrExportRuleListAboveQ(type, importUri);
+        } else {
+            // 考虑到在低版本的 Android 系统中，不少 Rom 将 DocumentUI 阉割掉了，无法使用 SAF
+            // Android P 及以前，使用原有方式进行文件导入导出
+            importOrExportRuleListBelowQ(type, importUri);
+        }
+    }
+
+    private void importOrExportRuleListAboveQ(@BackupType int type, Uri importUrl) {
+        if (type == TYPE_IMPORT) {
+            // Android Q 及以后，使用 SAF (Storage Access Framework) 来导入导出文档文件
+            Intent importIntent = BackupManager.getImportRuleListSAFIntent();
+            try {
+                startActivityForResult(importIntent, REQUEST_CODE_IMPORT_RULES);
+            } catch (Exception e) {
+                // 防止某些 Rom 将 DocumentUI 阉割掉
+                SnackbarHelper.makeLong(mRecyclerView, R.string.documents_ui_not_found).show();
+            }
+        } else if (type == TYPE_EXPORT) {
+            // Android Q 及以后，使用 SAF (Storage Access Framework) 来导入导出文档文件
+            Intent exportIntent = BackupManager.getExportRuleListSAFIntent();
+            try {
+                startActivityForResult(exportIntent, REQUEST_CODE_EXPORT_RULES);
+            } catch (Exception e) {
+                // 防止某些 Rom 将 DocumentUI 阉割掉
+                SnackbarHelper.makeLong(mRecyclerView, R.string.documents_ui_not_found).show();
+            }
+        } else if (type == TYPE_IMPORT_DIRECT){
+            requestPermission(type, importUrl);
+        }
+    }
+
+    private void importOrExportRuleListBelowQ(@BackupType int type, Uri importUri) {
+        requestPermission(type, importUri);
+    }
+
     private void requestPermission(final @BackupType int type, final Uri importUri) {
-        String[] permission;
+        String[] permissions;
         if (type == TYPE_EXPORT) {
-            permission = new String[]{
+            permissions = new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
             };
         } else {
-            permission = new String[]{
+            permissions = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
             };
         }
         AndPermission.with(this)
                 .runtime()
-                .permission(permission)
+                .permission(permissions)
                 .onGranted(data -> {
                     if (type == TYPE_IMPORT) {
                         attemptImportRuleList();
@@ -338,15 +384,14 @@ public class RuleListFragment extends Fragment {
                     }
                 })
                 .onDenied(data -> {
-                    Snackbar.make(mRecyclerView, R.string.external_storage_perm_denied_prompt, Snackbar.LENGTH_LONG).show();
+                    SnackbarHelper.makeLong(mRecyclerView, R.string.external_storage_perm_denied_prompt).show();
                 })
                 .start();
     }
 
     private void attemptExportRuleList() {
         if (mRuleAdapter.getItemCount() == 0) {
-            Snackbar.make(mRecyclerView, R.string.rule_list_empty_snack_prompt, Snackbar.LENGTH_LONG)
-                    .show();
+            SnackbarHelper.makeLong(mRecyclerView, R.string.rule_list_empty_snack_prompt).show();
             return;
         }
 
@@ -358,8 +403,7 @@ public class RuleListFragment extends Fragment {
                 .content(content)
                 .input(hint, defaultFilename, (dialog, input) -> {
                     File file = new File(BackupManager.getBackupDir(), input.toString());
-                    new ExportAsyncTask(mActivity, mRuleAdapter,
-                            file, getString(R.string.exporting)).execute();
+                    new ExportAsyncTaskBelowQ(mActivity, RuleListFragment.this, mRuleAdapter, file, getString(R.string.exporting)).execute();
                 })
                 .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
                 .negativeText(R.string.cancel)
@@ -387,7 +431,7 @@ public class RuleListFragment extends Fragment {
         final File[] files = BackupManager.getBackupFiles();
 
         if (files == null || files.length == 0) {
-            Snackbar.make(mRecyclerView, R.string.no_backup_exists, Snackbar.LENGTH_LONG).show();
+            SnackbarHelper.makeLong(mRecyclerView, R.string.no_backup_exists).show();
             return;
         }
 
@@ -413,26 +457,28 @@ public class RuleListFragment extends Fragment {
                 .title(R.string.import_confirmation_title)
                 .content(R.string.import_confirmation_message)
                 .positiveText(R.string.yes)
-                .onPositive((dialog, which) -> new ImportAsyncTask(mActivity, uri,
-                        getString(R.string.importing), true).execute())
-                .negativeText(R.string.no)
-                .onNegative((dialog, which) -> new ImportAsyncTask(mActivity, uri,
-                        getString(R.string.importing), false).execute())
-                .show();
+                .onPositive((dialog, which) ->
+                        new ImportAsyncTask(mActivity, RuleListFragment.this, uri, getString(R.string.importing), true).execute()
+                ).negativeText(R.string.no)
+                .onNegative((dialog, which) ->
+                        new ImportAsyncTask(mActivity, RuleListFragment.this, uri, getString(R.string.importing), false).execute()
+                ).show();
     }
 
-    private static class ExportAsyncTask extends DialogAsyncTask<Void, Void, ExportResult> {
+    private static class ExportAsyncTaskBelowQ extends DialogAsyncTask<Void, Void, ExportResult> {
 
         private File mFile;
         private RuleAdapter mRuleAdapter;
+        private WeakReference<RuleListFragment> mWeakFragment;
 
-        ExportAsyncTask(Context context, RuleAdapter ruleAdapter, File file, String progressMsg) {
+        ExportAsyncTaskBelowQ(Context context, RuleListFragment ruleListFragment, RuleAdapter ruleAdapter, File file, String progressMsg) {
             this(context, progressMsg, false);
             mRuleAdapter = ruleAdapter;
             mFile = file;
+            mWeakFragment = new WeakReference<>(ruleListFragment);
         }
 
-        private ExportAsyncTask(Context context, String progressMsg, boolean cancelable) {
+        private ExportAsyncTaskBelowQ(Context context, String progressMsg, boolean cancelable) {
             super(context, progressMsg, cancelable);
         }
 
@@ -444,21 +490,57 @@ public class RuleListFragment extends Fragment {
         @Override
         protected void onPostExecute(ExportResult exportResult) {
             super.onPostExecute(exportResult);
-            XEventBus.post(new Event.ExportEvent(exportResult, mFile));
+            if (mWeakFragment.get() != null) {
+                mWeakFragment.get().onExportCompleted(exportResult, mFile);
+            }
+        }
+    }
+
+    private static class ExportAsyncTaskSinceQ extends DialogAsyncTask<Void, Void, ExportResult> {
+        private WeakReference<RuleListFragment> mWeakFragment;
+        private WeakReference<Context> mWeakContext;
+        private Uri mUri;
+        private List<SmsCodeRule> mRuleList;
+
+        ExportAsyncTaskSinceQ(Context context, RuleListFragment ruleListFragment, List<SmsCodeRule> rules, Uri uri, String progressMsg) {
+            super(context, progressMsg, false);
+            mWeakFragment = new WeakReference<>(ruleListFragment);
+            mWeakContext = new WeakReference<>(context);
+            mRuleList = rules;
+            mUri = uri;
+        }
+
+        @Override
+        protected ExportResult doInBackground(Void... voids) {
+            if (mWeakContext.get() != null) {
+                return BackupManager.exportRuleList(mWeakContext.get(), mUri, mRuleList);
+            } else {
+                return ExportResult.FAILED;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ExportResult exportResult) {
+            super.onPostExecute(exportResult);
+            if (mWeakFragment.get() != null) {
+                mWeakFragment.get().onExportCompletedSinceQ(exportResult == ExportResult.SUCCESS);
+            }
         }
     }
 
     private static class ImportAsyncTask extends DialogAsyncTask<Void, Void, ImportResult> {
 
         private WeakReference<Context> mContextRef;
+        private WeakReference<RuleListFragment> mWeakFragment;
         private Uri mUri;
         private boolean mRetain;
 
-        ImportAsyncTask(Context context, Uri uri, String progressMsg, boolean retain) {
+        ImportAsyncTask(Context context, RuleListFragment ruleListFragment, Uri uri, String progressMsg, boolean retain) {
             this(context, progressMsg, false);
             mContextRef = new WeakReference<>(context);
             mUri = uri;
             mRetain = retain;
+            mWeakFragment = new WeakReference<>(ruleListFragment);
         }
 
         ImportAsyncTask(Context context, String progressMsg, boolean cancelable) {
@@ -478,32 +560,37 @@ public class RuleListFragment extends Fragment {
         @Override
         protected void onPostExecute(ImportResult importResult) {
             super.onPostExecute(importResult);
-            XEventBus.post(importResult);
+            if (mWeakFragment.get() != null) {
+                mWeakFragment.get().onImportComplete(importResult);
+            }
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onExportCompleted(final Event.ExportEvent event) {
+    private void onExportCompleted(ExportResult exportResult, final File file) {
         int msgId;
-        if (event.result == ExportResult.SUCCESS) {
+        if (exportResult == ExportResult.SUCCESS) {
             msgId = R.string.export_succeed;
         } else {
             // ExportResult.FAILED
             msgId = R.string.export_failed;
         }
-        Snackbar snackbar = Snackbar.make(mRecyclerView, msgId, Snackbar.LENGTH_LONG);
-        if (event.result == ExportResult.SUCCESS) {
+        Snackbar snackbar = SnackbarHelper.makeLong(mRecyclerView, msgId);
+        if (exportResult == ExportResult.SUCCESS) {
             snackbar.setAction(R.string.share, v -> {
                 if (mActivity != null) {
-                    BackupManager.shareBackupFile(mActivity, event.file);
+                    BackupManager.shareBackupFile(mActivity, file);
                 }
             });
         }
         snackbar.show();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onImportComplete(ImportResult importResult) {
+    private void onExportCompletedSinceQ(boolean success) {
+        int msgId = success ? R.string.export_succeed : R.string.export_failed;
+        SnackbarHelper.makeLong(mRecyclerView, msgId).show();
+    }
+
+    private void onImportComplete(ImportResult importResult) {
         @StringRes int msg;
         switch (importResult) {
             case SUCCESS:
@@ -524,6 +611,17 @@ public class RuleListFragment extends Fragment {
                 msg = R.string.import_failed_read_error;
                 break;
         }
-        Snackbar.make(mRecyclerView, msg, Snackbar.LENGTH_LONG).show();
+        SnackbarHelper.makeLong(mRecyclerView, msg).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_EXPORT_RULES) {
+                new ExportAsyncTaskSinceQ(mActivity, this, mRuleAdapter.getRuleList(), data.getData(), getString(R.string.exporting)).execute();
+            } else if (requestCode == REQUEST_CODE_IMPORT_RULES) {
+                showImportDialogConfirm(data.getData());
+            }
+        }
     }
 }

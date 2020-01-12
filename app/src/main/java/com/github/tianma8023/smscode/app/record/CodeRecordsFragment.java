@@ -15,6 +15,7 @@ import com.github.tianma8023.smscode.app.base.back.BackPressFragment;
 import com.github.tianma8023.smscode.db.DBManager;
 import com.github.tianma8023.smscode.entity.SmsMsg;
 import com.github.tianma8023.smscode.utils.ClipboardUtils;
+import com.github.tianma8023.smscode.utils.SnackbarHelper;
 import com.github.tianma8023.smscode.utils.XLog;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -157,7 +158,7 @@ public class CodeRecordsFragment extends BackPressFragment {
         String smsCode = item.getSmsMsg().getSmsCode();
         ClipboardUtils.copyToClipboard(mActivity, smsCode);
         String prompt = getString(R.string.prompt_sms_code_copied, smsCode);
-        Snackbar.make(mRecyclerView, prompt, Snackbar.LENGTH_SHORT).show();
+        SnackbarHelper.makeShort(mRecyclerView, prompt).show();
     }
 
     private boolean itemLongClicked(RecordItem item, int position) {
@@ -223,7 +224,7 @@ public class CodeRecordsFragment extends BackPressFragment {
     private void removeSelectedItems() {
         final List<SmsMsg> itemsToRemove = mCodeRecordAdapter.removeSelectedItems();
         String text = getString(R.string.some_items_removed, itemsToRemove.size());
-        Snackbar snackbar = Snackbar.make(mRecyclerView, text, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = SnackbarHelper.makeLong(mRecyclerView, text);
         snackbar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {

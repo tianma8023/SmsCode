@@ -239,6 +239,7 @@
     <string name="action_rule_help">帮助</string>
     <string name="share">分享</string>
     <string name="import_rules">导入规则</string>
+    <string name="documents_ui_not_found">未发现 DocumentsUI 应用</string>
     <!-- sms code rule end -->
 
     <!-- permission requirement start -->

@@ -60,15 +60,4 @@ public class Event {
             this.template = template;
         }
     }
-
-    public static class ExportEvent {
-        public ExportResult result;
-        public File file;
-
-        public ExportEvent(ExportResult result, File file) {
-            this.result = result;
-            this.file = file;
-        }
-    }
-
 }

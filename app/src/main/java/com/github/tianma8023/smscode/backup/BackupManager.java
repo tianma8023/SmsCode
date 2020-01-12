@@ -26,9 +26,9 @@ public class BackupManager {
 
     private static final String BACKUP_DIRECTORY = "SmsCode";
     private static final String BACKUP_FILE_EXTENSION = ".scebak";
-    private static final String BACKUP_FILE_NAME_PREFIX = "bak-";
+    private static final String BACKUP_FILE_NAME_PREFIX = "SmsCode-";
 
-    private static final String BACKUP_MIME_TYPE = "application/jason";
+    private static final String BACKUP_MIME_TYPE = "application/json";
     private static final String BACKUP_FILE_AUTHORITY = BuildConfig.APPLICATION_ID + ".files";
 
     private BackupManager() {
@@ -44,7 +44,7 @@ public class BackupManager {
     }
 
     public static String getDefaultBackupFilename() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmm", Locale.getDefault());
         String dateStr = sdf.format(new Date());
         File backupDir = getBackupDir();
         String basename = BACKUP_FILE_NAME_PREFIX + dateStr;
@@ -92,6 +92,28 @@ public class BackupManager {
         }
     }
 
+    public static ExportResult exportRuleList(Context context, Uri uri, List<SmsCodeRule> ruleList) {
+        try (RuleExporter exporter = new RuleExporter(context.getContentResolver().openOutputStream(uri))) {
+            exporter.doExport(ruleList);
+            return ExportResult.SUCCESS;
+        } catch (IOException e) {
+            XLog.e("Export SmsCode rules failed", e);
+            return ExportResult.FAILED;
+        }
+    }
+
+    /**
+     * 获取导出规则列表的 SAF (Storage Access Framework) 的 Intent
+     */
+    public static Intent getExportRuleListSAFIntent() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType(BACKUP_MIME_TYPE);
+        intent.putExtra(Intent.EXTRA_TITLE, getDefaultBackupFilename());
+
+        return intent;
+    }
+
     public static ImportResult importRuleList(Context context, Uri uri, boolean retain) {
         RuleImporter ruleImporter = null;
         try {
@@ -115,6 +137,18 @@ public class BackupManager {
                 ruleImporter.close();
             }
         }
+    }
+
+    /**
+     * 获取导入规则列表的 SAF (Storage Access Framework) 的 Intent
+     */
+    public static Intent getImportRuleListSAFIntent() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType(BACKUP_MIME_TYPE);
+        intent.putExtra(Intent.EXTRA_TITLE, getDefaultBackupFilename());
+
+        return intent;
     }
 
     public static void shareBackupFile(Context context, File file) {
